@@ -13,17 +13,13 @@ body {text-align:center;}
 <body>
 
 <br>
-Welcome <input type = "text" value = "${sessionScope.currentUser }" />
-<form name="Login" action="Login" method="post">
-<input type="submit" name="Login" value="Loginto existing account"></input><br>
-Userid: <input type="text" name="userid"></input><br>
-Password: <input type="password" name="pass"></input><br>
-</form>
-<form name="Signup" action="Signup.jsp" method="post">
-<input type="submit" name="Signup" value="Signup for new account"></input>
-</form>
+<% String user = ""; 
+if(session.getAttribute("currentUser") == null || session.getAttribute("currentUser") == "") {%>
+<a href = "Login.jsp"> Login </a> | <a href = "Signup.jsp"> Signup </a>
+<% } else { user = session.getAttribute("currentUser").toString(); %>
+Welcome <%= user %>
+<% } %>
 <br><br>
-
 <form name="CancelBooking" action="CancelBooking.java" method="post">
 <input type="submit" name="cancel" value="Cancel a previous booking"></input>
 </form>
@@ -40,7 +36,8 @@ Search for hotels: <br>
 <form name="Search" action="Hotelinfo.java" method="post">
 City: <input type="text" list="cities" name="city"></input><br>
 Area: <input type="text" list="areas" name="area"></input><br>
-Date of booking: <input type="text" name="date"></input><br>
+Start date of booking: <input type="date" name="start_date"></input><br>
+End date of booking: <input type="date" name="end_date"></input><br>
 <input type="submit" ></input>
 </form>
 
