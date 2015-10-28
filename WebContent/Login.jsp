@@ -12,7 +12,7 @@
 User Name:<br>
 <input type="text" name="username" >
 <br>
-Last name:<br>
+Password:<br>
 <input type="password" name="password" >
 <br><br>
 <input type="submit" value="Submit">

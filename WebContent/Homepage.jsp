@@ -36,7 +36,8 @@ Search for hotels: <br>
 <form name="Search" action="Hotelinfo.java" method="post">
 City: <input type="text" list="cities" name="city"></input><br>
 Area: <input type="text" list="areas" name="area"></input><br>
-Date of booking: <input type="text" name="date"></input><br>
+Start date of booking: <input type="date" name="start_date"></input><br>
+End date of booking: <input type="date" name="end_date"></input><br>
 <input type="submit" ></input>
 </form>
 
