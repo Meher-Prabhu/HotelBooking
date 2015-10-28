@@ -1,10 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page session="true" %>
 <!DOCTYPE html >
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>Hotel Booking</title>
 <style>
 body {text-align:center;}
 </style>
@@ -12,7 +13,8 @@ body {text-align:center;}
 <body>
 
 <br>
-<form name="Login" action="Login.java" method="post">
+Welcome <input type = "text" value = "${sessionScope.currentUser }" />
+<form name="Login" action="Login" method="post">
 <input type="submit" name="Login" value="Loginto existing account"></input><br>
 Userid: <input type="text" name="userid"></input><br>
 Password: <input type="password" name="pass"></input><br>
@@ -28,10 +30,10 @@ Password: <input type="password" name="pass"></input><br>
 <br><br>
 
 <datalist id="cities">
-#fill in cities for autofill
+
 </datalist>
 <datalist id="areas">
-#fill in cities for autofill
+
 </datalist>
 
 Search for hotels: <br>

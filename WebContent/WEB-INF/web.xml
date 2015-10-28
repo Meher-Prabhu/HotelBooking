@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<servlet-mapping>
+
+<servlet-name>Login</servlet-name>
+
+<url-pattern>/Login.java</url-pattern>
+
+</servlet-mapping>
+
