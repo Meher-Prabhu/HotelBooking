@@ -7,6 +7,7 @@
 <title>Login</title>
 </head>
 <body>
+<% session.setAttribute("currentUser", ""); %>
 <form action="Login" method="post">
 User Name:<br>
 <input type="text" name="username" >
