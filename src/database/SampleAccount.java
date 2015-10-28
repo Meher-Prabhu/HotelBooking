@@ -1,6 +1,4 @@
 package database;
-import java.util.*;
-import java.sql.*;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
