@@ -2,6 +2,7 @@
 <%@ page import="java.util.*" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page session="true" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -22,10 +23,10 @@
 			 </select>
 	<br>
 	Price-range : <br>
-		<input type="checkbox" name="price_range" value="5000-10000"></input><br>
-		<input type="checkbox" name="price_range" value="10000-15000"></input><br>
-		<input type="checkbox" name="price_range" value="15000-20000"></input><br>
-		<input type="checkbox" name="price_range" value="20000-25000"></input><br>
+		<input type="checkbox" name="price_range1" value="5000-10000"></input><br>
+		<input type="checkbox" name="price_range2" value="10000-15000"></input><br>
+		<input type="checkbox" name="price_range3" value="15000-20000"></input><br>
+		<input type="checkbox" name="price_range4" value="20000-25000"></input><br>
 	<br>
 	Amenities : <br>
 		<%List <String> amenitieslist=Hotelinfo.getamenities();

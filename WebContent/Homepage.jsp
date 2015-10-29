@@ -39,6 +39,11 @@ City: <input type="text" list="cities" name="city"></input><br>
 Area: <input type="text" list="areas" name="area"></input><br>
 Start date of booking: <input type="date" name="start_date"></input><br>
 End date of booking: <input type="date" name="end_date"></input><br>
+<br>
+<% if(session.getAttribute("empty_field")=="true") {%>
+Provide correct start,end dates
+<%} %>
+
 <input type="submit" ></input>
 </form>
 
