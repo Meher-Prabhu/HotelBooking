@@ -1,6 +1,7 @@
 package database;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -29,6 +30,8 @@ public class Hotelinfo extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 
+    public static List<String> getamenities()
+    {return new ArrayList<String>();}
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
@@ -75,7 +78,7 @@ public class Hotelinfo extends HttpServlet {
 				String stmt = "select A from Hotel A where A.location.city = :city and A.location.area = :area ";
 				Query query = session.createQuery(stmt).setParameter("city",city).setParameter("area",area).setParameter("start_date", start_date).setParameter("end_date",end_date);
 				List<Hotel>hotels = (List<Hotel>) query.list();
-				request.getSession(true).setAttribute("hotel_search_results", hotels);
+				searchSession.setAttribute("hotel_search_results", hotels);
 		
 				response.sendRedirect("SearchResult.jsp");
 				
@@ -93,17 +96,17 @@ public class Hotelinfo extends HttpServlet {
 		
 		else if(orig.equalsIgnoreCase("SearchResult.jsp"))
 		{   
-
-			String city = request.getParameter("city");
-			String area = request.getParameter("area");
-			String start_date = request.getParameter("start_date");
-			String end_date = request.getParameter("end_date");
+			HttpSession searchSession = request.getSession(true);
+			String city = searchSession.getAttribute("city").toString();
+			String area = searchSession.getAttribute("area").toString();
+			String start_date = searchSession.getAttribute("start_date").toString();
+			String end_date = searchSession.getAttribute("end_date").toString();
 			String rating = request.getParameter("rating");
 			String price_range1 = request.getParameter("price_range1");
 			String price_range2 = request.getParameter("price_range2");
 			String price_range3 = request.getParameter("price_range3");
 			String price_range4 = request.getParameter("price_range4");
-			HttpSession searchSession = request.getSession(true);
+			
 			searchSession.setAttribute("city", city);
 			searchSession.setAttribute("area", area);
 			searchSession.setAttribute("start_date", start_date);
@@ -115,7 +118,7 @@ public class Hotelinfo extends HttpServlet {
 				String stmt = "select A from Hotel A where A.location.city = :city and A.location.area = :area ";
 				Query query = session.createQuery(stmt).setParameter("city",city).setParameter("area",area).setParameter("start_date", start_date).setParameter("end_date",end_date);
 				List<Hotel>hotels = (List<Hotel>) query.list();
-				request.getSession(true).setAttribute("hotel_search_results", hotels);
+				searchSession.setAttribute("hotel_search_results", hotels);
 		
 				response.sendRedirect("SearchResult.jsp");
 				
