@@ -54,16 +54,16 @@ public class Login extends HttpServlet {
 			Session session = SessionFactoryUtil.getInstance().getCurrentSession();
 			try{
 				tx= session.beginTransaction();
-				String stmt = "select A.name,A.password from SampleAccount A where A.mail_id = :mail";
+				String stmt = "select A from SampleAccount A where A.mail_id = :mail";
 				Query query = session.createQuery(stmt).setParameter("mail",username);
-				List<Object[]>rows = (List<Object[]>) query.list();
+				List<SampleAccount>rows = (List<SampleAccount>) query.list();
 				tx.commit();
 				if(rows.isEmpty())
 					response.sendRedirect(request.getHeader("referer"));
-				if(rows.get(0)[1].toString().equals(password)){
-					String userName = rows.get(0)[0].toString();
+				if(rows.get(0).get_password().equals(password)){
+					SampleAccount user = rows.get(0);
 					HttpSession userSession = request.getSession(true);
-					userSession.setAttribute("currentUser", userName);
+					userSession.setAttribute("currentUser", user);
 					response.sendRedirect("Homepage.jsp");
 				}
 			}
