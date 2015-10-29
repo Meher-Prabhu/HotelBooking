@@ -5,6 +5,10 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Login</title>
+<% if(session.getAttribute("currentUser") != null) { 
+	response.sendRedirect("Homepage.jsp");
+}
+%>
 </head>
 <body>
 <form action="Login" method="post">
@@ -16,5 +20,10 @@ Password:<br>
 <br><br>
 <input type="submit" value="Submit">
 </form>
+<br>
+<br>
+<% if(session.getAttribute("error") == "Invalid") {	%>
+Invalid data please verify your details
+<% } %>
 </body>
 </html>
