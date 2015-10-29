@@ -4,17 +4,12 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Login</title>
+<title>Cancel Booking</title>
 </head>
 <body>
-<form action="Login" method="post">
-User Name:<br>
-<input type="text" name="username" >
-<br>
-Password:<br>
-<input type="password" name="password" >
-<br><br>
-<input type="submit" value="Submit">
+<form action = "Booking" method = "post">
+Booking ID: <input type = "text" name = "bID"> <br>
+<input type = "submit" value = "Cancel Booking">
 </form>
 </body>
 </html>

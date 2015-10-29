@@ -17,6 +17,7 @@ public class Client {
 			Query query = session.createQuery("from SampleAccount");
 			@SuppressWarnings("unchecked")
 			List<SampleAccount> rows = (List<SampleAccount>) query.list();
+			System.out.println(rows.get(0).getClass());
 			System.out.println(rows.get(0));
 			tx.commit();
 		} catch(RuntimeException e) {
