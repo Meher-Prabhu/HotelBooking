@@ -1,4 +1,4 @@
-<%@page import="database.Hotel"%>
+<%@page import="database.Hotelinfo"%>
 <%@ page import="java.util.*" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
@@ -28,7 +28,7 @@
 		<input type="checkbox" name="price_range" value="20000-25000"></input><br>
 	<br>
 	Amenities : <br>
-		<%List <String> amenitieslist=Hotel.getamenities();
+		<%List <String> amenitieslist=Hotelinfo.getamenities();
 		for(int i=0;i<amenitieslist.size();i++)
 			{%>
 				<input type="checkbox" name="amenities" value=<%amenitieslist.get(i);%>><br>
