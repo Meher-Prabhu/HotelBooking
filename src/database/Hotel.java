@@ -83,3 +83,14 @@ import javax.persistence.Table;
 		this.location = value;
 	}
 }
+
+class Location {
+	public String city;
+	public String area;
+	
+	public Location(String city, String area) {
+		this.city = city;
+		this.area = area;
+	}
+	
+}
