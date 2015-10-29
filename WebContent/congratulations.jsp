@@ -4,17 +4,16 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Login</title>
+<title>Congratulations!!!</title>
 </head>
 <body>
-<form action="Login" method="post">
-User Name:<br>
-<input type="text" name="username" >
-<br>
-Password:<br>
-<input type="password" name="password" >
-<br><br>
-<input type="submit" value="Submit">
-</form>
+	<h1> Congratulations!!!
+	</h1>
+	<br>
+	You have successfully booked a room.
+	Your Booking Id is : <% %>
+	Please note your booking id for future referneces.
+	<a href = "Homepage.jsp"> Go to Homepage </a>
+	
 </body>
 </html>

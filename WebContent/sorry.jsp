@@ -4,17 +4,11 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Login</title>
+<title>Sorry :(</title>
 </head>
 <body>
-<form action="Login" method="post">
-User Name:<br>
-<input type="text" name="username" >
-<br>
-Password:<br>
-<input type="password" name="password" >
-<br><br>
-<input type="submit" value="Submit">
-</form>
+We were unable to book the room due to some error.
+Please try again later.
+<a href = "Homepage.jsp"> Go to Homepage </a>
 </body>
 </html>
