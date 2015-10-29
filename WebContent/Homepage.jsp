@@ -14,11 +14,10 @@ body {text-align:center;}
 <body>
 
 <br>
-<% String user = ""; 
-if(session.getAttribute("currentUser") == null || session.getAttribute("currentUser") == "") {%>
+<% if(session.getAttribute("currentUser") == null || session.getAttribute("currentUser") == "") {%>
 <a href = "Login.jsp"> Login </a> | <a href = "Signup.jsp"> Signup </a>
 <% } else {  %>
-<p> Welcome ${currentUser.get_name() } </p>
+<p> Welcome ${currentUser.get_name() } | <a href = "Logout.jsp">Logout</a> </p>
 <% } %>
 <br><br>
 <form name="CancelBooking" action="CancelBooking.jsp">
