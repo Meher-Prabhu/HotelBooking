@@ -47,9 +47,9 @@ public class Hotelinfo extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(request, response);
-		
-		if(request.getHeader("referer")=="Homepage.jsp")
+		String[] splitOrig = request.getHeader("referer").split("/");
+		String orig = splitOrig[splitOrig.length-1];
+		if(orig.equalsIgnoreCase("Homepage.jsp"))
 		{
 			String city = request.getParameter("city");
 			String area = request.getParameter("area");
@@ -60,9 +60,10 @@ public class Hotelinfo extends HttpServlet {
 			searchSession.setAttribute("area", area);
 			searchSession.setAttribute("start_date", start_date);
 			searchSession.setAttribute("end_date", end_date);
-			if(start_date==null || end_date==null)
-			{searchSession.setAttribute("empty_field","true");
-			 response.sendRedirect("Homepage.jsp");
+			if(start_date=="" || end_date=="")
+			{
+				searchSession.setAttribute("empty_field","true");
+				response.sendRedirect("Homepage.jsp");
 			}
 			else
 			{
@@ -90,7 +91,7 @@ public class Hotelinfo extends HttpServlet {
 		}
 		
 		
-		else if(request.getHeader("referer")=="SearchResult.jsp")
+		else if(orig.equalsIgnoreCase("SearchResult.jsp"))
 		{   
 
 			String city = request.getParameter("city");
