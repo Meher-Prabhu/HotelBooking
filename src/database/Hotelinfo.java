@@ -1,6 +1,7 @@
 package database;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,10 +73,11 @@ public class Hotelinfo extends HttpServlet {
 			searchSession.setAttribute("empty_field","false");
 			Transaction tx = null;
 			Session session = SessionFactoryUtil.getInstance().getCurrentSession();
+			Date strt_date = Date.valueOf(start_date);
 			try{
 				tx= session.beginTransaction();
-				String stmt = "select A from Hotel A where A.location.city = :city and A.location.area = :area ";
-				Query query = session.createQuery(stmt).setParameter("city",city).setParameter("area",area).setParameter("start_date", start_date).setParameter("end_date",end_date);
+				String stmt = "select A from Hotel A where A.city = :city and A.area = :area and date >= :start_date ";
+				Query query = session.createQuery(stmt).setParameter("city",city).setParameter("area",area).setParameter("start_date", strt_date);
 				List<Hotel>hotels = (List<Hotel>) query.list();
 				searchSession.setAttribute("hotel_search_results", hotels);
 		
@@ -86,6 +88,7 @@ public class Hotelinfo extends HttpServlet {
 				{
 					if(tx != null && tx.isActive()){
 						tx.rollback();
+						e.printStackTrace();
 					}
 					throw e;
 				}

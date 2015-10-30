@@ -33,7 +33,7 @@ body {text-align:center;}
 </datalist>
 
 Search for hotels: <br>
-<form name="Search" action="Hotelinfo.java" method="post">
+<form name="Search" action="Hotelinfo" method="post">
 City: <input type="text" list="cities" name="city"></input><br>
 Area: <input type="text" list="areas" name="area"></input><br>
 Start date of booking: <input type="date" name="start_date"></input><br>

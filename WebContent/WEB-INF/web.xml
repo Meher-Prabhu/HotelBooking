@@ -5,5 +5,10 @@
 
 <url-pattern>/Login.java</url-pattern>
 
+
+<servlet-name>Hotelinfo</servlet-name>
+
+<url-pattern>/Hotelinfo.java</url-pattern>
+
 </servlet-mapping>
 
