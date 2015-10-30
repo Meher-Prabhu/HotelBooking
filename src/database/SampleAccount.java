@@ -21,7 +21,7 @@ public class SampleAccount {
 	private String name;
 
 	@Column(name = "contact_number")
-	private long contact_number;
+	private Long contact_number;
 	
 	@Column(name = "address")
 	private String address;
@@ -61,12 +61,12 @@ public class SampleAccount {
 		this.name = value;
 	}
 	
-	public long get_contact_number() {
+	public Long get_contact_number() {
 		return contact_number;
 	}
 	
-	public void set_contact_number(long value) {
-		this.contact_number= value;
+	public void set_contact_number(Long value) {
+		this.contact_number = value;
 	}
 	
 	@Column(name = "address")
@@ -75,7 +75,10 @@ public class SampleAccount {
 	}
 	
 	public void set_address(String value) {
-		this.address = value;
+		if(value != null)
+			this.address = value;
+		else
+			this.address = "";
 	}
 	
 	@Column(name = "type")
@@ -88,7 +91,10 @@ public class SampleAccount {
 	}
 	
 	public String toString() {
-		return "Mail ID: " + get_mail_id() + " Password: " + get_password() + " name: " + get_name() + " contact: " + get_contact_number() + " address: " + get_address() + " type: " + get_type();
+		String str = "Mail ID: " + get_mail_id() + " Password: " + get_password() + " name: " + get_name() + " type: " + get_type();
+		if(get_contact_number() != null) str += " contact: " + get_contact_number();
+		if(get_address() != null) str += " address: " + get_address();
+		return str;
 	}
 }
 
