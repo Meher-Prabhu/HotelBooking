@@ -14,14 +14,14 @@ public class Client {
 			tx = session.beginTransaction();
 //			Scanner in = new Scanner(System.in);
 
-			Query query = session.createQuery("from SampleAccount");
+			Query query = session.createQuery("from Hotel");
 			@SuppressWarnings("unchecked")
-			List<SampleAccount> rows = (List<SampleAccount>) query.list();
-			System.out.println(rows.get(0).getClass());
+			List<Hotel> rows = (List<Hotel>) query.list();
 			System.out.println(rows.get(0));
+//			System.out.println(rows.get(2));
 			tx.commit();
 		} catch(RuntimeException e) {
-			System.out.println(e);
+			e.printStackTrace();
 		}
 		System.out.println("Done");
 	}

@@ -1,4 +1,5 @@
 <%@page import="database.Hotelinfo"%>
+<%@page import="database.Hotel"%>
 <%@ page import="java.util.*" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
@@ -38,11 +39,11 @@
 <div id="result" style="float:right; width:75%;">
 	List of hotels that match your search results: <br>
 	
-		<%List <String> hotellist; //we are supposed to get this list from Hotel.java servlet
+		<%List <Hotel> hotellist = (List<Hotel>)session.getAttribute("hotel_search_results"); //we are supposed to get this list from Hotel.java servlet
 		for(int i=0;i<hotellist.size();i++)
 			{%>
-				<input type="radio" name="option" value=<%hotellist.get(i);%>> <br>
-		 	<%}%>
+				<input type="radio" name="option" value=${hotellist.get(i).get_name() }> <br>
+		 	<%;}%>
 
 	<br>
 <input type="submit" name="gethotel" value="Search in this hotel"></input>

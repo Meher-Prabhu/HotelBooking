@@ -1,5 +1,5 @@
 RemoteSystemsTempFiles
 .metadata
 .classpath
-/bin/
-/build/
+build
+bin
