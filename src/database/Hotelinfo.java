@@ -194,9 +194,9 @@ public class Hotelinfo extends HttpServlet {
 					List<Hotel>hotels = (List<Hotel>) query.list();
 					searchSession.setAttribute("hotel_under_search", hotels.get(0));
 					
-					String stmt1="with R as (select hotel_id,room_id from hotel natural join room  natural join availability  where city= :city and area= :area date>= :startdate and date <= :enddate group by hotel_id,room_id having count(*)= :diff) select type,count(*) from R natural join room where hotel_id= :id group by type;";
-					SQLQuery query1 = ((SQLQuery) session.createSQLQuery(stmt).setParameter("city",city).setParameter("area",area).setParameter("start_date", strt_date).setParameter("end_date", endr_date).setParameter("diff", days).setParameter("id",id));
-					List<Object[]>room_type_availabilities = (List<Object[]>) query.list();
+					String stmt1="select type,count(*) from (select hotel_id,room_id from hotel natural join room natural join availability  where city= :city and area= :area and date>= :start_date and date <= :end_date group by hotel_id,room_id having count(*)= :diff) as R natural join room where hotel_id= :id group by type";
+					SQLQuery query1 = ((SQLQuery) session.createSQLQuery(stmt1).setParameter("city",city).setParameter("area",area).setParameter("start_date", strt_date).setParameter("end_date", endr_date).setParameter("diff", days).setParameter("id",id));
+					List<Object[]> room_type_availabilities = (List<Object[]>) query1.list();
 					searchSession.setAttribute("room_type_availabilities", room_type_availabilities);
 					tx.commit();
 					if(session.isOpen())
