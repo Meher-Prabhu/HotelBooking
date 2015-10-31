@@ -8,7 +8,7 @@
 </head>
 <body>
 We were unable to book the room due to some error.
-Please try again later.
+Please try again later.<br>
 <a href = "Homepage.jsp"> Go to Homepage </a>
 </body>
 </html>

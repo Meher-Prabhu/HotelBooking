@@ -1,6 +1,7 @@
 package database;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -31,7 +33,31 @@ public class Hotelinfo extends HttpServlet {
     }
 
     public static List<String> getamenities()
-    {return new ArrayList<String>();}
+    {
+//    	Transaction tx = null;
+//		Session session = SessionFactoryUtil.getInstance().getCurrentSession();
+//
+//		try{
+//			tx= session.beginTransaction();
+//			String stmt = "select  A.amenity from Amenities A group by A.amenity";
+//			Query query = session.createQuery(stmt);
+//			List<String>amenities = (List<String>) query.list();
+//			return amenities;
+//    	
+//		}
+//		catch(RuntimeException e)
+//		{
+//			if(tx != null && tx.isActive()){
+//				tx.rollback();
+//				e.printStackTrace();
+//			}
+//			throw e;
+//		}
+    	return new ArrayList<String>();
+    }
+		
+    	
+    	
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
@@ -50,9 +76,11 @@ public class Hotelinfo extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(request, response);
 		
-		if(request.getHeader("referer")=="Homepage.jsp")
+		String[] splitOrig = request.getHeader("referer").split("/");
+		String orig = splitOrig[splitOrig.length - 1];
+		
+		if(orig.equalsIgnoreCase("Homepage.jsp"))
 		{
 			String city = request.getParameter("city");
 			String area = request.getParameter("area");
@@ -63,7 +91,7 @@ public class Hotelinfo extends HttpServlet {
 			searchSession.setAttribute("area", area);
 			searchSession.setAttribute("start_date", start_date);
 			searchSession.setAttribute("end_date", end_date);
-			if(start_date==null || end_date==null)
+			if(start_date.equals("") || end_date.equals(""))
 			{searchSession.setAttribute("empty_field","true");
 			 response.sendRedirect("Homepage.jsp");
 			}
@@ -72,11 +100,14 @@ public class Hotelinfo extends HttpServlet {
 			searchSession.setAttribute("empty_field","false");
 			Transaction tx = null;
 			Session session = SessionFactoryUtil.getInstance().getCurrentSession();
+			Date strt_date = Date.valueOf(start_date);
+			Date endr_date = Date.valueOf(end_date);
 			try{
 				tx= session.beginTransaction();
-				String stmt = "select A from Hotel A where A.location.city = :city and A.location.area = :area ";
-				Query query = session.createQuery(stmt).setParameter("city",city).setParameter("area",area).setParameter("start_date", start_date).setParameter("end_date",end_date);
-				List<Hotel>hotels = (List<Hotel>) query.list();
+				int days = endr_date.compareTo(strt_date)+2;
+				String stmt = "select hotel_id,name from hotel natural join room natural join availability where city = :city and area = :area and date >= :start_date and date <= :end_date group by hotel_id,room_id having count(*) = :diff";
+				SQLQuery query = ((SQLQuery) session.createSQLQuery(stmt).setParameter("city",city).setParameter("area",area).setParameter("start_date", strt_date).setParameter("end_date", endr_date).setParameter("diff", days));
+				List<Object[]>hotels = (List<Object[]>) query.list();
 				searchSession.setAttribute("hotel_search_results", hotels);
 		
 				response.sendRedirect("SearchResult.jsp");
@@ -86,6 +117,8 @@ public class Hotelinfo extends HttpServlet {
 				{
 					if(tx != null && tx.isActive()){
 						tx.rollback();
+						// session.close();
+						e.printStackTrace();
 					}
 					throw e;
 				}
@@ -93,21 +126,27 @@ public class Hotelinfo extends HttpServlet {
 		}
 		
 		
-		else if(request.getHeader("referer")=="SearchResult.jsp")
+		else if(orig.equalsIgnoreCase("Searchresult.jsp"))
 		{   
+			String option = request.getParameter("option");
+			String submithotel= request.getParameter("gethotel");
 			HttpSession searchSession = request.getSession(true);
+			if(option ==null || option.equalsIgnoreCase("") || submithotel==null || option.equalsIgnoreCase(""))
+			{
+	
 			String city = searchSession.getAttribute("city").toString();
 			String area = searchSession.getAttribute("area").toString();
 			String start_date = searchSession.getAttribute("start_date").toString();
 			String end_date = searchSession.getAttribute("end_date").toString();
 			String rating = request.getParameter("rating");
-			String price_range1 = request.getParameter("price_range1");
-			String price_range2 = request.getParameter("price_range2");
-			String price_range3 = request.getParameter("price_range3");
-			String price_range4 = request.getParameter("price_range4");
+			String price_range[] = request.getParameterValues("price_range");
+			String amenities[] = request.getParameterValues("amenities");
+			if(price_range==null || amenities==null)
+			{searchSession.setAttribute("missing_input","true");
+			 response.sendRedirect("SearchResult.jsp");}
 			
-			searchSession.setAttribute("city", city);
-			searchSession.setAttribute("area", area);
+			else {
+			searchSession.setAttribute("missing_input","false");
 			searchSession.setAttribute("start_date", start_date);
 			searchSession.setAttribute("end_date", end_date);
 			Transaction tx = null;
@@ -127,7 +166,30 @@ public class Hotelinfo extends HttpServlet {
 					tx.rollback();
 				}
 				throw e;
+			}}
 			}
+			
+			else
+			{
+				Transaction tx = null;
+				Session session = SessionFactoryUtil.getInstance().getCurrentSession();
+				try{
+					tx= session.beginTransaction();
+					String stmt = "select A from Hotel A where A.name= :name";
+					Query query = session.createQuery(stmt).setParameter("name",option);
+					List<Hotel>hotels = (List<Hotel>) query.list();
+					searchSession.setAttribute("hotel_under_search", hotels.get(0));
+					response.sendRedirect("hotel.jsp");
+				}
+				catch(RuntimeException e){
+					if(tx != null && tx.isActive()){
+						tx.rollback();
+					}
+					throw e;
+				}
+				
+			}
+				
 		}
 			
 		}

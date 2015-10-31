@@ -23,7 +23,7 @@
    </property>
    <property name="current_session_context_class">thread</property>
    <mapping class = "database.SampleAccount"></mapping>
-	<mapping class = "database.Hotel"></mapping> 
+   <mapping class = "database.Hotel"></mapping>
 
 </session-factory>
 </hibernate-configuration>

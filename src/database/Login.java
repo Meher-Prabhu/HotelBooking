@@ -64,11 +64,12 @@ public class Login extends HttpServlet {
 					Query query = session.createQuery(stmt).setParameter("mail",username);
 					List<SampleAccount>rows = (List<SampleAccount>) query.list();
 					tx.commit();
+					System.out.println(rows.isEmpty());
 					if(rows.isEmpty()) {
 						request.getSession(true).setAttribute("error", "Invalid");
 						response.sendRedirect(request.getHeader("referer"));
 					}
-					if(rows.get(0).get_password().equals(password)){
+					else if(rows.get(0).get_password().equals(password)){
 						SampleAccount user = rows.get(0);
 						HttpSession userSession = request.getSession(true);
 						userSession.setAttribute("currentUser", user);

@@ -2,7 +2,7 @@ package database;
 
 import java.util.List;
 
-import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -14,7 +14,7 @@ public class Client {
 			tx = session.beginTransaction();
 //			Scanner in = new Scanner(System.in);
 
-			Query query = session.createQuery("from Hotel");
+			SQLQuery query = session.createSQLQuery("select * from hotel H natural join room").addEntity(Hotel.class);
 			@SuppressWarnings("unchecked")
 			List<Hotel> rows = (List<Hotel>) query.list();
 			System.out.println(rows.get(0));
