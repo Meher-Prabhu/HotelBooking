@@ -35,7 +35,12 @@
 			{%>
 				<input type="checkbox" name="amenities" value=<%amenitieslist.get(i);%>><br>
 		 	<%}%>
+	<input type="submit" name="getlisthotels" value="Get list of hotels"></input><br><br>
+	<% if(session.getAttribute("missing_input") == "true") {	%>
+Please fill in the checkboxes.
+<% } %>
 </div>
+
 <div id="result" style="float:right; width:75%;">
 	List of hotels that match your search results: <br>
 	

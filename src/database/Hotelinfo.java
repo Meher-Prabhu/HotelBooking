@@ -132,10 +132,13 @@ public class Hotelinfo extends HttpServlet {
 			String end_date = searchSession.getAttribute("end_date").toString();
 			String rating = request.getParameter("rating");
 			String price_range[] = request.getParameterValues("price_range");
+			String amenities[] = request.getParameterValues("amenities");
+			if(price_range==null || amenities==null)
+			{searchSession.setAttribute("missing_input","true");
+			 response.sendRedirect("SearchResult.jsp");}
 			
-			
-			searchSession.setAttribute("city", city);
-			searchSession.setAttribute("area", area);
+			else {
+			searchSession.setAttribute("missing_input","false");
 			searchSession.setAttribute("start_date", start_date);
 			searchSession.setAttribute("end_date", end_date);
 			Transaction tx = null;
@@ -155,7 +158,7 @@ public class Hotelinfo extends HttpServlet {
 					tx.rollback();
 				}
 				throw e;
-			}
+			}}
 			}
 			
 			else
