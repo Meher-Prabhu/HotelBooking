@@ -11,9 +11,12 @@
 <body>
 <%
 	Hotel hotel = (Hotel)session.getAttribute("hotel_under_search");
-	List <Object[]> room_type_list = (List<Object[]>)session.getAttribute("room_type_availabilities");
+	List <Object[]> room_type_list;
+	if(session.getAttribute("room_type_availabilities")!=null)
+	 {room_type_list=(List<Object[]>)session.getAttribute("room_type_availabilities");}
+	else {room_type_list=new ArrayList<Object[]>();} 
 %>
-<div id="top" style="height:50%;">
+<div id="top" style="float:top; height:50%;">
 	<div id="availability" style="float:left; width:50%;">
 	<% 
 	out.print("<table border='1'>");
@@ -34,12 +37,13 @@
 	<option> <%out.write(room_type_list.get(i)[0].toString());%> </option>
  	<%}%>
   </select>
+  <br>
 	Number of rooms : 	<input type="text" name="num_rooms" value=""><br>
 	<input type="submit" name="book" value="Book "></input>
 	</form>
 	</div>
 </div>
-<div id="bottom">
+<div id="bottom" style="float:bottom; height:50%;">
 Reply and comments section
 </div>
 
