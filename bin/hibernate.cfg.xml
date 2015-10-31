@@ -23,10 +23,6 @@
    </property>
    <property name="current_session_context_class">thread</property>
    <mapping class = "database.SampleAccount"></mapping>
-<<<<<<< HEAD:bin/hibernate.cfg.xml
-	<mapping class = "database.Hotel"></mapping> 
-=======
->>>>>>> parent of 5927bfa... Small changes to Hotelinfo:build/classes/hibernate.cfg.xml
 
 </session-factory>
 </hibernate-configuration>
