@@ -84,6 +84,7 @@ public class Login extends HttpServlet {
 					}
 					throw e;
 				}
+			
 			}
 		}
 		else if (orig.equalsIgnoreCase("Signup.jsp")) {
@@ -115,9 +116,9 @@ public class Login extends HttpServlet {
 				try {
 					tx = session.beginTransaction();
 					session.save(account);
-					tx.commit();
 					request.getSession(true).setAttribute("currentUser", account);
 					response.sendRedirect("Homepage.jsp");
+					tx.commit();
 				} catch(ConstraintViolationException e) {
 					request.getSession(true).setAttribute("error", "Present");
 					response.sendRedirect("Signup.jsp");
