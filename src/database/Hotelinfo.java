@@ -32,7 +32,30 @@ public class Hotelinfo extends HttpServlet {
     }
 
     public static List<String> getamenities()
-    {return new ArrayList<String>();}
+    {
+    	Transaction tx = null;
+		Session session = SessionFactoryUtil.getInstance().getCurrentSession();
+
+		try{
+			tx= session.beginTransaction();
+			String stmt = "select  A.amenity from Amenities A group by A.amenity";
+			Query query = session.createQuery(stmt);
+			List<String>amenities = (List<String>) query.list();
+			return amenities;
+    	
+		}
+		catch(RuntimeException e)
+		{
+			if(tx != null && tx.isActive()){
+				tx.rollback();
+				e.printStackTrace();
+			}
+			throw e;
+		}
+    }
+		
+    	
+    	
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
@@ -97,17 +120,19 @@ public class Hotelinfo extends HttpServlet {
 		
 		
 		else if(request.getHeader("referer")=="SearchResult.jsp")
-		{   
+		{   String option = request.getParameter("option");
+			String submithotel= request.getParameter("gethotel");
 			HttpSession searchSession = request.getSession(true);
+			if(option ==null || option.equalsIgnoreCase("") || submithotel==null || option.equalsIgnoreCase(""))
+			{
+	
 			String city = searchSession.getAttribute("city").toString();
 			String area = searchSession.getAttribute("area").toString();
 			String start_date = searchSession.getAttribute("start_date").toString();
 			String end_date = searchSession.getAttribute("end_date").toString();
 			String rating = request.getParameter("rating");
-			String price_range1 = request.getParameter("price_range1");
-			String price_range2 = request.getParameter("price_range2");
-			String price_range3 = request.getParameter("price_range3");
-			String price_range4 = request.getParameter("price_range4");
+			String price_range[] = request.getParameterValues("price_range");
+			
 			
 			searchSession.setAttribute("city", city);
 			searchSession.setAttribute("area", area);
@@ -131,6 +156,29 @@ public class Hotelinfo extends HttpServlet {
 				}
 				throw e;
 			}
+			}
+			
+			else
+			{
+				Transaction tx = null;
+				Session session = SessionFactoryUtil.getInstance().getCurrentSession();
+				try{
+					tx= session.beginTransaction();
+					String stmt = "select A from Hotel A where A.name= :name";
+					Query query = session.createQuery(stmt).setParameter("name",option);
+					List<Hotel>hotels = (List<Hotel>) query.list();
+					searchSession.setAttribute("hotel_under_search", hotels.get(0));
+					response.sendRedirect("hotel.jsp");
+				}
+				catch(RuntimeException e){
+					if(tx != null && tx.isActive()){
+						tx.rollback();
+					}
+					throw e;
+				}
+				
+			}
+				
 		}
 			
 		}

@@ -10,7 +10,7 @@
 </head>
 <body>
 <%
-	Hotel hotel = request.getParameter("hotel");
+	Hotel hotel = (Hotel)session.getAttribute("hotel_under_search");
 %>
 </body>
 </html>
