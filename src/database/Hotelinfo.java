@@ -23,6 +23,7 @@ import org.hibernate.Transaction;
 @WebServlet("/Hotelinfo")
 public class Hotelinfo extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static Session session;
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -31,19 +32,21 @@ public class Hotelinfo extends HttpServlet {
         super();
         // TODO Auto-generated constructor stub
     }
-
+    
     public static List<String> getamenities()
     {
     	Transaction tx = null;
 		Session session = SessionFactoryUtil.getInstance().getCurrentSession();
+		List<String> amenities;
 
 		try{
 			tx= session.beginTransaction();
 			String stmt = "select  distinct amenity from amenities";
 			SQLQuery query = ((SQLQuery) session.createSQLQuery(stmt));
-			List<String>amenities = (List<String>) query.list();
-			return amenities;
-    	
+			amenities = (List<String>) query.list();
+			tx.commit();
+			if(session.isOpen())
+				session.close();    	
 		}
 		catch(RuntimeException e)
 		{
@@ -54,6 +57,7 @@ public class Hotelinfo extends HttpServlet {
 			throw e;
 		}
 //    	return new ArrayList<String>();
+		return amenities;
     }
 		
     	
@@ -79,7 +83,6 @@ public class Hotelinfo extends HttpServlet {
 		
 		String[] splitOrig = request.getHeader("referer").split("/");
 		String orig = splitOrig[splitOrig.length - 1];
-		System.out.println(orig);
 		if(orig.equalsIgnoreCase("Homepage.jsp"))
 		{
 			String city = request.getParameter("city");
@@ -108,6 +111,9 @@ public class Hotelinfo extends HttpServlet {
 				String stmt = "select distinct hotel_id,name from hotel natural join room natural join availability where city = :city and area = :area and date >= :start_date and date <= :end_date group by hotel_id,room_id having count(*) = :diff";
 				SQLQuery query = ((SQLQuery) session.createSQLQuery(stmt).setParameter("city",city).setParameter("area",area).setParameter("start_date", strt_date).setParameter("end_date", endr_date).setParameter("diff", days));
 				List<Object[]>hotels = (List<Object[]>) query.list();
+				tx.commit();
+				if(session.isOpen())
+					session.close();				
 				searchSession.setAttribute("hotel_search_results", hotels);
 		
 				response.sendRedirect("SearchResult.jsp");

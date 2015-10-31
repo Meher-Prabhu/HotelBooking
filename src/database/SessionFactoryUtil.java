@@ -3,6 +3,8 @@ package database;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AnnotationConfiguration;
+import org.hibernate.connection.ConnectionProvider;
+import org.hibernate.impl.SessionFactoryImpl;
 
 public class SessionFactoryUtil {
 	private static org.hibernate.SessionFactory sessionFactory;
@@ -27,6 +29,11 @@ public class SessionFactoryUtil {
 	}
 	
 	public static void close() {
+		if(sessionFactory instanceof SessionFactoryImpl) {
+			SessionFactoryImpl sf = (SessionFactoryImpl) sessionFactory;
+			ConnectionProvider conn = sf.getConnectionProvider();
+			conn.close();
+		}
 		if(sessionFactory != null)
 			sessionFactory.close();
 		sessionFactory = null;
