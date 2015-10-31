@@ -34,26 +34,26 @@ public class Hotelinfo extends HttpServlet {
 
     public static List<String> getamenities()
     {
-//    	Transaction tx = null;
-//		Session session = SessionFactoryUtil.getInstance().getCurrentSession();
-//
-//		try{
-//			tx= session.beginTransaction();
-//			String stmt = "select  A.amenity from Amenities A group by A.amenity";
-//			Query query = session.createQuery(stmt);
-//			List<String>amenities = (List<String>) query.list();
-//			return amenities;
-//    	
-//		}
-//		catch(RuntimeException e)
-//		{
-//			if(tx != null && tx.isActive()){
-//				tx.rollback();
-//				e.printStackTrace();
-//			}
-//			throw e;
-//		}
-    	return new ArrayList<String>();
+    	Transaction tx = null;
+		Session session = SessionFactoryUtil.getInstance().getCurrentSession();
+
+		try{
+			tx= session.beginTransaction();
+			String stmt = "select  distinct amenity from amenities";
+			SQLQuery query = ((SQLQuery) session.createSQLQuery(stmt));
+			List<String>amenities = (List<String>) query.list();
+			return amenities;
+    	
+		}
+		catch(RuntimeException e)
+		{
+			if(tx != null && tx.isActive()){
+				tx.rollback();
+				e.printStackTrace();
+			}
+			throw e;
+		}
+//    	return new ArrayList<String>();
     }
 		
     	
@@ -79,7 +79,7 @@ public class Hotelinfo extends HttpServlet {
 		
 		String[] splitOrig = request.getHeader("referer").split("/");
 		String orig = splitOrig[splitOrig.length - 1];
-		
+		System.out.println(orig);
 		if(orig.equalsIgnoreCase("Homepage.jsp"))
 		{
 			String city = request.getParameter("city");
@@ -105,7 +105,7 @@ public class Hotelinfo extends HttpServlet {
 			try{
 				tx= session.beginTransaction();
 				int days = endr_date.compareTo(strt_date)+2;
-				String stmt = "select hotel_id,name from hotel natural join room natural join availability where city = :city and area = :area and date >= :start_date and date <= :end_date group by hotel_id,room_id having count(*) = :diff";
+				String stmt = "select distinct hotel_id,name from hotel natural join room natural join availability where city = :city and area = :area and date >= :start_date and date <= :end_date group by hotel_id,room_id having count(*) = :diff";
 				SQLQuery query = ((SQLQuery) session.createSQLQuery(stmt).setParameter("city",city).setParameter("area",area).setParameter("start_date", strt_date).setParameter("end_date", endr_date).setParameter("diff", days));
 				List<Object[]>hotels = (List<Object[]>) query.list();
 				searchSession.setAttribute("hotel_search_results", hotels);
@@ -153,7 +153,7 @@ public class Hotelinfo extends HttpServlet {
 			Session session = SessionFactoryUtil.getInstance().getCurrentSession();
 			try{
 				tx= session.beginTransaction();
-				String stmt = "select A from Hotel A where A.location.city = :city and A.location.area = :area ";
+				String stmt = "select A from Hotel A where A.city = :city and A.area = :area ";
 				Query query = session.createQuery(stmt).setParameter("city",city).setParameter("area",area).setParameter("start_date", start_date).setParameter("end_date",end_date);
 				List<Hotel>hotels = (List<Hotel>) query.list();
 				searchSession.setAttribute("hotel_search_results", hotels);
@@ -175,8 +175,8 @@ public class Hotelinfo extends HttpServlet {
 				Session session = SessionFactoryUtil.getInstance().getCurrentSession();
 				try{
 					tx= session.beginTransaction();
-					String stmt = "select A from Hotel A where A.name= :name";
-					Query query = session.createQuery(stmt).setParameter("name",option);
+					String stmt = "select A from Hotel A where A.id= :id";
+					Query query = session.createQuery(stmt).setParameter("id",option);
 					List<Hotel>hotels = (List<Hotel>) query.list();
 					searchSession.setAttribute("hotel_under_search", hotels.get(0));
 					response.sendRedirect("hotel.jsp");
