@@ -8,7 +8,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>Search results</title>
 </head>
 <body>
 <form name="searchresult" action="Hotelinfo.java" method="post">
@@ -46,11 +46,13 @@ Please fill in the checkboxes.
 	
 		<%
 		if(session.getAttribute("hotel_search_results")!=null)
-		{List <Hotel> hotellist = (List<Hotel>)session.getAttribute("hotel_search_results"); //we are supposed to get this list from Hotel.java servlet
+		{List <Object[]> hotellist = (List<Object[]>)session.getAttribute("hotel_search_results"); //we are supposed to get this list from Hotel.java servlet
 		for(int i=0;i<hotellist.size();i++)
-			{%>
-				<input type="radio" name="option" value=${hotellist.get(i).get_name() }> <br>
-		 	<%;}}%>
+			{
+			%>
+
+				<input type="radio" name="option" value=<% out.write(hotellist.get(i)[0].toString()); %> > <% out.write(hotellist.get(i)[1].toString()); %> <br> 
+		 	 <%}}%> 
 
 	<br>
 <input type="submit" name="gethotel" value="Search in this hotel"></input>

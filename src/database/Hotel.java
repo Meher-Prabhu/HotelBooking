@@ -12,7 +12,7 @@ import javax.persistence.Table;
 	@Id
 	@GeneratedValue
 	@Column(name = "hotel_id")
-	private int id;
+	private int hotel_id;
 	
 	@Column(name = "name")
 	private String name;
@@ -36,17 +36,17 @@ import javax.persistence.Table;
 	}
 	
 	public Hotel( int hotel_id, String name, String mail_id) {
-		this.id = hotel_id;
+		this.hotel_id = hotel_id;
 		this.name = name ;
 		this.mail_id= mail_id;
 	}
 	
 	public int get_id() {
-		return id;
+		return hotel_id;
 	}
 	
 	public void set_id(int value) {
-		this.id = value;
+		this.hotel_id = value;
 	}
 	
 	public long get_phone_number() {
@@ -94,9 +94,14 @@ import javax.persistence.Table;
 	public void set_city(String value) {
 		this.city = value;
 	}
-	
+
+	@Override
 	public String toString() {
-		return "name: " + get_name() + " area: " + get_area() + " city: " + get_city();
+		return "Hotel [hotel_id=" + hotel_id + ", name=" + name + ", area=" + area + ", city=" + city
+				+ ", phone_number=" + phone_number + ", booking_period=" + booking_period + ", mail_id=" + mail_id
+				+ "]";
 	}
+	
+	
 	
 }

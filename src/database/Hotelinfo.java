@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -33,25 +34,26 @@ public class Hotelinfo extends HttpServlet {
 
     public static List<String> getamenities()
     {
-    	Transaction tx = null;
-		Session session = SessionFactoryUtil.getInstance().getCurrentSession();
-
-		try{
-			tx= session.beginTransaction();
-			String stmt = "select  A.amenity from Amenities A group by A.amenity";
-			Query query = session.createQuery(stmt);
-			List<String>amenities = (List<String>) query.list();
-			return amenities;
-    	
-		}
-		catch(RuntimeException e)
-		{
-			if(tx != null && tx.isActive()){
-				tx.rollback();
-				e.printStackTrace();
-			}
-			throw e;
-		}
+//    	Transaction tx = null;
+//		Session session = SessionFactoryUtil.getInstance().getCurrentSession();
+//
+//		try{
+//			tx= session.beginTransaction();
+//			String stmt = "select  A.amenity from Amenities A group by A.amenity";
+//			Query query = session.createQuery(stmt);
+//			List<String>amenities = (List<String>) query.list();
+//			return amenities;
+//    	
+//		}
+//		catch(RuntimeException e)
+//		{
+//			if(tx != null && tx.isActive()){
+//				tx.rollback();
+//				e.printStackTrace();
+//			}
+//			throw e;
+//		}
+    	return new ArrayList<String>();
     }
 		
     	
@@ -74,9 +76,11 @@ public class Hotelinfo extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(request, response);
 		
-		if(request.getHeader("referer")=="Homepage.jsp")
+		String[] splitOrig = request.getHeader("referer").split("/");
+		String orig = splitOrig[splitOrig.length - 1];
+		
+		if(orig.equalsIgnoreCase("Homepage.jsp"))
 		{
 			String city = request.getParameter("city");
 			String area = request.getParameter("area");
@@ -87,7 +91,7 @@ public class Hotelinfo extends HttpServlet {
 			searchSession.setAttribute("area", area);
 			searchSession.setAttribute("start_date", start_date);
 			searchSession.setAttribute("end_date", end_date);
-			if(start_date==null || end_date==null)
+			if(start_date.equals("") || end_date.equals(""))
 			{searchSession.setAttribute("empty_field","true");
 			 response.sendRedirect("Homepage.jsp");
 			}
@@ -97,11 +101,13 @@ public class Hotelinfo extends HttpServlet {
 			Transaction tx = null;
 			Session session = SessionFactoryUtil.getInstance().getCurrentSession();
 			Date strt_date = Date.valueOf(start_date);
+			Date endr_date = Date.valueOf(end_date);
 			try{
 				tx= session.beginTransaction();
-				String stmt = "select A from Hotel A where A.city = :city and A.area = :area and date >= :start_date ";
-				Query query = session.createQuery(stmt).setParameter("city",city).setParameter("area",area).setParameter("start_date", strt_date);
-				List<Hotel>hotels = (List<Hotel>) query.list();
+				int days = endr_date.compareTo(strt_date)+2;
+				String stmt = "select hotel_id,name from hotel natural join room natural join availability where city = :city and area = :area and date >= :start_date and date <= :end_date group by hotel_id,room_id having count(*) = :diff";
+				SQLQuery query = ((SQLQuery) session.createSQLQuery(stmt).setParameter("city",city).setParameter("area",area).setParameter("start_date", strt_date).setParameter("end_date", endr_date).setParameter("diff", days));
+				List<Object[]>hotels = (List<Object[]>) query.list();
 				searchSession.setAttribute("hotel_search_results", hotels);
 		
 				response.sendRedirect("SearchResult.jsp");
@@ -111,6 +117,7 @@ public class Hotelinfo extends HttpServlet {
 				{
 					if(tx != null && tx.isActive()){
 						tx.rollback();
+						// session.close();
 						e.printStackTrace();
 					}
 					throw e;
@@ -119,8 +126,9 @@ public class Hotelinfo extends HttpServlet {
 		}
 		
 		
-		else if(request.getHeader("referer")=="SearchResult.jsp")
-		{   String option = request.getParameter("option");
+		else if(orig.equalsIgnoreCase("Searchresult.jsp"))
+		{   
+			String option = request.getParameter("option");
 			String submithotel= request.getParameter("gethotel");
 			HttpSession searchSession = request.getSession(true);
 			if(option ==null || option.equalsIgnoreCase("") || submithotel==null || option.equalsIgnoreCase(""))
