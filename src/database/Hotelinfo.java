@@ -24,67 +24,61 @@ import org.hibernate.Transaction;
 public class Hotelinfo extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static Session session;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public Hotelinfo() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
-    
-    public static List<String> getamenities()
-    {
-    	Transaction tx = null;
+
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public Hotelinfo() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public static List<String> getamenities() {
+		Transaction tx = null;
 		Session session = SessionFactoryUtil.getInstance().getCurrentSession();
 		List<String> amenities;
 
-		try{
-			tx= session.beginTransaction();
+		try {
+			tx = session.beginTransaction();
 			String stmt = "select  distinct amenity from amenities";
 			SQLQuery query = ((SQLQuery) session.createSQLQuery(stmt));
 			amenities = (List<String>) query.list();
 			tx.commit();
-			if(session.isOpen())
-				session.close();    	
-		}
-		catch(RuntimeException e)
-		{
-			if(tx != null && tx.isActive()){
+			if (session.isOpen())
+				session.close();
+		} catch (RuntimeException e) {
+			if (tx != null && tx.isActive()) {
 				tx.rollback();
 				e.printStackTrace();
 			}
 			throw e;
 		}
-//    	return new ArrayList<String>();
+		// return new ArrayList<String>();
 		return amenities;
-    }
-		
-    	
-    	
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-	   
-	
-	
-	
-	
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		
+		response.getWriter().append("Served at: ").append(request.getContextPath());
+
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		// TODO Auto-generated method stub
+
 		String[] splitOrig = request.getHeader("referer").split("/");
 		String orig = splitOrig[splitOrig.length - 1];
-		if(orig.equalsIgnoreCase("Homepage.jsp"))
-		{
+		if (orig.equalsIgnoreCase("Homepage.jsp")) {
 			String city = request.getParameter("city");
 			String area = request.getParameter("area");
 			String start_date = request.getParameter("start_date");
@@ -94,34 +88,32 @@ public class Hotelinfo extends HttpServlet {
 			searchSession.setAttribute("area", area);
 			searchSession.setAttribute("start_date", start_date);
 			searchSession.setAttribute("end_date", end_date);
-			if(start_date.equals("") || end_date.equals(""))
-			{searchSession.setAttribute("empty_field","true");
-			 response.sendRedirect("Homepage.jsp");
-			}
-			else
-			{
-			searchSession.setAttribute("empty_field","false");
-			Transaction tx = null;
-			Session session = SessionFactoryUtil.getInstance().getCurrentSession();
-			Date strt_date = Date.valueOf(start_date);
-			Date endr_date = Date.valueOf(end_date);
-			try{
-				tx= session.beginTransaction();
-				int days = endr_date.compareTo(strt_date)+2;
-				String stmt = "select distinct hotel_id,name from hotel natural join room natural join availability where city = :city and area = :area and date >= :start_date and date <= :end_date group by hotel_id,room_id having count(*) = :diff";
-				SQLQuery query = ((SQLQuery) session.createSQLQuery(stmt).setParameter("city",city).setParameter("area",area).setParameter("start_date", strt_date).setParameter("end_date", endr_date).setParameter("diff", days));
-				List<Object[]>hotels = (List<Object[]>) query.list();
-				tx.commit();
-				if(session.isOpen())
-					session.close();				
-				searchSession.setAttribute("hotel_search_results", hotels);
-		
-				response.sendRedirect("SearchResult.jsp");
-				
-				}
-			catch(RuntimeException e)
-				{
-					if(tx != null && tx.isActive()){
+			if (start_date.equals("") || end_date.equals("")) {
+				searchSession.setAttribute("empty_field", "true");
+				response.sendRedirect("Homepage.jsp");
+			} else {
+				searchSession.setAttribute("empty_field", "false");
+				Transaction tx = null;
+				Session session = SessionFactoryUtil.getInstance().getCurrentSession();
+				Date strt_date = Date.valueOf(start_date);
+				Date endr_date = Date.valueOf(end_date);
+				try {
+					tx = session.beginTransaction();
+					int days = endr_date.compareTo(strt_date) + 2;
+					String stmt = "select distinct hotel_id,name from hotel natural join room natural join availability where city = :city and area = :area and date >= :start_date and date <= :end_date group by hotel_id,room_id having count(*) = :diff";
+					SQLQuery query = ((SQLQuery) session.createSQLQuery(stmt).setParameter("city", city)
+							.setParameter("area", area).setParameter("start_date", strt_date)
+							.setParameter("end_date", endr_date).setParameter("diff", days));
+					List<Object[]> hotels = (List<Object[]>) query.list();
+					tx.commit();
+					if (session.isOpen())
+						session.close();
+					searchSession.setAttribute("hotel_search_results", hotels);
+
+					response.sendRedirect("SearchResult.jsp");
+
+				} catch (RuntimeException e) {
+					if (tx != null && tx.isActive()) {
 						tx.rollback();
 						// session.close();
 						e.printStackTrace();
@@ -130,104 +122,177 @@ public class Hotelinfo extends HttpServlet {
 				}
 			}
 		}
-		
-		
-		else if(orig.equalsIgnoreCase("Searchresult.jsp"))
-		{   
+
+		else if (orig.equalsIgnoreCase("Searchresult.jsp")) {
 			String option = request.getParameter("option");
-			String submithotel= request.getParameter("gethotel");
+			String submithotel = request.getParameter("gethotel");
 			HttpSession searchSession = request.getSession(true);
-			if(option ==null || option.equalsIgnoreCase("") || submithotel==null || option.equalsIgnoreCase(""))
-			{
-	
-			String city = searchSession.getAttribute("city").toString();
-			String area = searchSession.getAttribute("area").toString();
-			String start_date = searchSession.getAttribute("start_date").toString();
-			String end_date = searchSession.getAttribute("end_date").toString();
-			String rating = request.getParameter("rating");
-			String price_range[] = request.getParameterValues("price_range");
-			String amenities[] = request.getParameterValues("amenities");
-			if(price_range==null || amenities==null)
-			{searchSession.setAttribute("missing_input","true");
-			 response.sendRedirect("SearchResult.jsp");}
-			
-			else {
-			searchSession.setAttribute("missing_input","false");
-			searchSession.setAttribute("start_date", start_date);
-			searchSession.setAttribute("end_date", end_date);
-			Transaction tx = null;
-			Session session = SessionFactoryUtil.getInstance().getCurrentSession();
-			try{
-				tx= session.beginTransaction();
-				String stmt = "select A from Hotel A where A.city = :city and A.area = :area ";
-				Query query = session.createQuery(stmt).setParameter("city",city).setParameter("area",area).setParameter("start_date", start_date).setParameter("end_date",end_date);
-				List<Hotel>hotels = (List<Hotel>) query.list();
-				searchSession.setAttribute("hotel_search_results", hotels);
-		
-				response.sendRedirect("SearchResult.jsp");
-				
+			if (option == null || option.equalsIgnoreCase("") || submithotel == null || option.equalsIgnoreCase("")) {
+
+				String city = searchSession.getAttribute("city").toString();
+				String area = searchSession.getAttribute("area").toString();
+				String start_date = searchSession.getAttribute("start_date").toString();
+				String end_date = searchSession.getAttribute("end_date").toString();
+				String rating = request.getParameter("rating");
+				String price_range[] = request.getParameterValues("price_range");
+				String amenities[] = request.getParameterValues("amenities");
+				if (price_range == null || amenities == null) {
+					searchSession.setAttribute("missing_input", "true");
+					response.sendRedirect("SearchResult.jsp");
 				}
-			catch(RuntimeException e){
-				if(tx != null && tx.isActive()){
-					tx.rollback();
+
+				else {
+					searchSession.setAttribute("missing_input", "false");
+					searchSession.setAttribute("start_date", start_date);
+					searchSession.setAttribute("end_date", end_date);
+					Transaction tx = null;
+					Session session = SessionFactoryUtil.getInstance().getCurrentSession();
+					try {
+						tx = session.beginTransaction();
+						String stmt = "select A from Hotel A where A.city = :city and A.area = :area ";
+						Query query = session.createQuery(stmt).setParameter("city", city).setParameter("area", area)
+								.setParameter("start_date", start_date).setParameter("end_date", end_date);
+						List<Hotel> hotels = (List<Hotel>) query.list();
+						searchSession.setAttribute("hotel_search_results", hotels);
+
+						response.sendRedirect("SearchResult.jsp");
+
+					} catch (RuntimeException e) {
+						if (tx != null && tx.isActive()) {
+							tx.rollback();
+						}
+						throw e;
+					}
 				}
-				throw e;
-			}}
 			}
-			
-			else
-			{	
+
+			else {
 				String start_date = searchSession.getAttribute("start_date").toString();
 				String end_date = searchSession.getAttribute("end_date").toString();
 				String city = searchSession.getAttribute("city").toString();
 				String area = searchSession.getAttribute("area").toString();
 				Date strt_date = Date.valueOf(start_date);
 				Date endr_date = Date.valueOf(end_date);
-				int days = endr_date.compareTo(strt_date)+2;
+				int days = endr_date.compareTo(strt_date) + 2;
 				Transaction tx = null;
 				Session session = SessionFactoryUtil.getInstance().getCurrentSession();
-				try{
+				try {
 					int id = Integer.valueOf(option);
-					tx= session.beginTransaction();
+					tx = session.beginTransaction();
 					String stmt = "select A from Hotel A where A.id= :id";
-					Query query = session.createQuery(stmt).setParameter("id",id);
-					List<Hotel>hotels = (List<Hotel>) query.list();
+					Query query = session.createQuery(stmt).setParameter("id", id);
+					List<Hotel> hotels = (List<Hotel>) query.list();
 					searchSession.setAttribute("hotel_under_search", hotels.get(0));
-					
-					String stmt1="select type,count(*) from (select hotel_id,room_id from hotel natural join room natural join availability  where city= :city and area= :area and date>= :start_date and date <= :end_date group by hotel_id,room_id having count(*)= :diff) as R natural join room where hotel_id= :id group by type";
-					SQLQuery query1 = ((SQLQuery) session.createSQLQuery(stmt1).setParameter("city",city).setParameter("area",area).setParameter("start_date", strt_date).setParameter("end_date", endr_date).setParameter("diff", days).setParameter("id",id));
+
+					String stmt1 = "select type,count(*) from (select hotel_id,room_id from hotel natural join room natural join availability  where city= :city and area= :area and date>= :start_date and date <= :end_date group by hotel_id,room_id having count(*)= :diff) as R natural join room where hotel_id= :id group by type";
+					SQLQuery query1 = ((SQLQuery) session.createSQLQuery(stmt1).setParameter("city", city)
+							.setParameter("area", area).setParameter("start_date", strt_date)
+							.setParameter("end_date", endr_date).setParameter("diff", days).setParameter("id", id));
 					List<Object[]> room_type_availabilities = (List<Object[]>) query1.list();
 					searchSession.setAttribute("room_type_availabilities", room_type_availabilities);
-					
-					String stmt2 = "select id, content, name from review natural join accounts where hotel_id = :id";
+
+					String stmt2 = "select id, name, content from review natural join accounts where hotel_id = :id";
 					SQLQuery query2 = ((SQLQuery) session.createSQLQuery(stmt2).setParameter("id", id));
 					List<Object[]> reviews = (List<Object[]>) query2.list();
 					searchSession.setAttribute("hotel_reviews", reviews);
-					
-					String stmt3 = "select content, name, review_id from reply natural join accounts where review_id in (select id from review where hotel_id = :id)";
-					SQLQuery query3 = ((SQLQuery) session.createSQLQuery(stmt2).setParameter("id", id));
+
+					String stmt3 = "select review_id, name, content from reply natural join accounts where review_id in (select id from review where hotel_id = :id)";
+					SQLQuery query3 = ((SQLQuery) session.createSQLQuery(stmt3).setParameter("id", id));
 					List<Object[]> replies = (List<Object[]>) query3.list();
 					searchSession.setAttribute("review_replies", replies);
-					
+
+					if (searchSession.getAttribute("currentUser") != null) {
+						String user = ((SampleAccount) searchSession.getAttribute("currentUser")).get_mail_id();
+
+						String stmt4 = "select * from review where hotel_id = :id and mail_id = :user";
+						SQLQuery query4 = ((SQLQuery) session.createSQLQuery(stmt4).setParameter("id", id)
+								.setParameter("user", user));
+						List<Object[]> reviewed = (List<Object[]>) query4.list();
+						if (reviewed.size() > 0) {
+							searchSession.setAttribute("reviewed", true);
+						} else {
+							searchSession.setAttribute("reviewed", false);
+						}
+					}
+
 					tx.commit();
-					if(session.isOpen())
+					if (session.isOpen())
 						session.close();
 					response.sendRedirect("hotel.jsp");
-				}
-				catch(RuntimeException e){
-					if(tx != null && tx.isActive()){
+				} catch (RuntimeException e) {
+					if (tx != null && tx.isActive()) {
 						tx.rollback();
 					}
 					throw e;
 				}
-				
+
 			}
-				
+
+		} else if (orig.equalsIgnoreCase("hotel.jsp")) {
+			String formOrig = request.getParameter("formName");
+			HttpSession addSession = request.getSession(true);
+			if (formOrig.equalsIgnoreCase("reply")) {
+				String text = request.getParameter("reply");
+				int rev_id = Integer.valueOf(request.getParameter("rev_id"));
+				String user_mail = ((SampleAccount) addSession.getAttribute("currentUser")).get_mail_id();
+				String user_name = ((SampleAccount) addSession.getAttribute("currentUser")).get_name();
+				if (text.equalsIgnoreCase("")) {
+					response.sendRedirect("hotel.jsp");
+				} else {
+					Session session = SessionFactoryUtil.getInstance().getCurrentSession();
+					Transaction tx = null;
+					try {
+						tx = session.beginTransaction();
+						String update = "insert into reply values(default,:mail,:rev,:cont)";
+						SQLQuery query = (SQLQuery) session.createSQLQuery(update).setParameter("mail", user_mail)
+								.setParameter("rev", rev_id).setParameter("cont", text);
+						query.executeUpdate();
+						tx.commit();
+						Object[] new_reply = new Object[3];
+						new_reply[0] = rev_id;
+						new_reply[1] = user_name;
+						new_reply[2] = text;
+						List<Object[]> replies = (List<Object[]>) addSession.getAttribute("review_replies");
+						replies.add(new_reply);
+						addSession.setAttribute("review_replies", replies);
+					} catch (RuntimeException e) {
+						if (tx != null && tx.isActive()) {
+							tx.rollback();
+						}
+						throw e;
+					}
+					response.sendRedirect("hotel.jsp");
+				}
+			} else if (formOrig.equalsIgnoreCase("Review")) {
+				String text = request.getParameter("review");
+				String user_mail = ((SampleAccount) addSession.getAttribute("currentUser")).get_mail_id();
+				int hotel_id = Integer.valueOf(((Hotel) addSession.getAttribute("hotel_under_search")).get_id());
+				if (text.equalsIgnoreCase("")) {
+					response.sendRedirect("hotel.jsp");
+				} else {
+					Session session = SessionFactoryUtil.getInstance().getCurrentSession();
+					Transaction tx = null;
+					try {
+						tx = session.beginTransaction();
+						String update = "insert into review values(default, :mail, :hid, :cont)";
+						SQLQuery query = (SQLQuery) session.createSQLQuery(update).setParameter("mail", user_mail)
+								.setParameter("hid", hotel_id).setParameter("cont", text);
+						query.executeUpdate();
+						String stmt2 = "select id, name, content from review natural join accounts where hotel_id = :id";
+						SQLQuery query2 = ((SQLQuery) session.createSQLQuery(stmt2).setParameter("id", hotel_id));
+						List<Object[]> reviews = (List<Object[]>) query2.list();
+						addSession.setAttribute("hotel_reviews", reviews);
+						tx.commit();
+					} catch (RuntimeException e) {
+						if (tx != null && tx.isActive()) {
+							tx.rollback();
+						}
+					}
+					response.sendRedirect("hotel.jsp");
+				}
+			}
 		}
-			
-		}
-		
-		
+
+	}
 
 }
-
