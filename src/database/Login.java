@@ -73,7 +73,11 @@ public class Login extends HttpServlet {
 						SampleAccount user = rows.get(0);
 						HttpSession userSession = request.getSession(true);
 						userSession.setAttribute("currentUser", user);
+						System.out.println(user.get_mail_id());
+						if(user.get_type().equalsIgnoreCase("user"))
 						response.sendRedirect("Homepage.jsp");
+						else if (user.get_type().equalsIgnoreCase("hotel")) response.sendRedirect("Hoteldetails.jsp");
+						else response.sendRedirect("Adminlogin.jsp");
 					} else {
 						request.getSession(true).setAttribute("error", "Invalid");
 						response.sendRedirect(request.getHeader("referer"));					
