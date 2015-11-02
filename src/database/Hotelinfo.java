@@ -1,6 +1,7 @@
 package database;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -214,6 +215,11 @@ public class Hotelinfo extends HttpServlet {
 							searchSession.setAttribute("reviewed", false);
 						}
 					}
+					
+					String stmt5 = "select rating from avg_rating where hotel_id = :id";
+					SQLQuery query5 = ((SQLQuery) session.createSQLQuery(stmt5).setParameter("id", id));
+					BigDecimal rating = (BigDecimal) query5.uniqueResult();
+					searchSession.setAttribute("rating", rating);
 
 					tx.commit();
 					if (session.isOpen())
