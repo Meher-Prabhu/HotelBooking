@@ -198,6 +198,17 @@ public class Hotelinfo extends HttpServlet {
 					SQLQuery query1 = ((SQLQuery) session.createSQLQuery(stmt1).setParameter("city",city).setParameter("area",area).setParameter("start_date", strt_date).setParameter("end_date", endr_date).setParameter("diff", days).setParameter("id",id));
 					List<Object[]> room_type_availabilities = (List<Object[]>) query1.list();
 					searchSession.setAttribute("room_type_availabilities", room_type_availabilities);
+					
+					String stmt2 = "select id, content, name from review natural join accounts where hotel_id = :id";
+					SQLQuery query2 = ((SQLQuery) session.createSQLQuery(stmt2).setParameter("id", id));
+					List<Object[]> reviews = (List<Object[]>) query2.list();
+					searchSession.setAttribute("hotel_reviews", reviews);
+					
+					String stmt3 = "select content, name, review_id from reply natural join accounts where review_id in (select id from review where hotel_id = :id)";
+					SQLQuery query3 = ((SQLQuery) session.createSQLQuery(stmt2).setParameter("id", id));
+					List<Object[]> replies = (List<Object[]>) query3.list();
+					searchSession.setAttribute("review_replies", replies);
+					
 					tx.commit();
 					if(session.isOpen())
 						session.close();
