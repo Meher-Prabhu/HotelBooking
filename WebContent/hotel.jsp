@@ -16,7 +16,22 @@
 	 {room_type_list=(List<Object[]>)session.getAttribute("room_type_availabilities");}
 	else {room_type_list=new ArrayList<Object[]>();} 
 %>
-<div id="top" style="float:top; height:50%;">
+<div id = "wrapper">
+<div id="top" >
+	<div id="book" style="float:right; width:50%;">
+	<form name="book" action="booking.jsp" method="post">
+	Book for room type: 
+	<select name="department" >
+	<%
+	for(int i=0;i<room_type_list.size();i++){%>
+	<option> <%out.write(room_type_list.get(i)[0].toString());%> </option>
+ 	<%}%>
+  </select>
+  <br>
+	Number of rooms : 	<input type="text" name="num_rooms" value=""><br>
+	<input type="submit" name="book" value="Book "></input>
+	</form>
+	</div>
 	<div id="availability" style="float:left; width:50%;">
 	<h1><% out.print(hotel.get_name()); %> </h1>
 	<% out.print(hotel.get_phone_number()); %><br>
@@ -32,25 +47,13 @@
 	out.print("</table>");
 	%>
 	</div>
-	<div id="book" style="float:right; width:50%;">
-	<form name="book" action="Booking" method="post">
-	Book for room type: 
-	<select name="department" >
-	<%
-	for(int i=0;i<room_type_list.size();i++){%>
-	<option> <%out.write(room_type_list.get(i)[0].toString());%> </option>
- 	<%}%>
-  </select>
-  <br>
-	Number of rooms : 	<input type="text" name="num_rooms" value=""><br>
-	<input type="submit" name="book" value="Book "></input>
-	</form>
-	</div>
 </div>
-<div id="bottom" style="float:bottom; height:50%;">
+<br>
+<div id="bottom" style="float:left; clear:left">
+<br>
 Reply and comments section
 </div>
-
+</div>
 	
 
 </body>
