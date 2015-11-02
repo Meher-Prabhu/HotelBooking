@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>Hotel</title>
 </head>
 <body>
 <%
@@ -18,6 +18,10 @@
 %>
 <div id="top" style="float:top; height:50%;">
 	<div id="availability" style="float:left; width:50%;">
+	<h1><% out.print(hotel.get_name()); %> </h1>
+	<% out.print(hotel.get_phone_number()); %><br>
+	<% out.print(hotel.get_area()); %> <br>
+	<% out.print(hotel.get_city()); %><br><br>
 	<% 
 	out.print("<table border='1'>");
 	
