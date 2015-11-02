@@ -22,8 +22,8 @@
       dbproject
    </property>
    <property name="current_session_context_class">thread</property>
+	<property name="connection.pool_size">10</property>
    <mapping class = "database.SampleAccount"></mapping>
    <mapping class = "database.Hotel"></mapping>
-
 </session-factory>
 </hibernate-configuration>

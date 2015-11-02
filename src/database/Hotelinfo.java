@@ -176,15 +176,31 @@ public class Hotelinfo extends HttpServlet {
 			}
 			
 			else
-			{
+			{	
+				String start_date = searchSession.getAttribute("start_date").toString();
+				String end_date = searchSession.getAttribute("end_date").toString();
+				String city = searchSession.getAttribute("city").toString();
+				String area = searchSession.getAttribute("area").toString();
+				Date strt_date = Date.valueOf(start_date);
+				Date endr_date = Date.valueOf(end_date);
+				int days = endr_date.compareTo(strt_date)+2;
 				Transaction tx = null;
 				Session session = SessionFactoryUtil.getInstance().getCurrentSession();
 				try{
+					int id = Integer.valueOf(option);
 					tx= session.beginTransaction();
 					String stmt = "select A from Hotel A where A.id= :id";
-					Query query = session.createQuery(stmt).setParameter("id",option);
+					Query query = session.createQuery(stmt).setParameter("id",id);
 					List<Hotel>hotels = (List<Hotel>) query.list();
 					searchSession.setAttribute("hotel_under_search", hotels.get(0));
+					
+					String stmt1="select type,count(*) from (select hotel_id,room_id from hotel natural join room natural join availability  where city= :city and area= :area and date>= :start_date and date <= :end_date group by hotel_id,room_id having count(*)= :diff) as R natural join room where hotel_id= :id group by type";
+					SQLQuery query1 = ((SQLQuery) session.createSQLQuery(stmt1).setParameter("city",city).setParameter("area",area).setParameter("start_date", strt_date).setParameter("end_date", endr_date).setParameter("diff", days).setParameter("id",id));
+					List<Object[]> room_type_availabilities = (List<Object[]>) query1.list();
+					searchSession.setAttribute("room_type_availabilities", room_type_availabilities);
+					tx.commit();
+					if(session.isOpen())
+						session.close();
 					response.sendRedirect("hotel.jsp");
 				}
 				catch(RuntimeException e){
