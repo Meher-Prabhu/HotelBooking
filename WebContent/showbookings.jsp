@@ -11,15 +11,12 @@
 <%
 
 List<Object[]> bookinglist;
-if (session.getAttribute("bookinglist") != null) {
+if (session.getAttribute("bookings") != null) {
 	bookinglist = (List<Object[]>) session.getAttribute("bookings");
 } else {
 	bookinglist = new ArrayList<Object[]>();}
-
-
 					out.print("<table border='1' align='center'>");
 					out.print("<tr> <th>Booking_id</th> <th>Name </th> <th>Room_id</th> <th>Start date</th> <th>End date</th> </tr>");
-
 					for (int i = 0; i < bookinglist.size(); i++) {
 						out.print("<tr>");
 						out.print("<td>" + bookinglist.get(i)[0].toString() + "</td>" + "<td>"

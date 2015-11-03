@@ -51,7 +51,7 @@ public class Hotelchanges extends HttpServlet {
 		
 		
 		
-		if(orig.equalsIgnoreCase("seebooking.jsp")) {
+		if(orig.equalsIgnoreCase("hoteldetails.jsp")) {
 			Transaction tx = null;
 			Session session = SessionFactoryUtil.getInstance().getCurrentSession();
 			HttpSession hotelSession = request.getSession(true);
@@ -59,16 +59,17 @@ public class Hotelchanges extends HttpServlet {
 			
 			try{
 				tx= session.beginTransaction();
-				String stmt = "select	B.booking_id,B.name,B.room_id,B.start_date,B.end_date from booking B inner join hotel H on B.hotel_id=H.hotel_id where H.mail_id = :mail";
+				String stmt = "select B.booking_id, B.name, B.room_id, B.start_date, B.end_date from booking B inner join hotel H on B.hotel_id=H.hotel_id where H.mail_id = :mail";
 				SQLQuery query = (SQLQuery) session.createSQLQuery(stmt).setParameter("mail",my_hotel.get_mail_id());
 				List<Object[]>bookings = (List<Object[]>) query.list();
 				tx.commit();
-				
+				System.out.println(bookings.size());
 				hotelSession.setAttribute("bookings",bookings);
 				response.sendRedirect("showbookings.jsp");					
 				}
 			
 			catch(RuntimeException e){
+				e.printStackTrace();
 				if(tx != null && tx.isActive()){
 					tx.rollback();
 				}
@@ -224,7 +225,8 @@ public class Hotelchanges extends HttpServlet {
 			Integer capacity= Integer.parseInt(request.getParameter("capacity"));
 			
 			String room_type=request.getParameter("room_type");
-			List<String>amenities= new ArrayList<String>(Arrays.asList(request.getParameter("amenities").split(" , ")));
+			List<String>amenities= new ArrayList<String>(Arrays.asList(request.getParameter("amenities").split(",")));
+			System.out.println(amenities);
 			
 			try{
 				tx= session.beginTransaction();
@@ -237,7 +239,7 @@ public class Hotelchanges extends HttpServlet {
 				}
 				Hotel hotelaccount = (Hotel)hotelSession.getAttribute("hotelaccount");
 				
-				String stmt3 = "select * from roomtype where type= :room_type and hotel_id= :hotel_id";
+				String stmt3 = "select * from room_type where type= :room_type and hotel_id= :hotel_id";
 				SQLQuery query3 = ((SQLQuery) session.createSQLQuery(stmt3).setParameter("room_type",room_type).setParameter("hotel_id",hotelaccount.get_id()));
 				List<Object[]>roomtype = (List<Object[]>) query3.list();
 				if(!roomtype.isEmpty()) {
@@ -248,7 +250,7 @@ public class Hotelchanges extends HttpServlet {
 				
 				else{
 				hotelSession.setAttribute("roomtypepresent", "false");
-				String stmt1 = "insert into roomtype values( :room_type, :hotel_id, :price, :capacity)";
+				String stmt1 = "insert into room_type values( :room_type, :hotel_id, :price, :capacity)";
 				SQLQuery query1 = ((SQLQuery) session.createSQLQuery(stmt1).setParameter("room_type",room_type).setParameter("hotel_id",hotelaccount.get_id()).setParameter("price",price).setParameter("capacity",capacity));
 				query1.executeUpdate();
 				for(int i=0;i<amenities.size();i++)
