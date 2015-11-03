@@ -134,7 +134,8 @@ public class Hotelinfo extends HttpServlet {
 				Date endr_date = Date.valueOf(end_date);
 				try {
 					tx = session.beginTransaction();
-					int days = endr_date.compareTo(strt_date) + 2;
+					//int days = endr_date.compareTo(strt_date) + 2;
+					int days = (int)((endr_date.getTime() - strt_date.getTime())/(1000*60*60*24)) + 1;
 					String stmt = "select distinct hotel_id,name from hotel natural join room natural join availability where city = :city and area = :area and date >= :start_date and date <= :end_date group by hotel_id,room_id having count(*) = :diff";
 					SQLQuery query = ((SQLQuery) session.createSQLQuery(stmt).setParameter("city", city)
 							.setParameter("area", area).setParameter("start_date", strt_date)

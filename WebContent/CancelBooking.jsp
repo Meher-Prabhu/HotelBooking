@@ -7,8 +7,8 @@
 <title>Cancel Booking</title>
 </head>
 <body>
-<form action = "Booking" method = "post">
-Booking ID: <input type = "text" name = "bID"> <br>
+<form action = "Bookinginfo" method = "post">
+Booking ID: <input type = "text" name = "booking_id"> <br>
 <input type = "submit" value = "Cancel Booking">
 </form>
 </body>

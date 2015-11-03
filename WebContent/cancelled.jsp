@@ -4,11 +4,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Sorry :(</title>
+<title>Cancelled!!</title>
 </head>
 <body>
-Sorry,we were unable to process your request.<br>
-Please check your details and try again.<br> 
-<a href = "Homepage.jsp"> Go to Homepage </a>
+	<h1> Cancelled!!!
+	</h1>
+	<br>
+	You have successfully cancelled your booking of the room.<br>
+	<a href = "Homepage.jsp"> Go to Homepage </a>
 </body>
 </html>

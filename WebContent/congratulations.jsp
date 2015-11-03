@@ -10,10 +10,9 @@
 	<h1> Congratulations!!!
 	</h1>
 	<br>
-	You have successfully booked a room.
-	Your Booking Id is : <% %>
-	Please note your booking id for future referneces.
+	You have successfully booked a room.<br>
+	Your Booking Id is : <% out.print(session.getAttribute("booking_id"));%> <br>
+	Please note your booking id for future referneces. <br>
 	<a href = "Homepage.jsp"> Go to Homepage </a>
-	
 </body>
 </html>
