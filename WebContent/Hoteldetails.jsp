@@ -1,13 +1,24 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="database.SampleAccount" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
+<% if(session.getAttribute("currentUser") == null) {
+	response.sendRedirect("Homepage.jsp");
+}
+else {
+SampleAccount user = (SampleAccount) session.getAttribute("currentUser");  
+if(user.get_type().equalsIgnoreCase("user") || user.get_type().equalsIgnoreCase("admin")) {
+	response.sendRedirect("Homepage.jsp");
+} else {
+	%>
+
 </head>
 <body>
-Welcome ${currentUser.get_name() } | <a href = "Logout.jsp">Logout</a> </p>
+Welcome ${currentUser.get_name() } | <a href = "Logout.jsp">Logout</a>
 <br>
 Select from one of the below actions you wish to perform.<br>
 <form name="SeeBooking" action="Hotelchanges" method="post">
@@ -26,6 +37,7 @@ Select from one of the below actions you wish to perform.<br>
 <input type="submit" name="add_room_type" value="Add a new room type"></input><br>
 </form>
 
+<%}} %>
 
 </body>
 </html>

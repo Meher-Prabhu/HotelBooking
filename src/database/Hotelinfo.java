@@ -255,6 +255,21 @@ public class Hotelinfo extends HttpServlet {
 					SQLQuery query5 = ((SQLQuery) session.createSQLQuery(stmt5).setParameter("id", id));
 					BigDecimal rating = (BigDecimal) query5.uniqueResult();
 					searchSession.setAttribute("rating", rating);
+					
+					if (searchSession.getAttribute("currentUser") != null) {
+						String user = ((SampleAccount) searchSession.getAttribute("currentUser")).get_mail_id();
+
+						String stmt6 = "select value from rating where hotel_id = :id and mail_id = :user";
+						SQLQuery query6 = ((SQLQuery) session.createSQLQuery(stmt6).setParameter("id", id)
+								.setParameter("user", user));
+						List<Double> user_rating = (List<Double>) query6.list();
+						if (user_rating.size() > 0) {
+							searchSession.setAttribute("userRating", user_rating.get(0));
+						} else {
+							searchSession.setAttribute("userRating", null);
+						}
+					}
+					
 
 					tx.commit();
 					if (session.isOpen())
@@ -328,6 +343,37 @@ public class Hotelinfo extends HttpServlet {
 						if (tx != null && tx.isActive()) {
 							tx.rollback();
 						}
+					}
+					response.sendRedirect("hotel.jsp");
+				}
+			} else if(formOrig.equalsIgnoreCase("rating")) {
+				double rating = 0.0;
+				if(request.getParameter("rating") != null)
+					rating = Double.valueOf(request.getParameter("rating"));
+				String user_mail = ((SampleAccount) addSession.getAttribute("currentUser")).get_mail_id();
+				int hotel_id = Integer.valueOf(((Hotel) addSession.getAttribute("hotel_under_search")).get_id());
+				System.out.println(rating);
+				if(rating == 0.0) {
+					response.sendRedirect("hotel.jsp");
+				} else {
+					Session session = SessionFactoryUtil.getInstance().getCurrentSession();
+					Transaction tx = null;
+					try{
+					tx = session.beginTransaction();
+					String update = "insert into rating values (:user, :hotel, :value)";
+					SQLQuery query = (SQLQuery) session.createSQLQuery(update).setParameter("user", user_mail).setParameter("hotel", hotel_id).setParameter("value", rating);
+					query.executeUpdate();
+					String stmt = "select rating from avg_rating where hotel_id = :hotel";
+					SQLQuery query1 = (SQLQuery) session.createSQLQuery(stmt).setParameter("hotel", hotel_id);
+					BigDecimal avg_rating = (BigDecimal) query1.uniqueResult();
+					addSession.setAttribute("rating", avg_rating);
+					addSession.setAttribute("userRating", rating);
+					tx.commit();
+					} catch(RuntimeException e) {
+						if(tx != null && tx.isActive()) {
+							tx.rollback();
+						}
+						throw e;
 					}
 					response.sendRedirect("hotel.jsp");
 				}
