@@ -19,7 +19,15 @@ Type of room: <select name="room_type">
 				<option value=<%out.write(roomtypeslist.get(i));%>><%out.write(roomtypeslist.get(i));%></option>
 		 	<%}%>
 	</select>
+<br>
 <input type="submit" name="Submit" value="Submit">
+<br>
+<% if(session.getAttribute("roompresent") == "true") {	%>
+Room already present , please enter a new room.
+<% } %>
+
+
+
 </form>
 </body>
 </html>

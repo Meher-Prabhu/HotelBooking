@@ -19,7 +19,13 @@ Room type to change to : <select name="room_type">
 				<option value=<%out.write(roomtypeslist.get(i));%>><%out.write(roomtypeslist.get(i));%></option>
 		 	<%}%>
 	</select>
+<br>
 <input type="submit" name="Submit" value="Submit">
+<br>
+<% if(session.getAttribute("roompresent") == "false") {	%>
+Room not present, enter correct room.
+<% } %>
+
 </form>
 </body>
 </html>

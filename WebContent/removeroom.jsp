@@ -10,6 +10,11 @@
 <form action="Hotelchanges" method="post">
 Enter room no. to remove : <input type="text" name="room_id" value=""><br>
 <input type="submit" name="Submit" value="Submit">
+<br>
+<% if(session.getAttribute("roompresent") == "false") {	%>
+Room not present , please enter correct room.
+<% } %>
+
 </form>
 
 </body>

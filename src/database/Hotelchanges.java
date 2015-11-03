@@ -1,7 +1,7 @@
 package database;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -95,7 +95,18 @@ public class Hotelchanges extends HttpServlet {
 				 hotelSession.setAttribute("hotelaccount",hotel);
 				}
 				Hotel hotelaccount = (Hotel)hotelSession.getAttribute("hotelaccount");
-				System.out.println(hotelaccount.get_name());
+				
+				String stmt2 = "select * from room where room_id= :room_id and hotel_id= :hotel_id";
+				SQLQuery query2 = ((SQLQuery) session.createSQLQuery(stmt2).setParameter("room_id",room_id).setParameter("hotel_id",hotelaccount.get_id()));
+				List<Object[]>room = (List<Object[]>) query2.list();
+				if(!room.isEmpty()) {
+					hotelSession.setAttribute("roompresent", "true");
+					response.sendRedirect("addroom.jsp");
+				}
+				
+				
+				else{
+				hotelSession.setAttribute("roompresent", "false");
 				String stmt1 = "insert into room values( :room_id, :hotel_id, :room_type, :hotel_id)";
 				SQLQuery query1 = ((SQLQuery) session.createSQLQuery(stmt1).setParameter("room_id",room_id).setParameter("hotel_id",hotelaccount.get_id()).setParameter("room_type",room_type));
 				System.out.println(query1);
@@ -103,6 +114,7 @@ public class Hotelchanges extends HttpServlet {
 				tx.commit();
 				System.out.println(added);
 				response.sendRedirect("Hoteldetails.jsp");
+				}
 			  }
 			catch(RuntimeException e){
 				e.printStackTrace();
@@ -132,11 +144,24 @@ public class Hotelchanges extends HttpServlet {
 				 hotelSession.setAttribute("hotelaccount",hotel);
 				}
 				Hotel hotelaccount = (Hotel)hotelSession.getAttribute("hotelaccount");
+				
+				String stmt2 = "select * from room where room_id= :room_id and hotel_id= :hotel_id";
+				SQLQuery query2 = ((SQLQuery) session.createSQLQuery(stmt2).setParameter("room_id",room_id).setParameter("hotel_id",hotelaccount.get_id()));
+				List<Object[]>room = (List<Object[]>) query2.list();
+				if(room.isEmpty()) {
+					hotelSession.setAttribute("roompresent", "false");
+					response.sendRedirect("updateroom.jsp");
+				}
+				
+				
+				else{
+				hotelSession.setAttribute("roompresent", "true");
 				String stmt1 = "UPDATE room	SET type = :room_type WHERE room_id= :room_id and hotel_id= :hotel_id";
 				SQLQuery query1 = ((SQLQuery) session.createSQLQuery(stmt1).setParameter("room_id",room_id).setParameter("hotel_id",hotelaccount.get_id()).setParameter("room_type",room_type));
 				query1.executeUpdate();
 				tx.commit();
 				response.sendRedirect("Hoteldetails.jsp");
+				}
 			  }
 			catch(RuntimeException e){
 				if(tx != null && tx.isActive()){
@@ -163,13 +188,85 @@ public class Hotelchanges extends HttpServlet {
 				 hotelSession.setAttribute("hotelaccount",hotel);
 				}
 				Hotel hotelaccount = (Hotel)hotelSession.getAttribute("hotelaccount");
+				
+				String stmt2 = "select * from room where room_id= :room_id and hotel_id= :hotel_id";
+				SQLQuery query2 = ((SQLQuery) session.createSQLQuery(stmt2).setParameter("room_id",room_id).setParameter("hotel_id",hotelaccount.get_id()));
+				List<Object[]>room = (List<Object[]>) query2.list();
+				if(room.isEmpty()) {
+					hotelSession.setAttribute("roompresent", "false");
+					response.sendRedirect("addroom.jsp");
+				}
+				
+				
+				else{
+				hotelSession.setAttribute("roompresent", "true");
 				String stmt1 = "delete from room where room_id= :room_id and hotel_id= :hotel_id";
 				SQLQuery query1 = ((SQLQuery) session.createSQLQuery(stmt1).setParameter("room_id",room_id).setParameter("hotel_id",hotelaccount.get_id()));
 				query1.executeUpdate();
 				tx.commit();
 				response.sendRedirect("Hoteldetails.jsp");
+				}
 			  }
 			catch(RuntimeException e){
+				if(tx != null && tx.isActive()){
+					tx.rollback();
+				}
+				throw e;
+			}
+		}
+		
+		else if (orig.equalsIgnoreCase("addroomtype.jsp")){
+			Transaction tx = null;
+			Session session = SessionFactoryUtil.getInstance().getCurrentSession();
+			HttpSession hotelSession = request.getSession(true);
+			SampleAccount my_hotel= (SampleAccount) hotelSession.getAttribute("currentUser");
+			Integer price= Integer.parseInt(request.getParameter("price"));
+			Integer capacity= Integer.parseInt(request.getParameter("capacity"));
+			
+			String room_type=request.getParameter("room_type");
+			List<String>amenities= new ArrayList<String>(Arrays.asList(request.getParameter("amenities").split(" , ")));
+			
+			try{
+				tx= session.beginTransaction();
+				if(hotelSession.getAttribute("hotelaccount")==null)
+				{String stmt = "select	H from Hotel H where H.mail_id= :mail";
+				 Query query = session.createQuery(stmt).setParameter("mail",my_hotel.get_mail_id());
+				 List<Hotel>hotels = (List<Hotel>) query.list();
+				 Hotel hotel = hotels.get(0);
+				 hotelSession.setAttribute("hotelaccount",hotel);
+				}
+				Hotel hotelaccount = (Hotel)hotelSession.getAttribute("hotelaccount");
+				
+				String stmt3 = "select * from roomtype where type= :room_type and hotel_id= :hotel_id";
+				SQLQuery query3 = ((SQLQuery) session.createSQLQuery(stmt3).setParameter("room_type",room_type).setParameter("hotel_id",hotelaccount.get_id()));
+				List<Object[]>roomtype = (List<Object[]>) query3.list();
+				if(!roomtype.isEmpty()) {
+					hotelSession.setAttribute("roomtypepresent", "true");
+					response.sendRedirect("addroom.jsp");
+				}
+				
+				
+				else{
+				hotelSession.setAttribute("roomtypepresent", "false");
+				String stmt1 = "insert into roomtype values( :room_type, :hotel_id, :price, :capacity)";
+				SQLQuery query1 = ((SQLQuery) session.createSQLQuery(stmt1).setParameter("room_type",room_type).setParameter("hotel_id",hotelaccount.get_id()).setParameter("price",price).setParameter("capacity",capacity));
+				query1.executeUpdate();
+				for(int i=0;i<amenities.size();i++)
+					{
+					String stmt2 = "insert into amenities values( :amenity, :room_type, :hotel_id)";
+					SQLQuery query2 = ((SQLQuery) session.createSQLQuery(stmt2).setParameter("amenity",amenities.get(i)).setParameter("hotel_id",hotelaccount.get_id()).setParameter("room_type",room_type));
+					query2.executeUpdate();
+					
+					
+					}
+				
+				tx.commit();
+				
+				response.sendRedirect("Hoteldetails.jsp");
+				}
+			  }
+			catch(RuntimeException e){
+				e.printStackTrace();
 				if(tx != null && tx.isActive()){
 					tx.rollback();
 				}
