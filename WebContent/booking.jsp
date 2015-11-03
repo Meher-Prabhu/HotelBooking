@@ -13,9 +13,9 @@
 <% Hotel hotel = (Hotel)session.getAttribute("hotel_under_search");
 SampleAccount sample_account = (SampleAccount)session.getAttribute("currentUser");%>
 
-<form name="details" action="Booking" method="post">
+<form name="details" action="Bookinginfo" method="post">
 
-Name: <input type="text" name="mail_id" value="
+Name: <input type="text" name="name" value="
 <% if(session.getAttribute("currentUser") == null || session.getAttribute("currentUser") == "") {%>
 <% } else {  %>
 <% out.print(sample_account.get_address()); %>
@@ -41,12 +41,10 @@ Contact Number: <input type="text" name="contact_number" value="
 	String end_date = (String)session.getAttribute("end_date");
 %>
 
-Type of Room: <input type="text" name="type_of_room" value="<% request.getParameter("department"); %>">
-Number of rooms : 	<input type="text" name="num_rooms" value="<% request.getParameter("num_rooms"); %>">
-Start Date: <input type="text" name="start_date" value="<% out.print(start_date); %>">
-End Date: <input type="text" name="end_date" value="<% out.print(end_date); %>">
-
-
+Type of Room: <input type="text" name="type_of_room" value="<% out.print(request.getParameter("department")); %>"><br>
+Number of rooms : 	<input type="number" name="num_rooms" value="<% out.print(request.getParameter("num_rooms")); %>"><br>
+Start Date: <% out.print((String)session.getAttribute("start_date")); %> <br>
+End Date: <% out.print((String)session.getAttribute("end_date")); %> <br>
 <input type="submit" ></input>
 </form>
 </body>

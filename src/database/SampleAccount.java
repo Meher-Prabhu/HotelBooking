@@ -98,54 +98,5 @@ public class SampleAccount {
 	}
 }
 
-@Entity
-@Table(name = "Room")
- class room {
-
-	@Id
-	@Column(name = "id")
-	private String id;
-	
-	@Column(name = "hotel_id")
-	private String hotel_id;
-
-	@Column(name = "type")
-	private String type;
-
-	
-	
-	public room() {
-	}
-	
-	public room(String room_id, String hotel_id) {
-		this.id = room_id;
-		this.hotel_id = hotel_id ;
-	}
-	
-	public String get_id() {
-		return id;
-	}
-	
-	public void set_id(String value) {
-		this.id = value;
-	}
-	
-	public String get_hotel_id() {
-		return hotel_id;
-	}
-	
-	public void set_hotel_id(String value) {
-		this.hotel_id = value;
-	}
-	
-	public String get_type() {
-		return type;
-	}
-	
-	public void set_type(String value) {
-		this.type = value;
-	}
-	
-}
 
 

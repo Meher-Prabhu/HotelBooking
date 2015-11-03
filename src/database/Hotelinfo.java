@@ -2,7 +2,6 @@ package database;
 
 import java.io.IOException;
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -23,9 +22,7 @@ import org.hibernate.Transaction;
 @WebServlet("/Hotelinfo")
 public class Hotelinfo extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static Session session;
-       
-    /**
+	/**
      * @see HttpServlet#HttpServlet()
      */
     public Hotelinfo() {
@@ -33,12 +30,20 @@ public class Hotelinfo extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
     
-    public static List<String> getamenities()
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		response.getWriter().append("Served at: ").append(request.getContextPath());
+	}
+	
+    @SuppressWarnings("unchecked")
+	public static List<String> getamenities()
     {
     	Transaction tx = null;
 		Session session = SessionFactoryUtil.getInstance().getCurrentSession();
 		List<String> amenities;
-
 		try{
 			tx= session.beginTransaction();
 			String stmt = "select  distinct amenity from amenities";
@@ -60,24 +65,11 @@ public class Hotelinfo extends HttpServlet {
 		return amenities;
     }
 		
-    	
-    	
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-	   
-	
-	
-	
-	
-	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
+	@SuppressWarnings("unchecked")
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		

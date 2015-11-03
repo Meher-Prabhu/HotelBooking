@@ -1,7 +1,6 @@
 package database;
 
 import java.io.IOException;
-import java.sql.BatchUpdateException;
 import java.util.List;
 
 import javax.servlet.ServletException;

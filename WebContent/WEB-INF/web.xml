@@ -10,5 +10,9 @@
 
 <url-pattern>/Hotelinfo.java</url-pattern>
 
+<servlet-name>Bookinginfo</servlet-name>
+
+<url-pattern>/Bookinginfo.java</url-pattern>
+
 </servlet-mapping>
 
