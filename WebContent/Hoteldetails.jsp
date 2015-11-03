@@ -7,7 +7,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-Welcome ${currentUser.get_name() } | <a href = "Logout.jsp">Logout</a> </p>
+Welcome ${currentUser.get_name() } | <a href = "Logout.jsp">Logout</a>
 <br>
 Select from one of the below actions you wish to perform.<br>
 <form name="SeeBooking" action="Hotelchanges" method="post">

@@ -59,8 +59,8 @@ public class Hotelchanges extends HttpServlet {
 			
 			try{
 				tx= session.beginTransaction();
-				String stmt = "select	B.booking_id,B.name,B.room_id,B.start_date,B.end_date from Booking B inner join Hotel H on B.hotel_id=H.hotel_id where H.mail_id = :mail";
-				Query query = session.createQuery(stmt).setParameter("mail",my_hotel.get_mail_id());
+				String stmt = "select	B.booking_id,B.name,B.room_id,B.start_date,B.end_date from booking B inner join hotel H on B.hotel_id=H.hotel_id where H.mail_id = :mail";
+				SQLQuery query = (SQLQuery) session.createSQLQuery(stmt).setParameter("mail",my_hotel.get_mail_id());
 				List<Object[]>bookings = (List<Object[]>) query.list();
 				tx.commit();
 				
@@ -95,12 +95,17 @@ public class Hotelchanges extends HttpServlet {
 				 hotelSession.setAttribute("hotelaccount",hotel);
 				}
 				Hotel hotelaccount = (Hotel)hotelSession.getAttribute("hotelaccount");
+				System.out.println(hotelaccount.get_name());
 				String stmt1 = "insert into room values( :room_id, :hotel_id, :room_type, :hotel_id)";
 				SQLQuery query1 = ((SQLQuery) session.createSQLQuery(stmt1).setParameter("room_id",room_id).setParameter("hotel_id",hotelaccount.get_id()).setParameter("room_type",room_type));
-				query1.executeUpdate();
+				System.out.println(query1);
+				int added = query1.executeUpdate();
+				tx.commit();
+				System.out.println(added);
 				response.sendRedirect("Hoteldetails.jsp");
 			  }
 			catch(RuntimeException e){
+				e.printStackTrace();
 				if(tx != null && tx.isActive()){
 					tx.rollback();
 				}
@@ -130,6 +135,7 @@ public class Hotelchanges extends HttpServlet {
 				String stmt1 = "UPDATE room	SET type = :room_type WHERE room_id= :room_id and hotel_id= :hotel_id";
 				SQLQuery query1 = ((SQLQuery) session.createSQLQuery(stmt1).setParameter("room_id",room_id).setParameter("hotel_id",hotelaccount.get_id()).setParameter("room_type",room_type));
 				query1.executeUpdate();
+				tx.commit();
 				response.sendRedirect("Hoteldetails.jsp");
 			  }
 			catch(RuntimeException e){
@@ -160,6 +166,7 @@ public class Hotelchanges extends HttpServlet {
 				String stmt1 = "delete from room where room_id= :room_id and hotel_id= :hotel_id";
 				SQLQuery query1 = ((SQLQuery) session.createSQLQuery(stmt1).setParameter("room_id",room_id).setParameter("hotel_id",hotelaccount.get_id()));
 				query1.executeUpdate();
+				tx.commit();
 				response.sendRedirect("Hoteldetails.jsp");
 			  }
 			catch(RuntimeException e){
