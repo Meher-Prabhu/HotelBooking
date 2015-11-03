@@ -10,17 +10,20 @@
 Welcome ${currentUser.get_name() } | <a href = "Logout.jsp">Logout</a> </p>
 <br>
 Select from one of the below actions you wish to perform.<br>
-<form name="SeeBooking" action="Hotelchanges">
+<form name="SeeBooking" action="Hotelchanges" method="post">
 <input type="submit" name="see_booking" value="See the list of rooms booked through our interface"></input><br>
 </form>
-<form name="AddRoom" action="addroom.jsp">
+<form name="AddRoom" action="addroom.jsp" method="post">
 <input type="submit" name="add_room" value="Add a room"></input><br>
 </form>
-<form name="UpdateRoom" action="updateroom.jsp">
+<form name="UpdateRoom" action="updateroom.jsp" method="post">
 <input type="submit" name="update_room" value="Update features of a room"></input><br>
 </form>
-<form name="RemoveRoom" action="removeroom.jsp">
+<form name="RemoveRoom" action="removeroom.jsp" method="post">
 <input type="submit" name="delete_room" value="Remove a room"></input><br>
+</form>
+<form name="AddRoomType" action="addroomtype.jsp" method="post">
+<input type="submit" name="add_room_type" value="Add a new room type"></input><br>
 </form>
 
 

@@ -57,6 +57,37 @@ public class Hotelinfo extends HttpServlet {
 		// return new ArrayList<String>();
 		return amenities;
 	}
+	
+	
+	public static List<String> getroomtypes(HttpSession hotelSession) {
+		Transaction tx = null;
+		Session session = SessionFactoryUtil.getInstance().getCurrentSession();
+		List<String> roomtypes;
+		SampleAccount my_hotel= (SampleAccount) hotelSession.getAttribute("currentUser");
+		try {
+			tx = session.beginTransaction();
+			
+			String stmt = "select	H from Hotel H where H.mail_id= :mail";
+			 Query query = session.createQuery(stmt).setParameter("mail",my_hotel.get_mail_id());
+			 List<Hotel>hotels = (List<Hotel>) query.list();
+			 Hotel hotel = hotels.get(0);
+			
+			 String stmt1 = "select  type  from room_type where hotel_id= :hotel_id";
+			SQLQuery query1 = ((SQLQuery) session.createSQLQuery(stmt1).setParameter("hotel_id", hotel.get_id()));
+			roomtypes = (List<String>) query1.list();
+			tx.commit();
+			if (session.isOpen())
+				session.close();
+		} catch (RuntimeException e) {
+			if (tx != null && tx.isActive()) {
+				tx.rollback();
+				e.printStackTrace();
+			}
+			throw e;
+		}
+		// return new ArrayList<String>();
+		return roomtypes;
+	}
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse

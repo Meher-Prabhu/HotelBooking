@@ -29,6 +29,9 @@ public class Hotelchanges extends HttpServlet {
         super();
         // TODO Auto-generated constructor stub
     }
+    
+    
+    
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -93,7 +96,7 @@ public class Hotelchanges extends HttpServlet {
 				}
 				Hotel hotelaccount = (Hotel)hotelSession.getAttribute("hotelaccount");
 				String stmt1 = "insert into room values( :room_id, :hotel_id, :room_type, :hotel_id)";
-				SQLQuery query1 = ((SQLQuery) session.createQuery(stmt1).setParameter("room_id",room_id).setParameter("hotel_id",hotelaccount.get_id()).setParameter("room_type",room_type));
+				SQLQuery query1 = ((SQLQuery) session.createSQLQuery(stmt1).setParameter("room_id",room_id).setParameter("hotel_id",hotelaccount.get_id()).setParameter("room_type",room_type));
 				query1.executeUpdate();
 				response.sendRedirect("Hoteldetails.jsp");
 			  }
@@ -125,7 +128,7 @@ public class Hotelchanges extends HttpServlet {
 				}
 				Hotel hotelaccount = (Hotel)hotelSession.getAttribute("hotelaccount");
 				String stmt1 = "UPDATE room	SET type = :room_type WHERE room_id= :room_id and hotel_id= :hotel_id";
-				SQLQuery query1 = ((SQLQuery) session.createQuery(stmt1).setParameter("room_id",room_id).setParameter("hotel_id",hotelaccount.get_id()).setParameter("room_type",room_type));
+				SQLQuery query1 = ((SQLQuery) session.createSQLQuery(stmt1).setParameter("room_id",room_id).setParameter("hotel_id",hotelaccount.get_id()).setParameter("room_type",room_type));
 				query1.executeUpdate();
 				response.sendRedirect("Hoteldetails.jsp");
 			  }
@@ -143,7 +146,6 @@ public class Hotelchanges extends HttpServlet {
 			HttpSession hotelSession = request.getSession(true);
 			SampleAccount my_hotel= (SampleAccount) hotelSession.getAttribute("currentUser");
 			String room_no=request.getParameter("room_id");
-			String room_type=request.getParameter("room_type");
 			Integer room_id= Integer.parseInt(room_no);
 			try{
 				tx= session.beginTransaction();
@@ -156,7 +158,7 @@ public class Hotelchanges extends HttpServlet {
 				}
 				Hotel hotelaccount = (Hotel)hotelSession.getAttribute("hotelaccount");
 				String stmt1 = "delete from room where room_id= :room_id and hotel_id= :hotel_id";
-				SQLQuery query1 = ((SQLQuery) session.createQuery(stmt1).setParameter("room_id",room_id).setParameter("hotel_id",hotelaccount.get_id()));
+				SQLQuery query1 = ((SQLQuery) session.createSQLQuery(stmt1).setParameter("room_id",room_id).setParameter("hotel_id",hotelaccount.get_id()));
 				query1.executeUpdate();
 				response.sendRedirect("Hoteldetails.jsp");
 			  }

@@ -1,3 +1,5 @@
+<%@page import="database.Hotelinfo"%>
+<%@ page import="java.util.*" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -10,7 +12,13 @@
 <form action="Hotelchanges" method="post">
 Enter room details to add: <br>
 Room no. : <input type="text" name="room_id" value=""><br>
-Type of room: <input type="text" name="room_type" value=""><br>
+Type of room: <select name="room_type">
+	<%List <String> roomtypeslist=Hotelinfo.getroomtypes(session);
+		for(int i=0;i<roomtypeslist.size();i++)
+			{%>
+				<option value=<%out.write(roomtypeslist.get(i));%>><%out.write(roomtypeslist.get(i));%></option>
+		 	<%}%>
+	</select>
 <input type="submit" name="Submit" value="Submit">
 </form>
 </body>
