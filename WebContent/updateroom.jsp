@@ -1,4 +1,5 @@
 <%@page import="database.Hotelinfo"%>
+<%@page import="database.SampleAccount"%>
 <%@ page import="java.util.*" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
@@ -7,6 +8,15 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
+<% if(session.getAttribute("currentUser") == null) {
+	response.sendRedirect("Homepage.jsp");
+}
+else {
+SampleAccount user = (SampleAccount) session.getAttribute("currentUser");  
+if(user.get_type().equalsIgnoreCase("user") || user.get_type().equalsIgnoreCase("admin")) {
+	response.sendRedirect("Homepage.jsp");
+} else {
+	%>
 </head>
 <body>
 <form action="Hotelchanges" method="post">
@@ -24,7 +34,7 @@ Room type to change to : <select name="room_type">
 <br>
 <% if(session.getAttribute("roompresent") == "false") {	%>
 Room not present, enter correct room.
-<% } %>
+<% }}} %>
 
 </form>
 </body>

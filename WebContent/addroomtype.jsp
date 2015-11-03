@@ -1,10 +1,20 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="database.SampleAccount" %>    
 <!DOCTYPE html PUBLIC >
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>Add Room Type</title>
+<% if(session.getAttribute("currentUser") == null) {
+	response.sendRedirect("Homepage.jsp");
+}
+else {
+SampleAccount user = (SampleAccount) session.getAttribute("currentUser");  
+if(user.get_type().equalsIgnoreCase("user") || user.get_type().equalsIgnoreCase("admin")) {
+		response.sendRedirect("Homepage.jsp");
+	} else {
+	%>
 </head>
 <body>
 <form action="Hotelchanges" method="post">
@@ -17,7 +27,7 @@ Amenities provided in the room type (comma seperated) : <input type="text" name=
 <br>
 <% if(session.getAttribute("roomtypepresent") == "true") {	%>
 Roomtype already present , please enter a new roomtype.
-<% } %>
+<% } } }%>
 
 
 </form>

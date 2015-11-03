@@ -14,7 +14,7 @@ import javax.persistence.Table;
 public class Booking {
 	@Id
 	@Column(name = "booking_id")
-	private int booking_id;
+	private Long booking_id;
 	
 	@Id
 	@Column(name = "mail_id")
@@ -49,11 +49,11 @@ public class Booking {
 	public Booking() {
 	}
 
-	public int getBooking_id() {
+	public Long getBooking_id() {
 		return booking_id;
 	}
 
-	public void setBooking_id(int booking_id) {
+	public void setBooking_id(Long booking_id) {
 		this.booking_id = booking_id;
 	}
 

@@ -59,7 +59,7 @@ public class Hotelchanges extends HttpServlet {
 			
 			try{
 				tx= session.beginTransaction();
-				String stmt = "select B.booking_id, B.name, B.room_id, B.start_date, B.end_date from booking B inner join hotel H on B.hotel_id=H.hotel_id where H.mail_id = :mail";
+				String stmt = "select B.booking_id, B.name, B.room_id, B.start_date, B.end_date from booking B inner join hotel H on B.hotel_id=H.hotel_id where H.mail_id = :mail and B.status = 'active'";
 				SQLQuery query = (SQLQuery) session.createSQLQuery(stmt).setParameter("mail",my_hotel.get_mail_id());
 				List<Object[]>bookings = (List<Object[]>) query.list();
 				tx.commit();

@@ -1,6 +1,7 @@
 package database;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.List;
 
@@ -57,20 +58,20 @@ public class Bookinginfo extends HttpServlet {
 	}
 
 	@SuppressWarnings("unchecked")
-	int getMaxBookingId() {
+	Long getMaxBookingId() {
 		Transaction tx = null;
 		Session session = SessionFactoryUtil.getInstance().getCurrentSession();
-		int highest_room_id;
+		Long highest_room_id;
 		try {
 			tx = session.beginTransaction();
 			String stmt = "select max(booking_id) from booking";
 			SQLQuery query = ((SQLQuery) session.createSQLQuery(stmt));
-			List<Integer> list = (List<Integer>) query.list();
+			List<BigDecimal> list = (List<BigDecimal>) query.list();
 			tx.commit();
 			if (list.get(0) != null) {
-				highest_room_id = list.get(0) + 1;
+				highest_room_id = list.get(0).longValue() + 1;
 			} else {
-				highest_room_id = 1;
+				highest_room_id = (long) 1;
 			}
 			if (session.isOpen())
 				session.close();
