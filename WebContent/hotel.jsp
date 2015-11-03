@@ -51,6 +51,26 @@
 				<%
 					out.print(rating);
 				%><br>
+				<% if(session.getAttribute("currentUser") != null) { 
+					if(session.getAttribute("userRating") != null) {%>
+						Your rating: <% out.print(session.getAttribute("userRating")); %> <br>
+				<% } else { %>
+						Your rating: <form name = "Rating" action = "Hotelinfo" method = "post">
+						<input type = "hidden" name = "formName" value = "rating">
+						<input type = "radio" name = "rating" value = "0.5"> 0.5
+						<input type = "radio" name = "rating" value = "1.0"> 1.0
+						<input type = "radio" name = "rating" value = "1.5"> 1.5
+						<input type = "radio" name = "rating" value = "2.0"> 2.0
+						<input type = "radio" name = "rating" value = "2.5"> 2.5
+						<input type = "radio" name = "rating" value = "3.0"> 3.0
+						<input type = "radio" name = "rating" value = "3.5"> 3.5
+						<input type = "radio" name = "rating" value = "4.0"> 4.0
+						<input type = "radio" name = "rating" value = "4.5"> 4.5
+						<input type = "radio" name = "rating" value = "5.0"> 5.0
+						<input type = "submit" name = "rate" value = "Rate">
+						</form>
+				<% }
+					}%>
 				<%
 					out.print(hotel.get_phone_number());
 				%><br>
