@@ -31,9 +31,18 @@ function fillAreas() {
 	xhttp.send(null);
 }
 </script>
+<% boolean redirect = false;
+	if(session.getAttribute("currentUser") != null) {
+	SampleAccount user = (SampleAccount) session.getAttribute("currentUser");
+	if(user.get_type().equalsIgnoreCase("hotel")) {
+		redirect = true;
+	}
+	}
+	if(redirect)
+		response.sendRedirect("Hoteldetails.jsp");
+ else { %>
 </head>
 <body>
-
 <br>
 <% if(session.getAttribute("currentUser") == null || session.getAttribute("currentUser") == "") {%>
 <a href = "Login.jsp"> Login </a> | <a href = "Signup.jsp"> Signup </a> <br>
@@ -77,5 +86,6 @@ Provide correct start,end dates
 <input type="submit" ></input>
 </form>
 
+<% } %>
 </body>
 </html>

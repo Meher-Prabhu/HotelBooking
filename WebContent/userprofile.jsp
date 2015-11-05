@@ -7,6 +7,18 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>User Profile</title>
+<% boolean redirect = false;
+	if(session.getAttribute("currentUser") != null) {
+	SampleAccount user = (SampleAccount) session.getAttribute("currentUser");
+	if(user.get_type().equalsIgnoreCase("hotel")) {
+		redirect = true;
+	}
+	}
+	if(redirect)
+		response.sendRedirect("Hoteldetails.jsp");
+ else if(session.getAttribute("currentUser") == null) {
+	 response.sendRedirect("Homepage.jsp"); }
+	 else {%>
 </head>
 <body>
 <% SampleAccount account = (SampleAccount)session.getAttribute("currentUser"); %>
@@ -29,6 +41,6 @@ Retype password: <input type="password" name="pass2"></input><br>
 Passwords same daal chutiye
 <% } session.setAttribute("error", "");%>
 <a href = "Homepage.jsp"> Go to Homepage </a>
-
+<% } %>
 </body>
 </html>

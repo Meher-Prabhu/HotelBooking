@@ -8,6 +8,16 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Booking Details</title>
+<% boolean redirect = false;
+	if(session.getAttribute("currentUser") != null) {
+	SampleAccount user = (SampleAccount) session.getAttribute("currentUser");
+	if(user.get_type().equalsIgnoreCase("hotel")) {
+		redirect = true;
+	}
+	}
+	if(redirect)
+		response.sendRedirect("Hoteldetails.jsp");
+ else { %>
 </head>
 <body>
 <% Hotel hotel = (Hotel)session.getAttribute("hotel_under_search");
@@ -47,5 +57,6 @@ Start Date: <% out.print((String)session.getAttribute("start_date")); %> <br>
 End Date: <% out.print((String)session.getAttribute("end_date")); %> <br>
 <input type="submit" ></input>
 </form>
+<% } %>
 </body>
 </html>

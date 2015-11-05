@@ -1,4 +1,5 @@
 <%@	page import="java.util.*" %>
+<%@ page import="database.SampleAccount" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -6,6 +7,18 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>User Bookings</title>
+<% boolean redirect = false;
+	if(session.getAttribute("currentUser") != null) {
+	SampleAccount user = (SampleAccount) session.getAttribute("currentUser");
+	if(user.get_type().equalsIgnoreCase("hotel")) {
+		redirect = true;
+	}
+	}
+	if(redirect)
+		response.sendRedirect("Hoteldetails.jsp");
+ else if(session.getAttribute("currentUser") == null) {
+	 response.sendRedirect("Homepage.jsp"); }
+	 else {%>
 </head>
 <body>
 <% List<Object[]> list = (List<Object[]>)session.getAttribute("bookings");
@@ -23,5 +36,6 @@ out.print("</table>");
 %>
 <br>
 <a href = "Homepage.jsp"> Go to Homepage </a>
+<% } %>
 </body>
 </html>

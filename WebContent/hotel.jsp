@@ -1,4 +1,5 @@
 <%@ page import="database.Hotel"%>
+<%@ page import="database.SampleAccount" %>
 <%@	page import="java.util.*"%>
 <%@ page import="java.math.BigDecimal" %>
 <%@	page language="java" contentType="text/html; charset=UTF-8"
@@ -8,6 +9,16 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Hotel</title>
+<% boolean redirect = false;
+	if(session.getAttribute("currentUser") != null) {
+	SampleAccount user = (SampleAccount) session.getAttribute("currentUser");
+	if(user.get_type().equalsIgnoreCase("hotel")) {
+		redirect = true;
+	}
+	}
+	if(redirect)
+		response.sendRedirect("Hoteldetails.jsp");
+ else { %>
 </head>
 <body>
 	<%
@@ -175,6 +186,6 @@
 		</div>
 	</div>
 
-
+<% } %>
 </body>
 </html>
