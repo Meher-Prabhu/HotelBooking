@@ -16,11 +16,11 @@
 	Filter options:<br>
 	Rating : <select name="rating">
 				<option value="0">Any</option>
-				<option value="1">1 and above</option>
-				<option value="2">2 and above</option>
-				<option value="3">3 and above</option>
-				<option value="4">4 and above</option>
-				<option value="5">5</option>
+				<option value="1">>=1</option>
+				<option value="2">>=2</option>
+				<option value="3">>=3</option>
+				<option value="4">>=4</option>
+				<option value="5">=5</option>
 			 </select>
 	<br>
 	Price-range : <br>

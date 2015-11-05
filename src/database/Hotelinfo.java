@@ -186,8 +186,8 @@ public class Hotelinfo extends HttpServlet {
 					try {
 						tx = session.beginTransaction();
 						String stmt = "select A from Hotel A where A.city = :city and A.area = :area ";
-						Query query = session.createQuery(stmt).setParameter("city", city).setParameter("area", area)
-								.setParameter("start_date", start_date).setParameter("end_date", end_date);
+						SQLQuery query = ((SQLQuery) session.createSQLQuery(stmt).setParameter("city", city).setParameter("area", area)
+								.setParameter("start_date", start_date).setParameter("end_date", end_date));
 						List<Hotel> hotels = (List<Hotel>) query.list();
 						searchSession.setAttribute("hotel_search_results", hotels);
 

@@ -277,24 +277,86 @@ public class Hotelchanges extends HttpServlet {
 		}
 		
 		
-		
-		
-		
-		
-				 
-				 
-				 
+		else if (orig.equalsIgnoreCase("updateroomtype.jsp")){
+			Transaction tx = null;
+			Session session = SessionFactoryUtil.getInstance().getCurrentSession();
+			HttpSession hotelSession = request.getSession(true);
+			SampleAccount my_hotel= (SampleAccount) hotelSession.getAttribute("currentUser");
+			Integer price= Integer.parseInt(request.getParameter("price"));
+			Integer capacity= Integer.parseInt(request.getParameter("capacity"));
 			
+			String room_type=request.getParameter("room_type");
 			
-			
-			
-			
-			
-			
-			
-			
-			
+			try{
+				tx= session.beginTransaction();
+				if(hotelSession.getAttribute("hotelaccount")==null)
+				{String stmt = "select	H from Hotel H where H.mail_id= :mail";
+				 Query query = session.createQuery(stmt).setParameter("mail",my_hotel.get_mail_id());
+				 List<Hotel>hotels = (List<Hotel>) query.list();
+				 Hotel hotel = hotels.get(0);
+				 hotelSession.setAttribute("hotelaccount",hotel);
+				}
+				Hotel hotelaccount = (Hotel)hotelSession.getAttribute("hotelaccount");
+				
+				String stmt3 = "UPDATE room_type	SET price = :price and capacity = :capacity WHERE type= :room_type and hotel_id= :hotel_id";
+				SQLQuery query3 = ((SQLQuery) session.createSQLQuery(stmt3).setParameter("room_type",room_type).setParameter("hotel_id",hotelaccount.get_id()).setParameter("price", price).setParameter("capacity", capacity));
+				query3.executeUpdate();
+				
+				tx.commit();
+				
+				response.sendRedirect("Hoteldetails.jsp");
+				}
+			  
+			catch(RuntimeException e){
+				e.printStackTrace();
+				if(tx != null && tx.isActive()){
+					tx.rollback();
+				}
+				throw e;
+			}
 		}
+		
+		else if (orig.equalsIgnoreCase("removeroomtype.jsp")){
+			Transaction tx = null;
+			Session session = SessionFactoryUtil.getInstance().getCurrentSession();
+			HttpSession hotelSession = request.getSession(true);
+			SampleAccount my_hotel= (SampleAccount) hotelSession.getAttribute("currentUser");
+			
+			
+			String room_type=request.getParameter("room_type");
+			
+			try{
+				tx= session.beginTransaction();
+				if(hotelSession.getAttribute("hotelaccount")==null)
+				{String stmt = "select	H from Hotel H where H.mail_id= :mail";
+				 Query query = session.createQuery(stmt).setParameter("mail",my_hotel.get_mail_id());
+				 List<Hotel>hotels = (List<Hotel>) query.list();
+				 Hotel hotel = hotels.get(0);
+				 hotelSession.setAttribute("hotelaccount",hotel);
+				}
+				Hotel hotelaccount = (Hotel)hotelSession.getAttribute("hotelaccount");
+				
+				String stmt3 = "delete from room_type where type= :room_type and hotel_id= :hotel_id";
+				SQLQuery query3 = ((SQLQuery) session.createSQLQuery(stmt3).setParameter("room_type",room_type).setParameter("hotel_id",hotelaccount.get_id()));
+				query3.executeUpdate();
+				
+				tx.commit();
+				
+				response.sendRedirect("Hoteldetails.jsp");
+				}
+			  
+			catch(RuntimeException e){
+				e.printStackTrace();
+				if(tx != null && tx.isActive()){
+					tx.rollback();
+				}
+				throw e;
+			}
+		}
+		
+		
+		
+	}
 		
 		
 		
