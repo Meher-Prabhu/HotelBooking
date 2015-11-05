@@ -23,6 +23,7 @@
 				<option value="5">5 and above</option>
 			 </select>
 	<br>
+<<<<<<< Updated upstream
 	Budget(cost in rupees per day) : <select name="budget">
 				<option value="1000">Under 1000</option>
 				<option value="2000">Under 2000</option>
@@ -32,6 +33,7 @@
 				
 			 </select>
 	<br>
+
 	
 	Amenities : <br>
 		<%List <String> amenitieslist=Hotelinfo.getamenities();
