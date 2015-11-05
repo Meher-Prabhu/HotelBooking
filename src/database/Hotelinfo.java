@@ -200,7 +200,7 @@ public class Hotelinfo extends HttpServlet {
 					tx = session.beginTransaction();
 					//int days = endr_date.compareTo(strt_date) + 2;
 					int days = (int)((endr_date.getTime() - strt_date.getTime())/(1000*60*60*24)) + 1;
-					String stmt = "select distinct hotel_id,name from hotel natural join room natural join availability where city = :city and area = :area and date >= :start_date and date <= :end_date group by hotel_id,room_id having count(*) = :diff";
+					String stmt = "select distinct hotel_id,name from hotel natural join room natural join availability natural join room_type where city = :city and area = :area and date >= :start_date and date <= :end_date and price<=1000 group by hotel_id,room_id having count(*) = :diff";
 					SQLQuery query = ((SQLQuery) session.createSQLQuery(stmt).setParameter("city", city)
 							.setParameter("area", area).setParameter("start_date", strt_date)
 							.setParameter("end_date", endr_date).setParameter("diff", days));
@@ -260,7 +260,7 @@ public class Hotelinfo extends HttpServlet {
 						
 						SQLQuery query = ((SQLQuery) session.createSQLQuery(stmt).setParameter("city", city).setParameter("area", area).setParameter("rating", rating).setParameter("budget", budget)
 								.setParameter("start_date", strt_date).setParameter("end_date", endr_date).setParameter("diff", days));
-						searchSession.setAttribute("bigquery",stmt);
+						
 						List<Hotel> hotels = (List<Hotel>) query.list();
 						searchSession.setAttribute("hotel_search_results", hotels);
 
@@ -283,6 +283,10 @@ public class Hotelinfo extends HttpServlet {
 				Date strt_date = Date.valueOf(start_date);
 				Date endr_date = Date.valueOf(end_date);
 				int days = endr_date.compareTo(strt_date) + 2;
+				Integer search_rating = Integer.parseInt(request.getParameter("rating"));
+				Integer budget = Integer.parseInt(request.getParameter("budget"));
+				String amenities[] = request.getParameterValues("amenities");
+				List<String> lamenities = Arrays.asList(amenities);
 				Transaction tx = null;
 				Session session = SessionFactoryUtil.getInstance().getCurrentSession();
 				try {
@@ -292,12 +296,15 @@ public class Hotelinfo extends HttpServlet {
 					Query query = session.createQuery(stmt).setParameter("id", id);
 					List<Hotel> hotels = (List<Hotel>) query.list();
 					searchSession.setAttribute("hotel_under_search", hotels.get(0));
-					Integer rating= (Integer)searchSession.getAttribute("searchrating");
-					Integer budget= (Integer)searchSession.getAttribute("budget");
-					String bigquery=searchSession.getAttribute("bigquery").toString();
-					String stmt1 = "select type,count(*) from (" + bigquery + ") as R natural join room where hotel_id= :id group by type";
+					
+					 stmt = "select  hotel_id,name,room_id from hotel natural join room natural join availability natural join avg_rating natural join room_type where city = :city and area = :area and date >= :start_date and date <= :end_date and rating>= :rating  and price<= :budget group by hotel_id,room_id having count(*) = :diff ";
+					
+					for(int i=0;i<lamenities.size();i++)
+					{stmt+= "intersect select hotel_id,name,room_id from hotel natural join room natural join amenities where amenity='"+lamenities.get(i)+"'";}
+					
+					String stmt1 = "select type,count(*) from (" + stmt + ") as R natural join room where hotel_id= :id group by type";
 					SQLQuery query1 = ((SQLQuery) session.createSQLQuery(stmt1).setParameter("city", city)
-							.setParameter("area", area).setParameter("start_date", strt_date).setParameter("rating", rating).setParameter("budget", budget)
+							.setParameter("area", area).setParameter("start_date", strt_date).setParameter("rating", search_rating).setParameter("budget", budget)
 							.setParameter("end_date", endr_date).setParameter("diff", days).setParameter("id", id));
 					List<Object[]> room_type_availabilities = (List<Object[]>) query1.list();
 					searchSession.setAttribute("room_type_availabilities", room_type_availabilities);
