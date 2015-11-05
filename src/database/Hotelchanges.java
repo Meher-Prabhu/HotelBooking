@@ -298,7 +298,7 @@ public class Hotelchanges extends HttpServlet {
 				}
 				Hotel hotelaccount = (Hotel)hotelSession.getAttribute("hotelaccount");
 				
-				String stmt3 = "UPDATE room_type	SET price = :price and capacity = :capacity WHERE type= :room_type and hotel_id= :hotel_id";
+				String stmt3 = "UPDATE room_type SET price = :price, capacity = :capacity WHERE type= :room_type and hotel_id= :hotel_id";
 				SQLQuery query3 = ((SQLQuery) session.createSQLQuery(stmt3).setParameter("room_type",room_type).setParameter("hotel_id",hotelaccount.get_id()).setParameter("price", price).setParameter("capacity", capacity));
 				query3.executeUpdate();
 				
