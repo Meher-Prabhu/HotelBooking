@@ -121,7 +121,13 @@ public class Login extends HttpServlet {
 					tx = session.beginTransaction();
 					session.save(account);
 					request.getSession(true).setAttribute("currentUser", account);
-					response.sendRedirect("Homepage.jsp");
+					if(type.equalsIgnoreCase("user")) {
+						response.sendRedirect("Homepage.jsp");
+					} else if(type.equalsIgnoreCase("hotel")) {
+						response.sendRedirect("addHotel.jsp");
+					} else if(type.equalsIgnoreCase("admin")){
+						response.sendRedirect("Adminlogin.jsp");
+					}
 					tx.commit();
 				} catch(ConstraintViolationException e) {
 					request.getSession(true).setAttribute("error", "Present");

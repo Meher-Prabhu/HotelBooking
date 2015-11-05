@@ -14,6 +14,7 @@ import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.exception.ConstraintViolationException;
 
 /**
  * Servlet implementation class Hotelchanges
@@ -351,6 +352,36 @@ public class Hotelchanges extends HttpServlet {
 					tx.rollback();
 				}
 				throw e;
+			}
+		} else if(orig.equalsIgnoreCase("addhotel.jsp")) {
+			String hotel = request.getParameter("name");
+			String area = request.getParameter("area");
+			String city = request.getParameter("city");
+			String phoneString = request.getParameter("phone");
+			String periodString = request.getParameter("period");
+			HttpSession addSession = request.getSession();
+			if(hotel == null || hotel.equalsIgnoreCase("") || area == null || area.equalsIgnoreCase("") || city == null || city.equalsIgnoreCase("") || phoneString == null || phoneString.equalsIgnoreCase("") || periodString == null || periodString.equalsIgnoreCase("")) {
+				addSession.setAttribute("error_hotel", true);
+				response.sendRedirect("addHotel.jsp");
+			} else {
+				String hotel_mail_id = ((SampleAccount) addSession.getAttribute("currentUser")).get_mail_id();
+				long phone_number = Long.valueOf(phoneString);
+				int period = Integer.valueOf(periodString);
+				Session session = SessionFactoryUtil.getInstance().getCurrentSession();
+				Transaction tx = null;
+				try {
+					tx = session.beginTransaction();
+					String stmt = "insert into hotel values(default, :hotel, :area, :city, :number, :period, :mail)";
+					SQLQuery query = (SQLQuery) session.createSQLQuery(stmt).setParameter("hotel", hotel).setParameter("area", area).setParameter("city", city).setParameter("number", phone_number).setParameter("period", period).setParameter("mail", hotel_mail_id);
+					query.executeUpdate();
+					tx.commit();
+				} catch(ConstraintViolationException e) {
+					if(tx != null && tx.isActive()) {
+						tx.rollback();
+						addSession.setAttribute("present", true);
+					}
+				}
+				response.sendRedirect("Hoteldetails.jsp");
 			}
 		}
 		
