@@ -36,6 +36,12 @@ Select from one of the below actions you wish to perform.<br>
 <form name="AddRoomType" action="addroomtype.jsp" method="post">
 <input type="submit" name="add_room_type" value="Add a new room type"></input><br>
 </form>
+<form name="UpdateRoomType" action="updateroomtype.jsp" method="post">
+<input type="submit" name="update_room_type" value="Update details of an existing room type"></input><br>
+</form>
+<form name="RemoveRoomType" action="removeroomtype.jsp" method="post">
+<input type="submit" name="remove_room_type" value="Remove an existing room type"></input><br>
+</form>
 
 <%}} %>
 

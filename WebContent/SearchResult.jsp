@@ -4,7 +4,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page session="true" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html >
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -20,15 +20,19 @@
 				<option value="2">2 and above</option>
 				<option value="3">3 and above</option>
 				<option value="4">4 and above</option>
-				<option value="5">5</option>
+				<option value="5">5 and above</option>
 			 </select>
 	<br>
-	Price-range : <br>
-		<input type="checkbox" name="price_range" value="1">5000-10000<br>
-		<input type="checkbox" name="price_range" value="2">10000-15000<br>
-		<input type="checkbox" name="price_range" value="3">15000-20000<br>
-		<input type="checkbox" name="price_range" value="4">20000-25000<br>
+	Budget(cost in rupees per day) : <select name="budget">
+				<option value="1000">Under 1000</option>
+				<option value="2000">Under 2000</option>
+				<option value="3000">Under 3000</option>
+				<option value="4000">Under 4000</option>
+				<option value="5000">Under 5000</option>
+				
+			 </select>
 	<br>
+	
 	Amenities : <br>
 		<%List <String> amenitieslist=Hotelinfo.getamenities();
 		for(int i=0;i<amenitieslist.size();i++)
