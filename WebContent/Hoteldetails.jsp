@@ -45,5 +45,10 @@ Select from one of the below actions you wish to perform.<br>
 
 <%}} %>
 
+<% if(session.getAttribute("present") != null) { %>
+	You already have a hotel.
+	<% session.setAttribute("present",null);
+	} %>
+
 </body>
 </html>
