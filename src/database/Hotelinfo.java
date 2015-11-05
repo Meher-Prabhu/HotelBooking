@@ -3,10 +3,7 @@ package database;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Date;
-<<<<<<< Updated upstream
 import java.util.ArrayList;
-=======
->>>>>>> Stashed changes
 import java.util.Arrays;
 import java.util.List;
 
@@ -203,7 +200,7 @@ public class Hotelinfo extends HttpServlet {
 					tx = session.beginTransaction();
 					//int days = endr_date.compareTo(strt_date) + 2;
 					int days = (int)((endr_date.getTime() - strt_date.getTime())/(1000*60*60*24)) + 1;
-					String stmt = "select distinct hotel_id,name from hotel natural join room natural join availability natural join room_type where city = :city and area = :area and date >= :start_date and date <= :end_date and price<=1000 group by hotel_id,room_id having count(*) = :diff";
+					String stmt = "select distinct hotel_id,name from hotel natural join room natural join availability natural join room_type where city = :city and area = :area and date >= :start_date and date <= :end_date and price<=5000 group by hotel_id,room_id having count(*) = :diff";
 					SQLQuery query = ((SQLQuery) session.createSQLQuery(stmt).setParameter("city", city)
 							.setParameter("area", area).setParameter("start_date", strt_date)
 							.setParameter("end_date", endr_date).setParameter("diff", days));
@@ -212,6 +209,9 @@ public class Hotelinfo extends HttpServlet {
 					if (session.isOpen())
 						session.close();
 					searchSession.setAttribute("hotel_search_results", hotels);
+					searchSession.setAttribute("amenitiesselected", null);
+					searchSession.setAttribute("searchrating", null);
+					searchSession.setAttribute("budget", null);
 
 					response.sendRedirect("SearchResult.jsp");
 
@@ -243,14 +243,17 @@ public class Hotelinfo extends HttpServlet {
 				searchSession.setAttribute("budget", budget);
 
 				String amenities[] = request.getParameterValues("amenities");
-				List<String> lamenities = Arrays.asList(amenities);
+			
+				System.out.println(amenities);
+				List<String> lamenities;
 				if ( amenities == null) {
-					searchSession.setAttribute("missing_input", "true");
-					response.sendRedirect("SearchResult.jsp");
+				 lamenities= new ArrayList<String>();
 				}
 
 				else {
-					searchSession.setAttribute("missing_input", "false");
+					 lamenities = Arrays.asList(amenities);}
+				searchSession.setAttribute("amenitiesselected",lamenities);
+					
 					Date strt_date = Date.valueOf(start_date);
 					Date endr_date = Date.valueOf(end_date);
 					int days = (int)((endr_date.getTime() - strt_date.getTime())/(1000*60*60*24)) + 1;
@@ -282,7 +285,7 @@ public class Hotelinfo extends HttpServlet {
 						throw e;
 					}
 				}
-			}
+			
 
 			else {
 				String start_date = searchSession.getAttribute("start_date").toString();
@@ -291,15 +294,26 @@ public class Hotelinfo extends HttpServlet {
 				String area = searchSession.getAttribute("area").toString();
 				Date strt_date = Date.valueOf(start_date);
 				Date endr_date = Date.valueOf(end_date);
-				int days = endr_date.compareTo(strt_date) + 2;
+				int days = (int)((endr_date.getTime() - strt_date.getTime())/(1000*60*60*24)) + 1;
 				Integer search_rating = Integer.parseInt(request.getParameter("rating"));
 				Integer budget = Integer.parseInt(request.getParameter("budget"));
+				searchSession.setAttribute("searchrating",search_rating);
+				searchSession.setAttribute("budget", budget);
 				String amenities[] = request.getParameterValues("amenities");
-				List<String> lamenities = Arrays.asList(amenities);
+				
+				List<String> lamenities;
+				if ( amenities == null) {
+				 lamenities= new ArrayList<String>();
+				}
+				else{
+					lamenities = Arrays.asList(amenities);
+				}
+				searchSession.setAttribute("amenitiesselected",lamenities);
 				Transaction tx = null;
 				Session session = SessionFactoryUtil.getInstance().getCurrentSession();
 				try {
 					int id = Integer.valueOf(option);
+					System.out.println(id+" "+days);
 					tx = session.beginTransaction();
 					String stmt = "select A from Hotel A where A.id= :id";
 					Query query = session.createQuery(stmt).setParameter("id", id);
@@ -312,11 +326,12 @@ public class Hotelinfo extends HttpServlet {
 					{stmt+= "intersect select hotel_id,name,room_id from hotel natural join room natural join amenities where amenity='"+lamenities.get(i)+"'";}
 					
 					String stmt1 = "select type,count(*) from (" + stmt + ") as R natural join room where hotel_id= :id group by type";
-
+					System.out.println(stmt1);
 					SQLQuery query1 = ((SQLQuery) session.createSQLQuery(stmt1).setParameter("city", city)
 							.setParameter("area", area).setParameter("start_date", strt_date).setParameter("rating", search_rating).setParameter("budget", budget)
 							.setParameter("end_date", endr_date).setParameter("diff", days).setParameter("id", id));
 					List<Object[]> room_type_availabilities = (List<Object[]>) query1.list();
+					
 					searchSession.setAttribute("room_type_availabilities", room_type_availabilities);
 
 					String stmt2 = "select id, name, content from review natural join accounts where hotel_id = :id";

@@ -26,21 +26,20 @@
 <div id="filter" style="float:left; width:25%;"> 
 	Filter options:<br>
 	Rating : <select name="rating">
-				<option value="0">Any</option>
-				<option value="1">1 and above</option>
-				<option value="2">2 and above</option>
-				<option value="3">3 and above</option>
-				<option value="4">4 and above</option>
-				<option value="5">5 and above</option>
+				<option value="0"	<%if(session.getAttribute("searchrating")!=null){if((Integer)session.getAttribute("searchrating")==0){%>selected<%;}}%>>Any</option>
+				<option value="1"	<%if(session.getAttribute("searchrating")!=null){if((Integer)session.getAttribute("searchrating")==1){%>selected<%;}}%>>1 and above</option>
+				<option value="2"	<%if(session.getAttribute("searchrating")!=null){if((Integer)session.getAttribute("searchrating")==2){%>selected<%;}}%>>2 and above</option>
+				<option value="3"	<%if(session.getAttribute("searchrating")!=null){if((Integer)session.getAttribute("searchrating")==3){%>selected<%;}}%>>3 and above</option>
+				<option value="4"	<%if(session.getAttribute("searchrating")!=null){if((Integer)session.getAttribute("searchrating")==4){%>selected<%;}}%>>4 and above</option>
+				<option value="5"	<%if(session.getAttribute("searchrating")!=null){if((Integer)session.getAttribute("searchrating")==5){%>selected<%;}}%>>5 and above</option>
 			 </select>
 	<br>
-<<<<<<< Updated upstream
 	Budget(cost in rupees per day) : <select name="budget">
-				<option value="1000">Under 1000</option>
-				<option value="2000">Under 2000</option>
-				<option value="3000">Under 3000</option>
-				<option value="4000">Under 4000</option>
-				<option value="5000">Under 5000</option>
+				<option value="1000"	<%if(session.getAttribute("budget")!=null){if((Integer)session.getAttribute("budget")==1000){%>selected<%;}}%>>Under 1000</option>
+				<option value="2000"	<%if(session.getAttribute("budget")!=null){if((Integer)session.getAttribute("budget")==2000){%>selected<%;}}%>>Under 2000</option>
+				<option value="3000"	<%if(session.getAttribute("budget")!=null){if((Integer)session.getAttribute("budget")==3000){%>selected<%;}}%>>Under 3000</option>
+				<option value="4000"	<%if(session.getAttribute("budget")!=null){if((Integer)session.getAttribute("budget")==4000){%>selected<%;}}%>>Under 4000</option>
+				<option value="5000"	<%if(session.getAttribute("budget")==null){%> selected <%;}if(session.getAttribute("budget")!=null){if((Integer)session.getAttribute("budget")==5000){%>selected<%;}}%>>Under 5000</option>
 				
 			 </select>
 	<br>
@@ -50,7 +49,7 @@
 		<%List <String> amenitieslist=Hotelinfo.getamenities();
 		for(int i=0;i<amenitieslist.size();i++)
 			{%>
-				<input type="checkbox" name="amenities" value="<%out.write(amenitieslist.get(i));%>"><%out.write(amenitieslist.get(i));%><br>
+				<input type="checkbox" name="amenities" value="<%out.write(amenitieslist.get(i));%>" <%if(session.getAttribute("amenitiesselected")!=null){if(((List<String>)session.getAttribute("amenitiesselected")).contains(amenitieslist.get(i))) {%> checked <%;}} %>><%out.write(amenitieslist.get(i));%><br>
 		 	<%}%>
 	<input type="submit" name="getlisthotels" value="Get list of hotels"></input><br><br>
 	<% if(session.getAttribute("missing_input") == "true") {	%>
