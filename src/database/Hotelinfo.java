@@ -235,6 +235,8 @@ public class Hotelinfo extends HttpServlet {
 				String end_date = searchSession.getAttribute("end_date").toString();
 				Integer rating = Integer.parseInt(request.getParameter("rating"));
 				Integer budget = Integer.parseInt(request.getParameter("budget"));
+				searchSession.setAttribute("searchrating",rating);
+				searchSession.setAttribute("budget", budget);
 				String amenities[] = request.getParameterValues("amenities");
 				List<String> lamenities = Arrays.asList(amenities);
 				if ( amenities == null) {
@@ -258,7 +260,7 @@ public class Hotelinfo extends HttpServlet {
 						
 						SQLQuery query = ((SQLQuery) session.createSQLQuery(stmt).setParameter("city", city).setParameter("area", area).setParameter("rating", rating).setParameter("budget", budget)
 								.setParameter("start_date", strt_date).setParameter("end_date", endr_date).setParameter("diff", days));
-						searchSession.setAttribute("bigquery",query.toString());
+						searchSession.setAttribute("bigquery",stmt);
 						List<Hotel> hotels = (List<Hotel>) query.list();
 						searchSession.setAttribute("hotel_search_results", hotels);
 
@@ -290,11 +292,12 @@ public class Hotelinfo extends HttpServlet {
 					Query query = session.createQuery(stmt).setParameter("id", id);
 					List<Hotel> hotels = (List<Hotel>) query.list();
 					searchSession.setAttribute("hotel_under_search", hotels.get(0));
-					
+					Integer rating= (Integer)searchSession.getAttribute("searchrating");
+					Integer budget= (Integer)searchSession.getAttribute("budget");
 					String bigquery=searchSession.getAttribute("bigquery").toString();
 					String stmt1 = "select type,count(*) from (" + bigquery + ") as R natural join room where hotel_id= :id group by type";
 					SQLQuery query1 = ((SQLQuery) session.createSQLQuery(stmt1).setParameter("city", city)
-							.setParameter("area", area).setParameter("start_date", strt_date)
+							.setParameter("area", area).setParameter("start_date", strt_date).setParameter("rating", rating).setParameter("budget", budget)
 							.setParameter("end_date", endr_date).setParameter("diff", days).setParameter("id", id));
 					List<Object[]> room_type_availabilities = (List<Object[]>) query1.list();
 					searchSession.setAttribute("room_type_availabilities", room_type_availabilities);
