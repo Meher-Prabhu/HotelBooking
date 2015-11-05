@@ -233,8 +233,8 @@ public class Hotelinfo extends HttpServlet {
 				String area = searchSession.getAttribute("area").toString();
 				String start_date = searchSession.getAttribute("start_date").toString();
 				String end_date = searchSession.getAttribute("end_date").toString();
-				String rating = request.getParameter("rating");
-				String budget = request.getParameter("budget");
+				Integer rating = Integer.parseInt(request.getParameter("rating"));
+				Integer budget = Integer.parseInt(request.getParameter("budget"));
 				String amenities[] = request.getParameterValues("amenities");
 				List<String> lamenities = Arrays.asList(amenities);
 				if ( amenities == null) {
@@ -251,12 +251,12 @@ public class Hotelinfo extends HttpServlet {
 					Session session = SessionFactoryUtil.getInstance().getCurrentSession();
 					try {
 						tx = session.beginTransaction();
-						String stmt = "select  hotel_id,name,room_id from hotel natural join room natural join availability natural join avg_rating natural join room_type where city = :city and area = :area and date >= :start_date and date <= :end_date and rating"+rating+" and price>= :minprice and price"+budget+" group by hotel_id,room_id having count(*) = :diff";
+						String stmt = "select  hotel_id,name,room_id from hotel natural join room natural join availability natural join avg_rating natural join room_type where city = :city and area = :area and date >= :start_date and date <= :end_date and rating>= :rating  and price<= :budget group by hotel_id,room_id having count(*) = :diff";
 						
 						for(int i=0;i<lamenities.size();i++)
 						{stmt+= "intersect select hotel_id,name,room_id from hotel natural join room natural join amenities where amenity='"+lamenities.get(i)+"'";}
 						
-						SQLQuery query = ((SQLQuery) session.createSQLQuery(stmt).setParameter("city", city).setParameter("area", area)
+						SQLQuery query = ((SQLQuery) session.createSQLQuery(stmt).setParameter("city", city).setParameter("area", area).setParameter("rating", rating).setParameter("budget", budget)
 								.setParameter("start_date", strt_date).setParameter("end_date", endr_date).setParameter("diff", days));
 						List<Hotel> hotels = (List<Hotel>) query.list();
 						searchSession.setAttribute("hotel_search_results", hotels);

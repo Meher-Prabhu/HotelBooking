@@ -15,20 +15,20 @@
 <div id="filter" style="float:left; width:25%;"> 
 	Filter options:<br>
 	Rating : <select name="rating">
-				<option value=">=0">Any</option>
-				<option value=">=1">1 and above</option>
-				<option value=">=2">2 and above</option>
-				<option value=">=3">3 and above</option>
-				<option value=">=4">4 and above</option>
-				<option value=">=5">5 and above</option>
+				<option value="0">Any</option>
+				<option value="1">1 and above</option>
+				<option value="2">2 and above</option>
+				<option value="3">3 and above</option>
+				<option value="4">4 and above</option>
+				<option value="5">5 and above</option>
 			 </select>
 	<br>
 	Budget(cost in rupees per day) : <select name="budget">
-				<option value="<=1000">Under 1000</option>
-				<option value="<=2000">Under 2000</option>
-				<option value="<=3000">Under 3000</option>
-				<option value="<=4000">Under 4000</option>
-				<option value="<=5000">Under 5000</option>
+				<option value="1000">Under 1000</option>
+				<option value="2000">Under 2000</option>
+				<option value="3000">Under 3000</option>
+				<option value="4000">Under 4000</option>
+				<option value="5000">Under 5000</option>
 				
 			 </select>
 	<br>
