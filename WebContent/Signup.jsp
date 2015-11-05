@@ -29,6 +29,6 @@ Invalid data please verify your details
 Passwords same daal chutiye
 <% } if(session.getAttribute("error") == "Present") {	%>
 Kitne baar account banana hain chutiye
-<% } %>
+<% } session.setAttribute("error", "");%>
 </body>
 </html>

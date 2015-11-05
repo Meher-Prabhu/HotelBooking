@@ -152,9 +152,9 @@ public class Bookinginfo extends HttpServlet {
 			if (room_ids.size() >= num_rooms) {
 				Session session = SessionFactoryUtil.getInstance().getCurrentSession();
 				Transaction tx = null;
+				tx = session.beginTransaction();
 				try {
 					for (int i = 0; i < num_rooms; i++) {
-						tx = session.beginTransaction();
 						String delete = "delete from availability where hotel_id = :hotel_id and room_id = :room_id and date >= :start_date and date <= :end_date";
 						SQLQuery query = (SQLQuery) session.createSQLQuery(delete)
 								.setParameter("hotel_id", hotel.get_id()).setParameter("room_id", room_ids.get(i))

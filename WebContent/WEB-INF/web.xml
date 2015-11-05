@@ -14,5 +14,9 @@
 
 <url-pattern>/Bookinginfo.java</url-pattern>
 
+<servlet-name>Userprofile</servlet-name>
+
+<url-pattern>/Userprofile.java</url-pattern>
+
 </servlet-mapping>
 
