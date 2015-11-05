@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -233,24 +234,31 @@ public class Hotelinfo extends HttpServlet {
 				String start_date = searchSession.getAttribute("start_date").toString();
 				String end_date = searchSession.getAttribute("end_date").toString();
 				String rating = request.getParameter("rating");
-				String price_range[] = request.getParameterValues("price_range");
+				Integer minprice=Integer.parseInt(request.getParameter("minprice"));
+				Integer maxprice=Integer.parseInt(request.getParameter("maxprice"));
 				String amenities[] = request.getParameterValues("amenities");
-				if (price_range == null || amenities == null) {
+				List<String> lamenities = Arrays.asList(amenities);
+				if ( amenities == null) {
 					searchSession.setAttribute("missing_input", "true");
 					response.sendRedirect("SearchResult.jsp");
 				}
 
 				else {
 					searchSession.setAttribute("missing_input", "false");
-					searchSession.setAttribute("start_date", start_date);
-					searchSession.setAttribute("end_date", end_date);
+					Date strt_date = Date.valueOf(start_date);
+					Date endr_date = Date.valueOf(end_date);
+					int days = (int)((endr_date.getTime() - strt_date.getTime())/(1000*60*60*24)) + 1;
 					Transaction tx = null;
 					Session session = SessionFactoryUtil.getInstance().getCurrentSession();
 					try {
 						tx = session.beginTransaction();
-						String stmt = "select A from Hotel A where A.city = :city and A.area = :area ";
-						SQLQuery query = ((SQLQuery) session.createSQLQuery(stmt).setParameter("city", city).setParameter("area", area)
-								.setParameter("start_date", start_date).setParameter("end_date", end_date));
+						String stmt = "select  hotel_id,name,room_id from hotel natural join room natural join availability natural join avg_rating natural join room_type where city = :city and area = :area and date >= :start_date and date <= :end_date and rating"+rating+" and price>= :minprice and price<= :maxprice group by hotel_id,room_id having count(*) = :diff";
+						
+						for(int i=0;i<lamenities.size();i++)
+						{stmt+= "intersect select hotel_id,name,room_id from hotel natural join room natural join amenities where amenity='"+lamenities.get(i)+"'";}
+						
+						SQLQuery query = ((SQLQuery) session.createSQLQuery(stmt).setParameter("city", city).setParameter("area", area).setParameter("minprice",minprice).setParameter("maxprice",maxprice)
+								.setParameter("start_date", strt_date).setParameter("end_date", endr_date).setParameter("diff", days));
 						List<Hotel> hotels = (List<Hotel>) query.list();
 						searchSession.setAttribute("hotel_search_results", hotels);
 
