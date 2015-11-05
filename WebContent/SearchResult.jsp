@@ -37,7 +37,7 @@
 		<%List <String> amenitieslist=Hotelinfo.getamenities();
 		for(int i=0;i<amenitieslist.size();i++)
 			{%>
-				<input type="checkbox" name="amenities" value=<%out.write(amenitieslist.get(i));%>><%out.write(amenitieslist.get(i));%><br>
+				<input type="checkbox" name="amenities" value="<%out.write(amenitieslist.get(i));%>"><%out.write(amenitieslist.get(i));%><br>
 		 	<%}%>
 	<input type="submit" name="getlisthotels" value="Get list of hotels"></input><br><br>
 	<% if(session.getAttribute("missing_input") == "true") {	%>
