@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="database.SampleAccount" %>    
+<%@ page import="database.Account" %>    
 <!DOCTYPE html PUBLIC >
 <html>
 <head>
@@ -10,9 +10,11 @@
 	response.sendRedirect("Homepage.jsp");
 }
 else {
-SampleAccount user = (SampleAccount) session.getAttribute("currentUser");  
+Account user = (Account) session.getAttribute("currentUser");  
 if(user.get_type().equalsIgnoreCase("user") || user.get_type().equalsIgnoreCase("admin")) {
 		response.sendRedirect("Homepage.jsp");
+	} else if(user.get_status().equalsIgnoreCase("pending")){
+		response.sendRedirect("Pending.jsp");
 	} else {
 	%>
 </head>

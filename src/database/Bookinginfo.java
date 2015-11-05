@@ -132,7 +132,7 @@ public class Bookinginfo extends HttpServlet {
 			int num_rooms = Integer.parseInt(request.getParameter("num_rooms").toString());
 			Date start_date = Date.valueOf((String) searchSession.getAttribute("start_date"));
 			Date end_date = Date.valueOf((String) searchSession.getAttribute("end_date"));
-			SampleAccount sample_account = (SampleAccount) searchSession.getAttribute("currentUser");
+			Account sample_account = (Account) searchSession.getAttribute("currentUser");
 			Booking booking = new Booking();
 			booking.setBooking_id(getMaxBookingId());
 			if (searchSession.getAttribute("currentUser") == null || searchSession.getAttribute("currentUser") == "") {

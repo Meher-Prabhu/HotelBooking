@@ -59,9 +59,9 @@ public class Login extends HttpServlet {
 				Session session = SessionFactoryUtil.getInstance().getCurrentSession();
 				try{
 					tx= session.beginTransaction();
-					String stmt = "select A from SampleAccount A where A.mail_id = :mail";
+					String stmt = "select A from Account A where A.mail_id = :mail";
 					Query query = session.createQuery(stmt).setParameter("mail",username);
-					List<SampleAccount>rows = (List<SampleAccount>) query.list();
+					List<Account>rows = (List<Account>) query.list();
 					tx.commit();
 					System.out.println(rows.isEmpty());
 					if(rows.isEmpty()) {
@@ -69,7 +69,7 @@ public class Login extends HttpServlet {
 						response.sendRedirect(request.getHeader("referer"));
 					}
 					else if(rows.get(0).get_password().equals(password)){
-						SampleAccount user = rows.get(0);
+						Account user = rows.get(0);
 						HttpSession userSession = request.getSession(true);
 						userSession.setAttribute("currentUser", user);
 						System.out.println(user.get_mail_id());
@@ -106,7 +106,7 @@ public class Login extends HttpServlet {
 				request.getSession(true).setAttribute("error", "Mismatch");
 				response.sendRedirect("Signup.jsp");
 			} else {
-				SampleAccount account = new SampleAccount();				
+				Account account = new Account();				
 				account.set_mail_id(mail_id);
 				account.set_password(pass1);
 				account.set_name(name);
@@ -115,6 +115,10 @@ public class Login extends HttpServlet {
 					account.set_address(address);
 				if(contact_number != null)
 					account.set_contact_number(Long.valueOf(contact_number));
+				if(type.equalsIgnoreCase("user"))
+					account.set_status("approved");
+				else if(type.equalsIgnoreCase("hotel"))
+					account.set_status("pending");
 				Transaction tx = null;
 				Session session = SessionFactoryUtil.getInstance().getCurrentSession();
 				try {

@@ -1,5 +1,5 @@
 <%@	page import="java.util.*" %>
-<%@ page import = "database.SampleAccount" %>
+<%@ page import = "database.Account" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -9,7 +9,7 @@
 <title>User Profile</title>
 <% boolean redirect = false;
 	if(session.getAttribute("currentUser") != null) {
-	SampleAccount user = (SampleAccount) session.getAttribute("currentUser");
+	Account user = (Account) session.getAttribute("currentUser");
 	if(user.get_type().equalsIgnoreCase("hotel")) {
 		redirect = true;
 	}
@@ -21,7 +21,7 @@
 	 else {%>
 </head>
 <body>
-<% SampleAccount account = (SampleAccount)session.getAttribute("currentUser"); %>
+<% Account account = (Account)session.getAttribute("currentUser"); %>
 <h2>Current Details:</h2> 
 Mail ID: <% out.print(account.get_mail_id()); %> <br>
 Name: <% out.print(account.get_name()); %><br>

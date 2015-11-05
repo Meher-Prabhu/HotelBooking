@@ -52,7 +52,7 @@ public class Userprofile extends HttpServlet {
 		String orig = splitOrig[splitOrig.length - 1];
 		if (orig.equalsIgnoreCase("Homepage.jsp")) {
 			HttpSession searchSession = request.getSession(true);
-			SampleAccount sample_account = (SampleAccount) searchSession.getAttribute("currentUser");
+			Account sample_account = (Account) searchSession.getAttribute("currentUser");
 			Session session = SessionFactoryUtil.getInstance().getCurrentSession();
 			List<Object> list;
 			Transaction tx = null;
@@ -89,7 +89,7 @@ public class Userprofile extends HttpServlet {
 				Transaction tx = null;
 				Session session = SessionFactoryUtil.getInstance().getCurrentSession();
 				HttpSession searchSession = request.getSession(true);
-				SampleAccount sample_account = (SampleAccount) searchSession.getAttribute("currentUser");
+				Account sample_account = (Account) searchSession.getAttribute("currentUser");
 				if(name.equals("")){
 					name = sample_account.get_name();
 				}

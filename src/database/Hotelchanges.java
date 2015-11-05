@@ -56,7 +56,7 @@ public class Hotelchanges extends HttpServlet {
 			Transaction tx = null;
 			Session session = SessionFactoryUtil.getInstance().getCurrentSession();
 			HttpSession hotelSession = request.getSession(true);
-			SampleAccount my_hotel= (SampleAccount) hotelSession.getAttribute("currentUser");
+			Account my_hotel= (Account) hotelSession.getAttribute("currentUser");
 			
 			try{
 				tx= session.beginTransaction();
@@ -83,7 +83,7 @@ public class Hotelchanges extends HttpServlet {
 			Transaction tx = null;
 			Session session = SessionFactoryUtil.getInstance().getCurrentSession();
 			HttpSession hotelSession = request.getSession(true);
-			SampleAccount my_hotel= (SampleAccount) hotelSession.getAttribute("currentUser");
+			Account my_hotel= (Account) hotelSession.getAttribute("currentUser");
 			String room_no=request.getParameter("room_id");
 			String room_type=request.getParameter("room_type");
 			Integer room_id= Integer.parseInt(room_no);
@@ -132,7 +132,7 @@ public class Hotelchanges extends HttpServlet {
 			Transaction tx = null;
 			Session session = SessionFactoryUtil.getInstance().getCurrentSession();
 			HttpSession hotelSession = request.getSession(true);
-			SampleAccount my_hotel= (SampleAccount) hotelSession.getAttribute("currentUser");
+			Account my_hotel= (Account) hotelSession.getAttribute("currentUser");
 			String room_no=request.getParameter("room_id");
 			String room_type=request.getParameter("room_type");
 			Integer room_id= Integer.parseInt(room_no);
@@ -177,7 +177,7 @@ public class Hotelchanges extends HttpServlet {
 			Transaction tx = null;
 			Session session = SessionFactoryUtil.getInstance().getCurrentSession();
 			HttpSession hotelSession = request.getSession(true);
-			SampleAccount my_hotel= (SampleAccount) hotelSession.getAttribute("currentUser");
+			Account my_hotel= (Account) hotelSession.getAttribute("currentUser");
 			String room_no=request.getParameter("room_id");
 			Integer room_id= Integer.parseInt(room_no);
 			try{
@@ -221,7 +221,7 @@ public class Hotelchanges extends HttpServlet {
 			Transaction tx = null;
 			Session session = SessionFactoryUtil.getInstance().getCurrentSession();
 			HttpSession hotelSession = request.getSession(true);
-			SampleAccount my_hotel= (SampleAccount) hotelSession.getAttribute("currentUser");
+			Account my_hotel= (Account) hotelSession.getAttribute("currentUser");
 			Integer price= Integer.parseInt(request.getParameter("price"));
 			Integer capacity= Integer.parseInt(request.getParameter("capacity"));
 			
@@ -282,7 +282,7 @@ public class Hotelchanges extends HttpServlet {
 			Transaction tx = null;
 			Session session = SessionFactoryUtil.getInstance().getCurrentSession();
 			HttpSession hotelSession = request.getSession(true);
-			SampleAccount my_hotel= (SampleAccount) hotelSession.getAttribute("currentUser");
+			Account my_hotel= (Account) hotelSession.getAttribute("currentUser");
 			Integer price= Integer.parseInt(request.getParameter("price"));
 			Integer capacity= Integer.parseInt(request.getParameter("capacity"));
 			
@@ -321,7 +321,7 @@ public class Hotelchanges extends HttpServlet {
 			Transaction tx = null;
 			Session session = SessionFactoryUtil.getInstance().getCurrentSession();
 			HttpSession hotelSession = request.getSession(true);
-			SampleAccount my_hotel= (SampleAccount) hotelSession.getAttribute("currentUser");
+			Account my_hotel= (Account) hotelSession.getAttribute("currentUser");
 			
 			
 			String room_type=request.getParameter("room_type");
@@ -364,14 +364,14 @@ public class Hotelchanges extends HttpServlet {
 				addSession.setAttribute("error_hotel", true);
 				response.sendRedirect("addHotel.jsp");
 			} else {
-				String hotel_mail_id = ((SampleAccount) addSession.getAttribute("currentUser")).get_mail_id();
+				String hotel_mail_id = ((Account) addSession.getAttribute("currentUser")).get_mail_id();
 				long phone_number = Long.valueOf(phoneString);
 				int period = Integer.valueOf(periodString);
 				Session session = SessionFactoryUtil.getInstance().getCurrentSession();
 				Transaction tx = null;
 				try {
 					tx = session.beginTransaction();
-					String stmt = "insert into hotel values(default, :hotel, :area, :city, :number, :period, :mail)";
+					String stmt = "insert into hotel values(default, :hotel, :area, :city, :number, :period, :mail, 'pending')";
 					SQLQuery query = (SQLQuery) session.createSQLQuery(stmt).setParameter("hotel", hotel).setParameter("area", area).setParameter("city", city).setParameter("number", phone_number).setParameter("period", period).setParameter("mail", hotel_mail_id);
 					query.executeUpdate();
 					tx.commit();

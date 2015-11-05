@@ -1,5 +1,5 @@
 <%@page import="database.Hotelinfo"%>
-<%@page import="database.SampleAccount"%>
+<%@page import="database.Account"%>
 <%@ page import="java.util.*" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
@@ -12,9 +12,11 @@
 	response.sendRedirect("Homepage.jsp");
 }
 else {
-SampleAccount user = (SampleAccount) session.getAttribute("currentUser");  
+Account user = (Account) session.getAttribute("currentUser");  
 if(user.get_type().equalsIgnoreCase("user") || user.get_type().equalsIgnoreCase("admin")) {
 	response.sendRedirect("Homepage.jsp");
+} else if(user.get_status().equalsIgnoreCase("pending")){
+	response.sendRedirect("Pending.jsp");
 } else {
 	%>
 </head>

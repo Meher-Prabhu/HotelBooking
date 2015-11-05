@@ -8,7 +8,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "accounts")
-public class SampleAccount {
+public class Account {
 
 	@Id
 	@Column(name = "mail_id")
@@ -29,10 +29,13 @@ public class SampleAccount {
 	@Column(name = "type")
 	private String type;
 	
-	public SampleAccount() {
+	@Column(name = "status")
+	private String status;
+	
+	public Account() {
 	}
 	
-	public SampleAccount(String mail, String pass) {
+	public Account(String mail, String pass) {
 		this.mail_id = mail;
 		this.password = pass;
 	}
@@ -69,7 +72,6 @@ public class SampleAccount {
 		this.contact_number = value;
 	}
 	
-	@Column(name = "address")
 	public String get_address() {
 		return address;
 	}
@@ -81,7 +83,6 @@ public class SampleAccount {
 			this.address = "";
 	}
 	
-	@Column(name = "type")
 	public String get_type() {
 		return type;
 	}
@@ -90,10 +91,19 @@ public class SampleAccount {
 		this.type = value;
 	}
 	
+	public void set_status(String value) {
+		this.status = value;
+	}
+	
+	public String get_status() {
+		return status;
+	}
+	
 	public String toString() {
 		String str = "Mail ID: " + get_mail_id() + " Password: " + get_password() + " name: " + get_name() + " type: " + get_type();
 		if(get_contact_number() != null) str += " contact: " + get_contact_number();
 		if(get_address() != null) str += " address: " + get_address();
+		str += " status: " + get_status(); 
 		return str;
 	}
 }

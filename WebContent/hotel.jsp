@@ -1,5 +1,5 @@
 <%@ page import="database.Hotel"%>
-<%@ page import="database.SampleAccount" %>
+<%@ page import="database.Account" %>
 <%@	page import="java.util.*"%>
 <%@ page import="java.math.BigDecimal" %>
 <%@	page language="java" contentType="text/html; charset=UTF-8"
@@ -11,7 +11,7 @@
 <title>Hotel</title>
 <% boolean redirect = false;
 	if(session.getAttribute("currentUser") != null) {
-	SampleAccount user = (SampleAccount) session.getAttribute("currentUser");
+	Account user = (Account) session.getAttribute("currentUser");
 	if(user.get_type().equalsIgnoreCase("hotel")) {
 		redirect = true;
 	}

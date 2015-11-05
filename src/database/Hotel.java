@@ -32,6 +32,9 @@ import javax.persistence.Table;
 	@Column(name = "mail_id")
 	private String mail_id;
 	
+	@Column(name = "status")
+	private String status;
+	
 	public Hotel() {
 	}
 	
@@ -94,14 +97,22 @@ import javax.persistence.Table;
 	public void set_city(String value) {
 		this.city = value;
 	}
+	
+	public String get_status() {
+		return status;
+	}
+	
+	public void set_status(String value) {
+		this.status = value;
+	}
 
 	@Override
 	public String toString() {
 		return "Hotel [hotel_id=" + hotel_id + ", name=" + name + ", area=" + area + ", city=" + city
 				+ ", phone_number=" + phone_number + ", booking_period=" + booking_period + ", mail_id=" + mail_id
-				+ "]";
+				+ ", status=" + status + "]";
 	}
-	
-	
+
+		
 	
 }

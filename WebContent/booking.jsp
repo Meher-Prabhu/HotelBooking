@@ -1,4 +1,4 @@
-<%@ page import="database.SampleAccount" %>
+<%@ page import="database.Account" %>
 <%@ page import="database.Hotel" %>
 <%@	page import="java.util.*" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -10,7 +10,7 @@
 <title>Booking Details</title>
 <% boolean redirect = false;
 	if(session.getAttribute("currentUser") != null) {
-	SampleAccount user = (SampleAccount) session.getAttribute("currentUser");
+	Account user = (Account) session.getAttribute("currentUser");
 	if(user.get_type().equalsIgnoreCase("hotel")) {
 		redirect = true;
 	}
@@ -21,7 +21,7 @@
 </head>
 <body>
 <% Hotel hotel = (Hotel)session.getAttribute("hotel_under_search");
-SampleAccount sample_account = (SampleAccount)session.getAttribute("currentUser");%>
+Account sample_account = (Account)session.getAttribute("currentUser");%>
 
 <form name="details" action="Bookinginfo" method="post">
 

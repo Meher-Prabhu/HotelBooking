@@ -65,7 +65,7 @@ public class Hotelinfo extends HttpServlet {
 		Transaction tx = null;
 		Session session = SessionFactoryUtil.getInstance().getCurrentSession();
 		List<String> roomtypes;
-		SampleAccount my_hotel= (SampleAccount) hotelSession.getAttribute("currentUser");
+		Account my_hotel= (Account) hotelSession.getAttribute("currentUser");
 		try {
 			tx = session.beginTransaction();
 			
@@ -345,7 +345,7 @@ public class Hotelinfo extends HttpServlet {
 					searchSession.setAttribute("review_replies", replies);
 
 					if (searchSession.getAttribute("currentUser") != null) {
-						String user = ((SampleAccount) searchSession.getAttribute("currentUser")).get_mail_id();
+						String user = ((Account) searchSession.getAttribute("currentUser")).get_mail_id();
 
 						String stmt4 = "select * from review where hotel_id = :id and mail_id = :user";
 						SQLQuery query4 = ((SQLQuery) session.createSQLQuery(stmt4).setParameter("id", id)
@@ -364,7 +364,7 @@ public class Hotelinfo extends HttpServlet {
 					searchSession.setAttribute("rating", rating);
 					
 					if (searchSession.getAttribute("currentUser") != null) {
-						String user = ((SampleAccount) searchSession.getAttribute("currentUser")).get_mail_id();
+						String user = ((Account) searchSession.getAttribute("currentUser")).get_mail_id();
 
 						String stmt6 = "select value from rating where hotel_id = :id and mail_id = :user";
 						SQLQuery query6 = ((SQLQuery) session.createSQLQuery(stmt6).setParameter("id", id)
@@ -397,8 +397,8 @@ public class Hotelinfo extends HttpServlet {
 			if (formOrig.equalsIgnoreCase("reply")) {
 				String text = request.getParameter("reply");
 				int rev_id = Integer.valueOf(request.getParameter("rev_id"));
-				String user_mail = ((SampleAccount) addSession.getAttribute("currentUser")).get_mail_id();
-				String user_name = ((SampleAccount) addSession.getAttribute("currentUser")).get_name();
+				String user_mail = ((Account) addSession.getAttribute("currentUser")).get_mail_id();
+				String user_name = ((Account) addSession.getAttribute("currentUser")).get_name();
 				if (text.equalsIgnoreCase("")) {
 					response.sendRedirect("hotel.jsp");
 				} else {
@@ -428,7 +428,7 @@ public class Hotelinfo extends HttpServlet {
 				}
 			} else if (formOrig.equalsIgnoreCase("Review")) {
 				String text = request.getParameter("review");
-				String user_mail = ((SampleAccount) addSession.getAttribute("currentUser")).get_mail_id();
+				String user_mail = ((Account) addSession.getAttribute("currentUser")).get_mail_id();
 				int hotel_id = Integer.valueOf(((Hotel) addSession.getAttribute("hotel_under_search")).get_id());
 				if (text.equalsIgnoreCase("")) {
 					response.sendRedirect("hotel.jsp");
@@ -457,7 +457,7 @@ public class Hotelinfo extends HttpServlet {
 				double rating = 0.0;
 				if(request.getParameter("rating") != null)
 					rating = Double.valueOf(request.getParameter("rating"));
-				String user_mail = ((SampleAccount) addSession.getAttribute("currentUser")).get_mail_id();
+				String user_mail = ((Account) addSession.getAttribute("currentUser")).get_mail_id();
 				int hotel_id = Integer.valueOf(((Hotel) addSession.getAttribute("hotel_under_search")).get_id());
 				System.out.println(rating);
 				if(rating == 0.0) {

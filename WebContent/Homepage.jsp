@@ -1,7 +1,7 @@
 <%@page import="database.Hotelinfo"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import = "database.SampleAccount" %>
+<%@ page import = "database.Account" %>
 <%@ page import = "java.util.*" %>
 <%@ page session="true" %>
 <!DOCTYPE html >
@@ -33,7 +33,7 @@ function fillAreas() {
 </script>
 <% boolean redirect = false;
 	if(session.getAttribute("currentUser") != null) {
-	SampleAccount user = (SampleAccount) session.getAttribute("currentUser");
+	Account user = (Account) session.getAttribute("currentUser");
 	if(user.get_type().equalsIgnoreCase("hotel")) {
 		redirect = true;
 	}
