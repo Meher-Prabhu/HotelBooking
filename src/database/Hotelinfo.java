@@ -3,6 +3,7 @@ package database;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -88,17 +89,79 @@ public class Hotelinfo extends HttpServlet {
 		// return new ArrayList<String>();
 		return roomtypes;
 	}
+	
+	public static List<String> getCities() {
+		List<String> cities = new ArrayList<String>();
+		Session session = SessionFactoryUtil.getInstance().getCurrentSession();
+		Transaction tx = null;
+		try {
+			tx = session.beginTransaction();
+			String stmt = "select distinct city from hotel";
+			SQLQuery query = session.createSQLQuery(stmt);
+			cities = (List<String>) query.list();
+			tx.commit();
+		} catch(RuntimeException e) {
+			if(tx != null && tx.isActive()) {
+				tx.rollback();
+			}
+			throw e;
+		}
+		return cities;
+	}
+	
+	public static List<String> getAreas(String city) {
+		List<String> areas = new ArrayList<String>();
+		Session session = SessionFactoryUtil.getInstance().getCurrentSession();
+		Transaction tx = null;
+		try {
+			tx = session.beginTransaction();
+			String stmt = "select distinct area from hotel where city = :city";
+			SQLQuery query = (SQLQuery) session.createSQLQuery(stmt).setParameter("city", city);
+			areas = (List<String>) query.list();
+			tx.commit();
+		}catch(RuntimeException e) {
+			if(tx != null && tx.isActive()) {
+				tx.rollback();
+			}
+			throw e;
+		}
+		return areas;
+	}
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-
+		System.out.println("Here");
+		String city = request.getHeader("city_name");
+		List<String> areas = new ArrayList<String>();
+		Session session = SessionFactoryUtil.getInstance().getCurrentSession();
+		Transaction tx = null;
+		try {
+			tx = session.beginTransaction();
+			String stmt = "select distinct area from hotel where city = :city";
+			SQLQuery query = (SQLQuery) session.createSQLQuery(stmt).setParameter("city", city);
+			areas = (List<String>) query.list();
+			tx.commit();
+		}catch(RuntimeException e) {
+			if(tx != null && tx.isActive()) {
+				tx.rollback();
+			}
+			throw e;
+		}
+		String result = "";
+		for(int i = 0; i < areas.size()-1; i++) {
+			result = result+areas.get(i)+",";
+		}
+		result += areas.get(areas.size()-1);
+		response.setContentType("text/plain");
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().write(result);
 	}
+	
 
 
 	/**
