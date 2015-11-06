@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<jsp:include page="header.jsp"></jsp:include>
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -11,19 +12,37 @@
 %>
 </head>
 <body>
-<form action="Login" method="post">
-User Name:<br>
-<input type="text" name="username" >
-<br>
-Password:<br>
-<input type="password" name="password" >
-<br><br>
-<input type="submit" value="Submit">
+<nav class = "navbar navbar-default">
+<div class = "container-fluid">
+<div class = "navbar-header">
+<a class = "navbar-brand" href = "Homepage.jsp"> Hotel Booking </a>
+</div>
+<div>
+<ul class = "nav navbar-nav navbar-right">
+<li> <a href = "Signup.jsp"> Signup </a> </li>
+</ul>
+</div>
+</div>
+</nav> 
+<div class = "container">
+<h2> LOGIN </h2>
+<form action="Login" method="post" role="form">
+<div class = "form-group">
+User Name:
+<input type="email" class="form-control" name="username" >
+</div>
+<div class = "form-group">
+Password:
+<input type="password" class = "form-control" name="password" >
+</div>
+<input type="submit" class = "btn btn-success" value="Login">
 </form>
 <br>
 <br>
 <% if(session.getAttribute("error") == "Invalid") {	%>
 Invalid data please verify your details
-<% } %>
+
+<% session.setAttribute("error",null);} %>
+</div>
 </body>
 </html>

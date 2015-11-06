@@ -2,11 +2,12 @@
     pageEncoding="UTF-8"%>
 <%@ page import="database.Account" %> 
 <%@page import="database.Hotelinfo"%>
-<%@ page import="java.util.*" %> 
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%@ page import="java.util.*" %>
+<jsp:include page="header.jsp"></jsp:include> 
+<!DOCTYPE html>
 <html>
 <head>
-<title>Add Room Type</title>
+<title>Remove Room Type</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <% if(session.getAttribute("currentUser") == null) {
 	response.sendRedirect("Homepage.jsp");
@@ -21,21 +22,35 @@ if(user.get_type().equalsIgnoreCase("user") || user.get_type().equalsIgnoreCase(
 	%>
 </head>
 <body>
+<nav class = "navbar navbar-default">
+<div class = "container-fluid">
+<div class = "navbar-header">
+<a class = "navbar-brand" href = "Homepage.jsp"> Hotel Booking </a>
+</div>
+<div>
+<ul class = "nav navbar-nav navbar-right">
+<li> <a href = "#"> Welcome <% out.write(((Account) session.getAttribute("currentUser")).get_name()); %> </a> </li>
+<li> <a href = "Logout.jsp">Logout   </a> </li>
+</ul>
+</div>
+</div>
+</nav>
+<div class = "container">
 <form action="Hotelchanges" method="post">
 Enter the room type name to delete: 
-<select name="room_type">
+<select name="room_type" class = "form-control">
 	<%List <String> roomtypeslist=Hotelinfo.getroomtypes(session);
 		for(int i=0;i<roomtypeslist.size();i++)
 			{%>
 				<option value=<%out.write(roomtypeslist.get(i));%>><%out.write(roomtypeslist.get(i));%></option>
 		 	<%}%>
-	</select>
-<input type="submit" name="Submit" value="Submit">
+	</select><br>
+<input type="submit" name="Submit" value="Submit" class = "btn btn-danger">
 <br>
 
 <%  } }%>
 
 </form>
-
+</div>
 </body>
 </html>

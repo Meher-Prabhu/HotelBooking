@@ -114,7 +114,39 @@ public class Admin extends HttpServlet {
 				throw e;
 			}
 			response.sendRedirect("Adminlogin.jsp");
-		}
+		} else if(formOrig.equalsIgnoreCase("hotelreject")) {
+			int h_id = Integer.valueOf(request.getParameter("id"));
+			Transaction tx = null;
+			try {
+				tx = session.beginTransaction();
+				String update = "delete from hotel where hotel_id = :id";
+				SQLQuery query = (SQLQuery) session.createSQLQuery(update).setParameter("id",h_id);
+				query.executeUpdate();
+				tx.commit();
+			} catch(RuntimeException e) {
+				if(tx != null && tx.isActive()) {
+					tx.rollback();
+				}
+				throw e;
+			}
+			response.sendRedirect("Adminlogin.jsp");
+		} else if(formOrig.equalsIgnoreCase("accountreject")) {
+			String a_id = request.getParameter("id");
+			Transaction tx = null;
+			try {
+				tx = session.beginTransaction();
+				String update = "delete from accounts where mail_id = :id";
+				SQLQuery query = (SQLQuery) session.createSQLQuery(update).setParameter("id",a_id);
+				query.executeUpdate();
+				tx.commit();
+			} catch(RuntimeException e) {
+				if(tx != null && tx.isActive()) {
+					tx.rollback();
+				}
+				throw e;
+			}
+			response.sendRedirect("Adminlogin.jsp");
+		} 
 	}
 
 }

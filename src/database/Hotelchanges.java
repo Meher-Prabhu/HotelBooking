@@ -39,7 +39,30 @@ public class Hotelchanges extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		Transaction tx = null;
+		Session session = SessionFactoryUtil.getInstance().getCurrentSession();
+		HttpSession hotelSession = request.getSession(true);
+		Account my_hotel= (Account) hotelSession.getAttribute("currentUser");
+		
+		try{
+			tx= session.beginTransaction();
+			String stmt = "select B.booking_id, B.name, B.room_id, B.start_date, B.end_date from booking B inner join hotel H on B.hotel_id=H.hotel_id where H.mail_id = :mail and B.status = 'active'";
+			SQLQuery query = (SQLQuery) session.createSQLQuery(stmt).setParameter("mail",my_hotel.get_mail_id());
+			List<Object[]>bookings = (List<Object[]>) query.list();
+			tx.commit();
+			System.out.println(bookings.size());
+			hotelSession.setAttribute("bookings",bookings);
+			response.sendRedirect("showbookings.jsp");					
+			}
+		
+		catch(RuntimeException e){
+			e.printStackTrace();
+			if(tx != null && tx.isActive()){
+				tx.rollback();
+			}
+			throw e;
+		
+	}
 	}
 
 	/**
@@ -50,36 +73,7 @@ public class Hotelchanges extends HttpServlet {
 		String[] splitOrig = request.getHeader("referer").split("/");
 		String orig = splitOrig[splitOrig.length-1];
 		
-		
-		
-		if(orig.equalsIgnoreCase("hoteldetails.jsp")) {
-			Transaction tx = null;
-			Session session = SessionFactoryUtil.getInstance().getCurrentSession();
-			HttpSession hotelSession = request.getSession(true);
-			Account my_hotel= (Account) hotelSession.getAttribute("currentUser");
-			
-			try{
-				tx= session.beginTransaction();
-				String stmt = "select B.booking_id, B.name, B.room_id, B.start_date, B.end_date from booking B inner join hotel H on B.hotel_id=H.hotel_id where H.mail_id = :mail and B.status = 'active'";
-				SQLQuery query = (SQLQuery) session.createSQLQuery(stmt).setParameter("mail",my_hotel.get_mail_id());
-				List<Object[]>bookings = (List<Object[]>) query.list();
-				tx.commit();
-				System.out.println(bookings.size());
-				hotelSession.setAttribute("bookings",bookings);
-				response.sendRedirect("showbookings.jsp");					
-				}
-			
-			catch(RuntimeException e){
-				e.printStackTrace();
-				if(tx != null && tx.isActive()){
-					tx.rollback();
-				}
-				throw e;
-			
-		}
-		}
-		
-		else if (orig.equalsIgnoreCase("addroom.jsp")){
+		if (orig.equalsIgnoreCase("addroom.jsp")){
 			Transaction tx = null;
 			Session session = SessionFactoryUtil.getInstance().getCurrentSession();
 			HttpSession hotelSession = request.getSession(true);

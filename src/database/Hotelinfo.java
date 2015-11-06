@@ -136,7 +136,6 @@ public class Hotelinfo extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		System.out.println("Here");
 		String city = request.getHeader("city_name");
 		List<String> areas = new ArrayList<String>();
 		Session session = SessionFactoryUtil.getInstance().getCurrentSession();

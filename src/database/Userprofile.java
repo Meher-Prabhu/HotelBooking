@@ -28,6 +28,31 @@ public class Userprofile extends HttpServlet {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+	
+	public static List<Object[]>getBookings(String id) {
+		Session session = SessionFactoryUtil.getInstance().getCurrentSession();
+		List<Object[]> list;
+		Transaction tx = null;
+
+		try {
+			tx = session.beginTransaction();
+			String stmt = "select booking.booking_id,hotel.name,hotel.area,hotel.city,booking.start_date,booking.end_date,booking.status from booking,hotel where booking.hotel_id = hotel.hotel_id and booking.mail_id = :mail_id ";
+			SQLQuery query = (SQLQuery) session.createSQLQuery(stmt).
+					setParameter("mail_id", id);
+			list = (List<Object[]>) query.list();
+			tx.commit();
+			if (session.isOpen())
+				session.close();
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+			if (tx != null && tx.isActive()) {
+				tx.rollback();
+				e.printStackTrace();
+			}
+			throw e;
+		}
+		return list;
+	}
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
@@ -48,35 +73,6 @@ public class Userprofile extends HttpServlet {
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		// doGet(request, response);
-		String[] splitOrig = request.getHeader("referer").split("/");
-		String orig = splitOrig[splitOrig.length - 1];
-		if (orig.equalsIgnoreCase("Homepage.jsp")) {
-			HttpSession searchSession = request.getSession(true);
-			Account sample_account = (Account) searchSession.getAttribute("currentUser");
-			Session session = SessionFactoryUtil.getInstance().getCurrentSession();
-			List<Object> list;
-			Transaction tx = null;
-	
-			try {
-				tx = session.beginTransaction();
-				String stmt = "select booking.booking_id,hotel.name,hotel.area,hotel.city,booking.start_date,booking.end_date from booking,hotel where booking.hotel_id = hotel.hotel_id and booking.mail_id = :mail_id ";
-				SQLQuery query = (SQLQuery) session.createSQLQuery(stmt).
-						setParameter("mail_id", sample_account.get_mail_id());
-				list = (List<Object>) query.list();
-				searchSession.setAttribute("bookings", list);
-				tx.commit();
-				if (session.isOpen())
-					session.close();
-			} catch (RuntimeException e) {
-				e.printStackTrace();
-				if (tx != null && tx.isActive()) {
-					tx.rollback();
-					e.printStackTrace();
-				}
-				throw e;
-			}
-			response.sendRedirect("userbookings.jsp");
-		} else if (orig.contains("userprofile.jsp")) {
 			String name = request.getParameter("name");
 			String contact_number = request.getParameter("contact_number");
 			String address = request.getParameter("address");
@@ -136,6 +132,5 @@ public class Userprofile extends HttpServlet {
 				}
 				response.sendRedirect("Homepage.jsp");
 			}
-		}
 	}
 }

@@ -4,7 +4,8 @@
 <%@ page import="java.math.BigDecimal" %>
 <%@	page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<jsp:include page="header.jsp"></jsp:include>	
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -21,6 +22,28 @@
  else { %>
 </head>
 <body>
+<nav class = "navbar navbar-default">
+<div class = "container-fluid">
+<div class = "navbar-header">
+<a class = "navbar-brand" href = "Homepage.jsp"> Hotel Booking </a>
+</div>
+<% if(session.getAttribute("currentUser") != null && session.getAttribute("currentUser") != "") { %>
+<div>
+<ul class = "nav navbar-nav navbar-right">
+<li> <a href = "#"> Welcome <% out.write(((Account) session.getAttribute("currentUser")).get_name()); %> </a> </li>
+<% if(((Account) session.getAttribute("currentUser")).get_type().equalsIgnoreCase("admin")) { %>
+<li> <a href = "Adminlogin.jsp"> Requests </a> </li>
+<% } %>  
+<li> <a href = "userbookings.jsp"> Bookings </a> </li>
+<li> <a href = "userprofile.jsp"> Edit Profile </a> </li>
+<li> <a href = "Logout.jsp">Logout   </a> </li>
+</ul>
+</div>
+</div>
+</nav> 
+<% } %>
+</div>
+</nav>
 	<%
 		Hotel hotel = (Hotel) session.getAttribute("hotel_under_search");
 		BigDecimal rating = (BigDecimal) session.getAttribute("rating");
@@ -31,11 +54,13 @@
 			room_type_list = new ArrayList<Object[]>();
 		}
 	%>
-	<div id="wrapper">
+	<div id="wrapper" class = "container">
 		<div id="top">
-			<div id="book" style="float: right; width: 50%;">
-				<form name="book" action="booking.jsp" method="post">
-					Book for room type: <select name="department">
+			<div id="book" style="float: right; width: 43%;">
+				<h4>Book rooms</h4>
+				<form name="book" action="booking.jsp" method="post" class = "form-vertical">
+				<div class = "form-group">
+					<label> Room Type: </label> <select name="department" class = "form-control">
 						<%
 							for (int i = 0; i < room_type_list.size(); i++) {
 						%>
@@ -47,54 +72,61 @@
 						<%
 							}
 						%>
-					</select> <br> Number of rooms : <input type="text" name="num_rooms"
-						value=""><br> <input type="submit" name="book"
-						value="Book "></input>
+					</select></div>
+					<div class = "form-group"> 
+					<label>Number of rooms : </label> <br> <input type="number" name="num_rooms" class = "form-control">
+					</div>
+ 				<input class = "btn btn-success" type="submit" name="book"value="Book "></input>
 				</form>
 			</div>
-			<div id="availability" style="float: left; width: 50%;">
+			<div id="availability" style="float: left; width: 47%;">
 				<h1>
 					<%
 						out.print(hotel.get_name());
 					%>
 				</h1>
-				Rating:
+				<h4>Rating:
 				<%
 					out.print(rating);
-				%><br>
-				<% if(session.getAttribute("currentUser") != null) { 
-					if(session.getAttribute("userRating") != null) {%>
-						Your rating: <% out.print(session.getAttribute("userRating")); %> <br>
-				<% } else { %>
-						Your rating: <form name = "Rating" action = "Hotelinfo" method = "post">
-						<input type = "hidden" name = "formName" value = "rating">
-						<input type = "radio" name = "rating" value = "0.5"> 0.5
-						<input type = "radio" name = "rating" value = "1.0"> 1.0
-						<input type = "radio" name = "rating" value = "1.5"> 1.5
-						<input type = "radio" name = "rating" value = "2.0"> 2.0
-						<input type = "radio" name = "rating" value = "2.5"> 2.5
-						<input type = "radio" name = "rating" value = "3.0"> 3.0
-						<input type = "radio" name = "rating" value = "3.5"> 3.5
-						<input type = "radio" name = "rating" value = "4.0"> 4.0
-						<input type = "radio" name = "rating" value = "4.5"> 4.5
-						<input type = "radio" name = "rating" value = "5.0"> 5.0
-						<input type = "submit" name = "rate" value = "Rate">
-						</form>
-				<% }
-					}%>
+				%></h4>
+				<h4>
 				<%
 					out.print(hotel.get_phone_number());
-				%><br>
+				%></h4>
+				<h4>
 				<%
 					out.print(hotel.get_area());
 				%>
-				<br>
+				</h4>
+				<h4>
 				<%
 					out.print(hotel.get_city());
-				%><br>
+				%></h4>
+				<% if(session.getAttribute("currentUser") != null) { 
+					if(session.getAttribute("userRating") != null) {%>
+					<h4>	Your rating: <% out.print(session.getAttribute("userRating")); %> </h4>
+				<% } else { %>
+						<h4>Your rating: </h4> <form name = "Rating" action = "Hotelinfo" method = "post" role = "form">
+						<input type = "hidden" name = "formName" value = "rating">
+						<label class = "radio-inline"><input type = "radio" name = "rating" value = "0.5">0.5 </label> 
+						<label class = "radio-inline"><input type = "radio" name = "rating" value = "1.0">1.0 </label>
+						<label class = "radio-inline"><input type = "radio" name = "rating" value = "1.5">1.5 </label> 
+						<label class = "radio-inline"><input type = "radio" name = "rating" value = "2.0">2.0 </label>
+						<label class = "radio-inline"><input type = "radio" name = "rating" value = "2.5">2.5 </label>
+						<label class = "radio-inline"><input type = "radio" name = "rating" value = "3.0">3.0 </label>
+						<label class = "radio-inline"><input type = "radio" name = "rating" value = "3.5">3.5 </label>
+						<label class = "radio-inline"><input type = "radio" name = "rating" value = "4.0">4.0 </label>
+						<label class = "radio-inline"><input type = "radio" name = "rating" value = "4.5">4.5 </label>
+						<label class = "radio-inline"><input type = "radio" name = "rating" value = "5.0">5.0 </label><br> <br>
+						<input type = "submit" name = "rate" class = "btn btn-info" value = "Rate">
+						</form>
+				<% }
+					}%>
 				<br>
+				<table class = "table">
+				<tr><th>Type</th><th>Available rooms</th>
 				<%
-					out.print("<table border='1'>");
+					
 
 					for (int i = 0; i < room_type_list.size(); i++) {
 						out.print("<tr>");
@@ -102,13 +134,26 @@
 								+ room_type_list.get(i)[1].toString() + "</td>");
 						out.print("</tr>");
 					}
-					out.print("</table>");
+					
 				%>
+				</table>
 			</div>
 		</div>
 		<br>
 		<div id="bottom" style="float: left; clear: left">
-			<br> Reviews: <br> <br>
+			<h3> Reviews: </h3> <br>
+			<%
+				if (session.getAttribute("currentUser") != null && session.getAttribute("reviewed").equals(false)) {
+			%>
+			<h4> Add Review</h4>
+			<form name="Review" action="Hotelinfo" method="post" class = "form-inline">
+				<input type="hidden" name="formName" value="review"> 
+				<textarea placeholder="Write review" name="review" class = "form-control"></textarea>
+				<input type="submit" value="Review" class = "btn btn-info">
+			</form>
+			<%
+				}
+			%>
 			<%
 				List<Object[]> reviews = new ArrayList<Object[]>();
 				List<Object[]> replies = new ArrayList<Object[]>();
@@ -132,21 +177,19 @@
 				for (int i = 0; i < reviews.size(); i++) {
 					Object[] review = reviews.get(i);
 					int id = Integer.valueOf(review[0].toString());
-					out.print(review[1].toString());
+					out.print("<h4>"+review[1].toString()+"</h4>");
 			%>
-			<br>
-			<%
+			<p style = "padding-left:2em"><%
 				out.print(review[2].toString());
-			%>
-			<br>
+			%></p>
 			<%
 				if (session.getAttribute("currentUser") != null) {
 			%>
-			<form name="Reply" action="Hotelinfo" method="post">
+			<form style = "padding-left:1em" name="Reply" action="Hotelinfo" method="post" class = "form-inline">
 				<input type="hidden" name="formName" value="reply"> <input
-					type="hidden" name="rev_id" value=<%out.print(id);%>> <input
-					type="text" placeholder="Write reply" name="reply"> <input
-					type="submit" value="Reply">
+					type="hidden" name="rev_id" value=<%out.print(id);%>> 
+					<textarea class = "form-control" placeholder="Write reply" name="reply"></textarea> 
+					<input type="submit"  class = "btn btn-info" value="Reply">
 			</form>
 			<br>
 			<%
@@ -154,9 +197,12 @@
 			%>
 			<%
 				List<Object[]> rev_replies = mapped_replies.get(review);
+				if(rev_replies.size() > 0) { %>
+				<h4 style = "padding-left:1em">Replies</h4>
+				<%
 					for (int j = 0; j < rev_replies.size(); j++) {
 			%>
-			<p style="padding-left: 5em">
+			<p style="padding-left: 3em">
 				<%
 					out.print(rev_replies.get(j)[1].toString());
 				%>
@@ -169,18 +215,9 @@
 			<%
 				}
 				}
-			%>
-			<%
-				if (session.getAttribute("currentUser") != null && session.getAttribute("reviewed").equals(false)) {
-			%>
-			<form name="Review" action="Hotelinfo" method="post">
-				<input type="hidden" name="formName" value="review"> <input
-					type="text" placeholder="Write review" name="review"> <input
-					type="submit" value="Review">
-			</form>
-			<%
 				}
 			%>
+			
 			<br>
 			<p></p>
 		</div>

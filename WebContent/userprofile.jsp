@@ -2,7 +2,8 @@
 <%@ page import = "database.Account" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<jsp:include page="header.jsp"></jsp:include>    
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -21,26 +22,49 @@
 	 else {%>
 </head>
 <body>
+<nav class = "navbar navbar-default">
+<div class = "container-fluid">
+<div class = "navbar-header">
+<a class = "navbar-brand" href = "Homepage.jsp"> Hotel Booking </a>
+</div>
+<div>
+<ul class = "nav navbar-nav navbar-right">
+<li> <a href = "#"> Welcome <% out.write(((Account) session.getAttribute("currentUser")).get_name()); %> </a> </li>
+<% if(((Account) session.getAttribute("currentUser")).get_type().equalsIgnoreCase("admin")) { %>
+<li> <a href = "Adminlogin.jsp"> Requests </a> </li>
+<% } %>  
+<li> <a href = "userbookings.jsp"> Bookings </a> </li>
+<li class = "active"> <a href = "userprofile.jsp"> Edit Profile </a> </li>
+<li> <a href = "Logout.jsp">Logout   </a> </li>
+</ul>
+</div>
+</div>
+</nav> 
 <% Account account = (Account)session.getAttribute("currentUser"); %>
+<div class = "container">
 <h2>Current Details:</h2> 
-Mail ID: <% out.print(account.get_mail_id()); %> <br>
-Name: <% out.print(account.get_name()); %><br>
-Contact Number: <% out.print(account.get_contact_number()); %><br>
-Address: <% out.print(account.get_address()); %>
+<p class = "lead"> Mail ID: <% out.print(account.get_mail_id()); %> <br> 
+Name: <% out.print(account.get_name()); %> <br>
+Contact Number: <% out.print(account.get_contact_number()); %> <br> 
+Address: <% out.print(account.get_address()); %> </p>
 <br>
 <h2>Edit Profile: </h2>
-<form action="Userprofile" method="post">
-Name: <input type="text" name="name"></input><br>
-Contact number: <input type="text" name="contact_number"></input><br>
-Address: <input type="text" name="address"></input><br>
-New Password for account: <input type="password" name="pass1"></input><br>
-Retype password: <input type="password" name="pass2"></input><br>
-<input type="submit" name="editprofile"></input><br>
+<form action="Userprofile" method="post" role = "form">
+<h4> Name: </h4> <input type="text" name="name" class = "form-control"></input><br>
+<h4> Contact number: </h4> <input type="text" name="contact_number" class = "form-control"></input><br>
+<h4> Address: </h4> <input type="text" name="address" class = "form-control"></input><br>
+<h4> New Password for account: </h4> <input type="password" name="pass1" class = "form-control"></input><br>
+<h4> Retype password: </h4> <input type="password" name="pass2" class = "form-control"></input><br>
+<input type="submit" name="editprofile" class = "btn btn-success"></input><br>
 </form>
 <% if(session.getAttribute("error") == "Mismatch") {	%>
-Passwords same daal chutiye
+Passwords do not match
 <% } session.setAttribute("error", "");%>
-<a href = "Homepage.jsp"> Go to Homepage </a>
+<br>
+<a class = "lead" href = "Homepage.jsp"> Go to Homepage </a>
 <% } %>
+<br>
+<p class = "lead">	</p>
+</div>
 </body>
 </html>

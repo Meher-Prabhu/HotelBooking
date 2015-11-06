@@ -3,7 +3,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="database.Account" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<jsp:include page="header.jsp"></jsp:include>
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -21,10 +22,24 @@ else {
 	%>
 </head>
 <body>
+<nav class = "navbar navbar-default">
+<div class = "container-fluid">
+<div class = "navbar-header">
+<a class = "navbar-brand" href = "Homepage.jsp"> Hotel Booking </a>
+</div>
+<div>
+<ul class = "nav navbar-nav navbar-right">
+<li> <a href = "#"> Welcome <% out.write(((Account) session.getAttribute("currentUser")).get_name()); %> </a> </li>
+<li> <a href = "Logout.jsp">Logout   </a> </li>
+</ul>
+</div>
+</div>
+</nav>
+<div class = "container">
 <form action="Hotelchanges" method="post">
-Enter room details to add: <br>
-Room no. : <input type="text" name="room_id" value=""><br>
-Type of room: <select name="room_type">
+<h4>Enter room details to add:</h4> <br>
+Room no. : <input type="text" name="room_id" value="" class = "form-control"><br>
+Type of room: <select name="room_type" class = "form-control">
 	<%List <String> roomtypeslist=Hotelinfo.getroomtypes(session);
 		for(int i=0;i<roomtypeslist.size();i++)
 			{%>
@@ -32,7 +47,7 @@ Type of room: <select name="room_type">
 		 	<%}%>
 	</select>
 <br>
-<input type="submit" name="Submit" value="Submit">
+<input type="submit" name="Submit" class = "btn btn-success" value="Submit">
 <br>
 <% if(session.getAttribute("roompresent") == "true") {	%>
 Room already present , please enter a new room.
@@ -41,5 +56,6 @@ Room already present , please enter a new room.
 
 
 </form>
+</div>
 </body>
 </html>

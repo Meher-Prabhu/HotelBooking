@@ -1,11 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="database.Account" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<jsp:include page="header.jsp"></jsp:include>
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>Hotel Details</title>
 <% if(session.getAttribute("currentUser") == null) {
 	response.sendRedirect("Homepage.jsp");
 }
@@ -20,30 +21,36 @@ if(user.get_type().equalsIgnoreCase("user") || user.get_type().equalsIgnoreCase(
 
 </head>
 <body>
-Welcome ${currentUser.get_name() } | <a href = "Logout.jsp">Logout</a>
+<nav class = "navbar navbar-default">
+<div class = "container-fluid">
+<div class = "navbar-header">
+<a class = "navbar-brand" href = "Homepage.jsp"> Hotel Booking </a>
+</div>
+<div>
+<ul class = "nav navbar-nav navbar-right">
+<li> <a href = "#"> Welcome <% out.write(((Account) session.getAttribute("currentUser")).get_name()); %> </a> </li>
+<li> <a href = "Logout.jsp">Logout   </a> </li>
+</ul>
+</div>
+</div>
+</nav>
+<div class = "container">
+<h4>Select one of the actions below</h4>
+<form name="SeeBooking" action="Hotelchanges" method="get">
+<input type="submit" name="see_booking" value="Bookings list" class = "btn btn-info"></input>
+</form><br>
+<a type = "button" href = "addroom.jsp" class = "btn btn-success">Add a room</a><br>
 <br>
-Select from one of the below actions you wish to perform.<br>
-<form name="SeeBooking" action="Hotelchanges" method="post">
-<input type="submit" name="see_booking" value="See the list of rooms booked through our interface"></input><br>
-</form>
-<form name="AddRoom" action="addroom.jsp" method="post">
-<input type="submit" name="add_room" value="Add a room"></input><br>
-</form>
-<form name="UpdateRoom" action="updateroom.jsp" method="post">
-<input type="submit" name="update_room" value="Update features of a room"></input><br>
-</form>
-<form name="RemoveRoom" action="removeroom.jsp" method="post">
-<input type="submit" name="delete_room" value="Remove a room"></input><br>
-</form>
-<form name="AddRoomType" action="addroomtype.jsp" method="post">
-<input type="submit" name="add_room_type" value="Add a new room type"></input><br>
-</form>
-<form name="UpdateRoomType" action="updateroomtype.jsp" method="post">
-<input type="submit" name="update_room_type" value="Update details of an existing room type"></input><br>
-</form>
-<form name="RemoveRoomType" action="removeroomtype.jsp" method="post">
-<input type="submit" name="remove_room_type" value="Remove an existing room type"></input><br>
-</form>
+<a type = "button" href = "addroomtype.jsp" class = "btn btn-success">Add a new room type</a><br>
+<br>
+<a type = "button" href = "updateroom.jsp" class = "btn btn-success">Update type of a room</a><br>
+<br>
+<a type = "button" href = "updateroomtype.jsp" class = "btn btn-success">Update an existing room type</a><br>
+<br>
+<a type = "button" href = "removeroom.jsp" class = "btn btn-danger">Remove a room</a><br>
+<br>
+<a type = "button" href = "removeroomtype.jsp" class = "btn btn-danger">Remove a room type</a><br>
+<br>
 
 <%}} %>
 
@@ -51,6 +58,6 @@ Select from one of the below actions you wish to perform.<br>
 	You already have a hotel.
 	<% session.setAttribute("present",null);
 	} %>
-
+</div>
 </body>
 </html>

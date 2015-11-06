@@ -3,11 +3,12 @@
 <%@ page import="java.util.*" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<jsp:include page="header.jsp"></jsp:include>    
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>Update room</title>
 <% if(session.getAttribute("currentUser") == null) {
 	response.sendRedirect("Homepage.jsp");
 }
@@ -21,10 +22,24 @@ if(user.get_type().equalsIgnoreCase("user") || user.get_type().equalsIgnoreCase(
 	%>
 </head>
 <body>
-<form action="Hotelchanges" method="post">
-Enter room details to change: <br>
-Room no. : <input type="text" name="room_id" value=""><br>
-Room type to change to : <select name="room_type">
+<nav class = "navbar navbar-default">
+<div class = "container-fluid">
+<div class = "navbar-header">
+<a class = "navbar-brand" href = "Homepage.jsp"> Hotel Booking </a>
+</div>
+<div>
+<ul class = "nav navbar-nav navbar-right">
+<li> <a href = "#"> Welcome <% out.write(((Account) session.getAttribute("currentUser")).get_name()); %> </a> </li>
+<li> <a href = "Logout.jsp">Logout   </a> </li>
+</ul>
+</div>
+</div>
+</nav>
+<div class = "container">
+<form action="Hotelchanges" method="post" role = "form">
+<h4>Enter room details to change:</h4> <br>
+Room no. : <input type="text" name="room_id" value="" class = "form-control"><br>
+Room type to change to : <select name="room_type" class = "form-control">
 	<%List <String> roomtypeslist=Hotelinfo.getroomtypes(session);
 		for(int i=0;i<roomtypeslist.size();i++)
 			{%>
@@ -32,12 +47,13 @@ Room type to change to : <select name="room_type">
 		 	<%}%>
 	</select>
 <br>
-<input type="submit" name="Submit" value="Submit">
+<input type="submit" name="Submit" value="Submit" class = "btn btn-success">
 <br>
 <% if(session.getAttribute("roompresent") == "false") {	%>
 Room not present, enter correct room.
 <% }}} %>
 
 </form>
+</div>
 </body>
 </html>

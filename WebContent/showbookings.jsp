@@ -2,11 +2,12 @@
     pageEncoding="UTF-8"%>
    <%@	page import="java.util.*"%>
    <%@ page import="database.Account" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<jsp:include page="header.jsp"></jsp:include>   
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>Hotel's bookings</title>
 <% if(session.getAttribute("currentUser") == null) {
 	response.sendRedirect("Homepage.jsp");
 }
@@ -20,14 +21,29 @@ if(user.get_type().equalsIgnoreCase("user") || user.get_type().equalsIgnoreCase(
 	%>
 </head>
 <body>
+<nav class = "navbar navbar-default">
+<div class = "container-fluid">
+<div class = "navbar-header">
+<a class = "navbar-brand" href = "Homepage.jsp"> Hotel Booking </a>
+</div>
+<div>
+<ul class = "nav navbar-nav navbar-right">
+<li> <a href = "#"> Welcome <% out.write(((Account) session.getAttribute("currentUser")).get_name()); %> </a> </li>
+<li> <a href = "Logout.jsp">Logout   </a> </li>
+</ul>
+</div>
+</div>
+</nav>
+<div class = "container">
 <%
 
 List<Object[]> bookinglist;
 if (session.getAttribute("bookings") != null) {
 	bookinglist = (List<Object[]>) session.getAttribute("bookings");
 } else {
-	bookinglist = new ArrayList<Object[]>();}
-					out.print("<table border='1' align='center'>");
+	bookinglist = new ArrayList<Object[]>();}%>
+	<table class = "table table-striped">
+	<%
 					out.print("<tr> <th>Booking_id</th> <th>Name </th> <th>Room_id</th> <th>Start date</th> <th>End date</th> </tr>");
 					for (int i = 0; i < bookinglist.size(); i++) {
 						out.print("<tr>");
@@ -36,8 +52,10 @@ if (session.getAttribute("bookings") != null) {
 								+ "<td>"+ bookinglist.get(i)[3].toString()+ "</td>" + "<td>"+ bookinglist.get(i)[4].toString()+ "</td>");
 						out.print("</tr>");
 					}
-					out.print("</table>");
 %>
 <% }} %>
+</table>
+<a class = "lead" href = "Hoteldetails.jsp">Go to homepage</a>
+</div>
 </body>
 </html>

@@ -1,22 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" version="3.0">
+
+<welcome-file-list>
+        <welcome-file>Homepage.jsp</welcome-file>
+        <welcome-file>index.htm</welcome-file>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+
+<servlet>
+<servlet-name>Login</servlet-name>
+<servlet-class>Servlets</servlet-class>
+</servlet>
+
 <servlet-mapping>
 
 <servlet-name>Login</servlet-name>
 
 <url-pattern>/Login.java</url-pattern>
 
+</servlet-mapping>
 
+<servlet>
+<servlet-name>Hotelinfo</servlet-name>
+<servlet-class>Servlets</servlet-class>
+</servlet>
+
+<servlet-mapping>
 <servlet-name>Hotelinfo</servlet-name>
 
 <url-pattern>/Hotelinfo.java</url-pattern>
 
+</servlet-mapping>
+
+<servlet>
+<servlet-name>Bookinginfo</servlet-name>
+<servlet-class>Servlets</servlet-class>
+</servlet>
+
+<servlet-mapping>
 <servlet-name>Bookinginfo</servlet-name>
 
 <url-pattern>/Bookinginfo.java</url-pattern>
+</servlet-mapping>
 
+<servlet>
+<servlet-name>Userprofile</servlet-name>
+<servlet-class>Servlets</servlet-class>
+</servlet>
+
+<servlet-mapping>
 <servlet-name>Userprofile</servlet-name>
 
 <url-pattern>/Userprofile.java</url-pattern>
 
 </servlet-mapping>
 
+
+</web-app>

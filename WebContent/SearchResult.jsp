@@ -5,6 +5,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page session="true" %>
+<jsp:include page="header.jsp"></jsp:include>
 <!DOCTYPE html >
 <html>
 <head>
@@ -22,10 +23,32 @@
  else { %>
 </head>
 <body>
-<form name="searchresult" action="Hotelinfo" method="post">
-<div id="filter" style="float:left; width:25%;"> 
-	Filter options:<br>
-	Rating : <select name="rating">
+<nav class = "navbar navbar-default">
+<div class = "container-fluid">
+<div class = "navbar-header">
+<a class = "navbar-brand" href = "Homepage.jsp"> Hotel Booking </a>
+</div>
+<% if(session.getAttribute("currentUser") != null && session.getAttribute("currentUser") != "") { %>
+<div>
+<ul class = "nav navbar-nav navbar-right">
+<li> <a href = "#"> Welcome <% out.write(((Account) session.getAttribute("currentUser")).get_name()); %> </a> </li>
+<% if(((Account) session.getAttribute("currentUser")).get_type().equalsIgnoreCase("admin")) { %>
+<li> <a href = "Adminlogin.jsp"> Requests </a> </li>
+<% } %> 
+<li> <a href = "userbookings.jsp"> Bookings </a> </li>
+<li> <a href = "userprofile.jsp"> Edit Profile </a> </li>
+<li> <a href = "Logout.jsp">Logout   </a> </li>
+</ul>
+</div>
+</div>
+</nav> 
+<% } %>
+</div>
+</nav>
+<div id="filter" style="float:left; width:22%;" class = "container-fluid">
+<form name="searchresult" action="Hotelinfo" method="post" role = "form"> 
+	<h4>Filters:</h4>
+	Rating : <select name="rating" class = "form-control">
 				<option value="0"	<%if(session.getAttribute("searchrating")!=null){if((Integer)session.getAttribute("searchrating")==0){%>selected<%;}}%>>Any</option>
 				<option value="1"	<%if(session.getAttribute("searchrating")!=null){if((Integer)session.getAttribute("searchrating")==1){%>selected<%;}}%>>1 and above</option>
 				<option value="2"	<%if(session.getAttribute("searchrating")!=null){if((Integer)session.getAttribute("searchrating")==2){%>selected<%;}}%>>2 and above</option>
@@ -34,7 +57,7 @@
 				<option value="5"	<%if(session.getAttribute("searchrating")!=null){if((Integer)session.getAttribute("searchrating")==5){%>selected<%;}}%>>5 and above</option>
 			 </select>
 	<br>
-	Budget(cost in rupees per day) : <select name="budget">
+	Budget(cost in rupees per day) : <select name="budget" class = "form-control">
 				<option value="1000"	<%if(session.getAttribute("budget")!=null){if((Integer)session.getAttribute("budget")==1000){%>selected<%;}}%>>Under 1000</option>
 				<option value="2000"	<%if(session.getAttribute("budget")!=null){if((Integer)session.getAttribute("budget")==2000){%>selected<%;}}%>>Under 2000</option>
 				<option value="3000"	<%if(session.getAttribute("budget")!=null){if((Integer)session.getAttribute("budget")==3000){%>selected<%;}}%>>Under 3000</option>
@@ -48,17 +71,21 @@
 	Amenities : <br>
 		<%List <String> amenitieslist=Hotelinfo.getamenities();
 		for(int i=0;i<amenitieslist.size();i++)
-			{%>
-				<input type="checkbox" name="amenities" value="<%out.write(amenitieslist.get(i));%>" <%if(session.getAttribute("amenitiesselected")!=null){if(((List<String>)session.getAttribute("amenitiesselected")).contains(amenitieslist.get(i))) {%> checked <%;}} %>><%out.write(amenitieslist.get(i));%><br>
+			{%><div class = "checkbox">
+			<label>
+				<input type="checkbox" name="amenities" value="<%out.write(amenitieslist.get(i));%>" <%if(session.getAttribute("amenitiesselected")!=null){if(((List<String>)session.getAttribute("amenitiesselected")).contains(amenitieslist.get(i))) {%> checked <%;}} %>> <%out.write(amenitieslist.get(i));%><br>
+				</label>
+				</div>
 		 	<%}%>
-	<input type="submit" name="getlisthotels" value="Get list of hotels"></input><br><br>
+	<input type="submit" name="getlisthotels" class = "btn btn-info" value="Filter"></input><br><br>
 	<% if(session.getAttribute("missing_input") == "true") {	%>
 Please fill in the checkboxes.
 <% } %>
 </div>
 
-<div id="result" style="float:right; width:75%;">
-	List of hotels that match your search results: <br>
+<div class = "container-fluid">
+<div id="result" style="float:right; width:73%;">
+	<h4> Results: </h4>
 	
 		<%
 		if(session.getAttribute("hotel_search_results")!=null)
@@ -66,15 +93,19 @@ Please fill in the checkboxes.
 		for(int i=0;i<hotellist.size();i++)
 			{
 			%>
-
-				<input type="radio" name="option" value=<% out.write(hotellist.get(i)[0].toString()); %> > <% out.write(hotellist.get(i)[1].toString()); %> <br> 
+				<div class = "radio">
+				<label>
+				<input type="radio" name="option" value=<% out.write(hotellist.get(i)[0].toString()); %> > <% out.write(hotellist.get(i)[1].toString()); %> <br>
+				</label>
+				</div> 
 		 	 <%}}%> 
 
 	<br>
-<input type="submit" name="gethotel" value="Search in this hotel"></input>
+<input type="submit" name="gethotel" class = "btn btn-success" value="Proceed"></input>
 </div>
 
 </form>
+</div>
 <% } %>
 </body>
 </html>
