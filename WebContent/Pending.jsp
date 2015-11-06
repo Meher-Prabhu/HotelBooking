@@ -6,7 +6,17 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Request pending</title>
+<title>Request pending</title><% if(session.getAttribute("currentUser") == null) {
+	response.sendRedirect("Homepage.jsp");
+}  
+else {
+	Account user = (Account) session.getAttribute("currentUser");
+	if(user.get_type().equalsIgnoreCase("user") || user.get_type().equalsIgnoreCase("admin")) {
+	response.sendRedirect("Homepage.jsp");
+} else if(user.get_status().equalsIgnoreCase("approved")){
+	response.sendRedirect("Hoteldetails.jsp");
+} else {
+	%>
 </head>
 <body>
 <nav class = "navbar navbar-default">
@@ -28,5 +38,6 @@ Your request is pending. Please wait for the admin's approval.<br>
 If you did not add the details of your hotel yet, <a href = "addHotel.jsp">please add it</a> since the request will not be approved otherwise.
 </p>
 </div>
+<% } }%>
 </body>
 </html>
