@@ -21,6 +21,7 @@
 				var options = '';
 				for (var i = 0; i < areas.length; i++)
 					options += '<option value = "' + areas[i] + '">';
+				document.getElementsByName("area")[0].value = "";
 				document.getElementById('areas').innerHTML = options;
 			}
 		}

@@ -165,14 +165,16 @@
 				<table class="table">
 					<tr>
 						<th>Type</th>
-						<th>Available rooms</th>
+						<th>Price</th>
 						<th>Capacity</th>
+						<th>Available rooms</th>
 						<%
 							for (int i = 0; i < room_type_list.size(); i++) {
 									out.print("<tr>");
 									out.print("<td>" + room_type_list.get(i)[0].toString() + "</td>" + "<td>"
-											+ room_type_list.get(i)[1].toString() + "</td>" + "<td>"
-											+ room_type_list.get(i)[2].toString() + "</td>");
+											+ room_type_list.get(i)[2].toString() + "</td>" + "<td>"
+											+ room_type_list.get(i)[3].toString() + "</td>" + "<td>"
+											+ room_type_list.get(i)[1].toString() + "</td>");
 									out.print("</tr>");
 								}
 						%>
@@ -280,7 +282,8 @@
 					</ul>
 				</div>
 			</div>
-			<%}
+			<%
+				}
 			%>
 
 			<br>
@@ -288,6 +291,8 @@
 		</div>
 	</div>
 
-	<% } %>
+	<%
+		}
+	%>
 </body>
 </html>

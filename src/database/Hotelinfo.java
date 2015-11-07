@@ -136,28 +136,32 @@ public class Hotelinfo extends HttpServlet {
 		// TODO Auto-generated method stub
 		String city = request.getHeader("city_name");
 		List<String> areas = new ArrayList<String>();
-		Session session = SessionFactoryUtil.getInstance().getCurrentSession();
-		Transaction tx = null;
-		try {
-			tx = session.beginTransaction();
-			String stmt = "select distinct area from hotel where city = :city";
-			SQLQuery query = (SQLQuery) session.createSQLQuery(stmt).setParameter("city", city);
-			areas = (List<String>) query.list();
-			tx.commit();
-		} catch (RuntimeException e) {
-			if (tx != null && tx.isActive()) {
-				tx.rollback();
+		if (city.equalsIgnoreCase("")) {
+			response.getWriter().write("");
+		} else {
+			Session session = SessionFactoryUtil.getInstance().getCurrentSession();
+			Transaction tx = null;
+			try {
+				tx = session.beginTransaction();
+				String stmt = "select distinct area from hotel where city = :city";
+				SQLQuery query = (SQLQuery) session.createSQLQuery(stmt).setParameter("city", city);
+				areas = (List<String>) query.list();
+				tx.commit();
+			} catch (RuntimeException e) {
+				if (tx != null && tx.isActive()) {
+					tx.rollback();
+				}
+				throw e;
 			}
-			throw e;
+			String result = "";
+			for (int i = 0; i < areas.size() - 1; i++) {
+				result = result + areas.get(i) + ",";
+			}
+			result += areas.get(areas.size() - 1);
+			response.setContentType("text/plain");
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().write(result);
 		}
-		String result = "";
-		for (int i = 0; i < areas.size() - 1; i++) {
-			result = result + areas.get(i) + ",";
-		}
-		result += areas.get(areas.size() - 1);
-		response.setContentType("text/plain");
-		response.setCharacterEncoding("UTF-8");
-		response.getWriter().write(result);
 	}
 
 	/**
@@ -320,8 +324,8 @@ public class Hotelinfo extends HttpServlet {
 								+ lamenities.get(i) + "'";
 					}
 
-					String stmt1 = "select room_type.type,count(*),capacity from (" + stmt
-							+ ") as R natural join room, room_type where room.hotel_id= :id and room.type = room_type.type and room.type_hotel_id = room_type.hotel_id group by room_type.type,capacity";
+					String stmt1 = "select room_type.type,count(*),price,capacity from (" + stmt
+							+ ") as R natural join room, room_type where room.hotel_id= :id and room.type = room_type.type and room.type_hotel_id = room_type.hotel_id group by room_type.type,price,capacity";
 					SQLQuery query1 = ((SQLQuery) session.createSQLQuery(stmt1).setParameter("city", city)
 							.setParameter("area", area).setParameter("start_date", strt_date)
 							.setParameter("rating", search_rating).setParameter("budget", budget)
