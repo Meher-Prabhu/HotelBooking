@@ -63,7 +63,6 @@ public class Login extends HttpServlet {
 					Query query = session.createQuery(stmt).setParameter("mail",username);
 					List<Account>rows = (List<Account>) query.list();
 					tx.commit();
-					System.out.println(rows.isEmpty());
 					if(rows.isEmpty()) {
 						request.getSession(true).setAttribute("error", "Invalid");
 						response.sendRedirect(request.getHeader("referer"));
@@ -72,7 +71,6 @@ public class Login extends HttpServlet {
 						Account user = rows.get(0);
 						HttpSession userSession = request.getSession(true);
 						userSession.setAttribute("currentUser", user);
-						System.out.println(user.get_mail_id());
 						if(user.get_type().equalsIgnoreCase("user"))
 						response.sendRedirect("Homepage.jsp");
 						else if (user.get_type().equalsIgnoreCase("hotel")) response.sendRedirect("Hoteldetails.jsp");
@@ -124,6 +122,7 @@ public class Login extends HttpServlet {
 				try {
 					tx = session.beginTransaction();
 					session.save(account);
+					tx.commit();
 					request.getSession(true).setAttribute("currentUser", account);
 					if(type.equalsIgnoreCase("user")) {
 						response.sendRedirect("Homepage.jsp");
@@ -132,7 +131,6 @@ public class Login extends HttpServlet {
 					} else if(type.equalsIgnoreCase("admin")){
 						response.sendRedirect("Adminlogin.jsp");
 					}
-					tx.commit();
 				} catch(ConstraintViolationException e) {
 					request.getSession(true).setAttribute("error", "Present");
 					response.sendRedirect("Signup.jsp");

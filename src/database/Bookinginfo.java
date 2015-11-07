@@ -124,7 +124,6 @@ public class Bookinginfo extends HttpServlet {
 		// doGet(request, response);
 		String[] splitOrig = request.getHeader("referer").split("/");
 		String orig = splitOrig[splitOrig.length - 1];
-		System.out.println(orig);
 		if (orig.equalsIgnoreCase("booking.jsp")) {
 			HttpSession searchSession = request.getSession(true);
 			Hotel hotel = (Hotel) searchSession.getAttribute("hotel_under_search");
@@ -149,8 +148,6 @@ public class Bookinginfo extends HttpServlet {
 			booking.setEnd_date(Date.valueOf(searchSession.getAttribute("end_date").toString()));
 			booking.setStatus("active");
 			List<Integer> room_ids = getRoomIds(hotel, room_type, start_date, end_date);
-			System.out.println(room_ids.size());
-			System.out.println(num_rooms);
 			if (room_ids.size() >= num_rooms) {
 				Session session = SessionFactoryUtil.getInstance().getCurrentSession();
 				Transaction tx = null;

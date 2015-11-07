@@ -49,8 +49,14 @@ Room type to change to : <select name="room_type" class = "form-control">
 <br>
 <input type="submit" name="Submit" value="Submit" class = "btn btn-success">
 <br>
+<br>
 <% if(session.getAttribute("roompresent") == "false") {	%>
+<div class = "alert alert-danger" role = "alert">
+<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
 Room not present, enter correct room.
+</div>
+<% session.setAttribute("roompresent", "");%>
+
 <% }}} %>
 
 </form>

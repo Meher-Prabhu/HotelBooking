@@ -176,7 +176,7 @@ public class Hotelinfo extends HttpServlet {
 
 		String[] splitOrig = request.getHeader("referer").split("/");
 		String orig = splitOrig[splitOrig.length - 1];
-		if (orig.equalsIgnoreCase("Homepage.jsp")) {
+		if (orig.equalsIgnoreCase("Homepage.jsp") || orig.equalsIgnoreCase("HotelBooking")) {
 			String city = request.getParameter("city");
 			String area = request.getParameter("area");
 			String start_date = request.getParameter("start_date");
@@ -243,7 +243,6 @@ public class Hotelinfo extends HttpServlet {
 
 				String amenities[] = request.getParameterValues("amenities");
 			
-				System.out.println(amenities);
 				List<String> lamenities;
 				if ( amenities == null) {
 				 lamenities= new ArrayList<String>();
@@ -312,7 +311,6 @@ public class Hotelinfo extends HttpServlet {
 				Session session = SessionFactoryUtil.getInstance().getCurrentSession();
 				try {
 					int id = Integer.valueOf(option);
-					System.out.println(id+" "+days);
 					tx = session.beginTransaction();
 					String stmt = "select A from Hotel A where A.id= :id";
 					Query query = session.createQuery(stmt).setParameter("id", id);
@@ -325,7 +323,6 @@ public class Hotelinfo extends HttpServlet {
 					{stmt+= "intersect select hotel_id,name,room_id from hotel natural join room natural join amenities where amenity='"+lamenities.get(i)+"'";}
 					
 					String stmt1 = "select room_type.type,count(*),capacity from (" + stmt + ") as R natural join room, room_type where room.hotel_id= :id and room.type = room_type.type and room.type_hotel_id = room_type.hotel_id group by room_type.type,capacity";
-					System.out.println(stmt1);
 					SQLQuery query1 = ((SQLQuery) session.createSQLQuery(stmt1).setParameter("city", city)
 							.setParameter("area", area).setParameter("start_date", strt_date).setParameter("rating", search_rating).setParameter("budget", budget)
 							.setParameter("end_date", endr_date).setParameter("diff", days).setParameter("id", id));
@@ -458,7 +455,6 @@ public class Hotelinfo extends HttpServlet {
 					rating = Double.valueOf(request.getParameter("rating"));
 				String user_mail = ((Account) addSession.getAttribute("currentUser")).get_mail_id();
 				int hotel_id = Integer.valueOf(((Hotel) addSession.getAttribute("hotel_under_search")).get_id());
-				System.out.println(rating);
 				if(rating == 0.0) {
 					response.sendRedirect("hotel.jsp");
 				} else {

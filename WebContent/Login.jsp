@@ -40,7 +40,11 @@ Password:
 <br>
 <br>
 <% if(session.getAttribute("error") == "Invalid") {	%>
+
+<div class = "alert alert-danger" role = "alert">
+<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
 Invalid data please verify your details
+</div>
 
 <% session.setAttribute("error",null);} %>
 </div>

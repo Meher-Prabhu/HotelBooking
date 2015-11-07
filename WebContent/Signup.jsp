@@ -25,6 +25,22 @@
 </div>
 </nav>
 <div class = "container">
+<% if(session.getAttribute("error") == "Invalid") {	%>
+<div class = "alert alert-danger" role = "alert">
+<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+Invalid data please verify your details
+</div>
+<% } if(session.getAttribute("error") == "Mismatch") {	%>
+<div class = "alert alert-danger" role = "alert">
+<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+Passwords do not match
+</div>
+<% } if(session.getAttribute("error") == "Present") {	%>
+<div class = "alert alert-danger" role = "alert">
+<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+Account already exists with the mailID
+</div>
+<% } session.setAttribute("error", "");%>
 <h2> Signup </h2> 
 <form action="Login" method="post" role = "form">
 <h4>Name*:</h4> <input type="text" name="name" class = "form-control"></input><br>
@@ -39,13 +55,7 @@
 <label class = "radio-inline"><input type="radio" name="type" value="hotel">Hotel Account</label></h4><br>
 <input type="submit" class = "btn btn-success" name="signup"></input><br>
 </form>
-<% if(session.getAttribute("error") == "Invalid") {	%>
-Invalid data please verify your details
-<% } if(session.getAttribute("error") == "Mismatch") {	%>
-Passwords do not match
-<% } if(session.getAttribute("error") == "Present") {	%>
-Account already exists with the mailID
-<% } session.setAttribute("error", "");%>
+<br>
 <p class = "lead">	</p>
 </div>
 </body>

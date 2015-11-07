@@ -35,12 +35,16 @@ else {
 </nav>
 <div class = "container">
 <form action="Hotelchanges" method="post">
-Room no. to remove : <input type="text" name="room_id" value="" class = "form-control"><br>
+Room no. to remove : <input type="number" name="room_id" value="" class = "form-control"><br>
 <input type="submit" name="Submit" value="Submit" class = "btn btn-danger">
 <br>
+<br>
 <% if(session.getAttribute("roompresent") == "false") {	%>
+<div class = "alert alert-danger" role = "alert">
+<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
 Room not present , please enter correct room.
-<% }} } %>
+</div>
+<% session.setAttribute("roompresent",null);}} } %>
 
 </form>
 </div>

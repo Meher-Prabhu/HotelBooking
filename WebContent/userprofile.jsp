@@ -49,6 +49,12 @@ Contact Number: <% out.print(account.get_contact_number()); %> <br>
 Address: <% out.print(account.get_address()); %> </p>
 <br>
 <h2>Edit Profile: </h2>
+<% if(session.getAttribute("error") == "Mismatch") {	%>
+<div class = "alert alert-danger" role = "alert">
+<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+Passwords do not match
+</div>
+<%  session.setAttribute("error", ""); }%>
 <form action="Userprofile" method="post" role = "form">
 <h4> Name: </h4> <input type="text" name="name" class = "form-control"></input><br>
 <h4> Contact number: </h4> <input type="text" name="contact_number" class = "form-control"></input><br>
@@ -57,9 +63,7 @@ Address: <% out.print(account.get_address()); %> </p>
 <h4> Retype password: </h4> <input type="password" name="pass2" class = "form-control"></input><br>
 <input type="submit" name="editprofile" class = "btn btn-success"></input><br>
 </form>
-<% if(session.getAttribute("error") == "Mismatch") {	%>
-Passwords do not match
-<% } session.setAttribute("error", "");%>
+
 <br>
 <a class = "lead" href = "Homepage.jsp"> Go to Homepage </a>
 <% } %>

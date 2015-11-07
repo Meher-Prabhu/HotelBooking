@@ -152,6 +152,7 @@
 				<textarea placeholder="Write review" name="review" class = "form-control"></textarea>
 				<input type="submit" value="Review" class = "btn btn-info">
 			</form>
+			<br>
 			<%
 				}
 			%>
@@ -178,45 +179,50 @@
 				for (int i = 0; i < reviews.size(); i++) {
 					Object[] review = reviews.get(i);
 					int id = Integer.valueOf(review[0].toString());
-					out.print("<h4>"+review[1].toString()+"</h4>");
 			%>
-			<p style = "padding-left:2em"><%
+			<div class = "panel panel-default">
+			<div class = "panel panel-heading">
+			<h4> <span class = "glyphicon glyphicon-user" aria-hidden = "true"></span> <% out.print(review[1].toString());	%></h4>
+			</div>
+			<div class = "panel panel-body"><%
 				out.print(review[2].toString());
-			%></p>
-			<%
-				if (session.getAttribute("currentUser") != null) {
 			%>
+			<br><br>
+			<% if (session.getAttribute("currentUser") != null) { %>
 			<form style = "padding-left:1em" name="Reply" action="Hotelinfo" method="post" class = "form-inline">
 				<input type="hidden" name="formName" value="reply"> <input
 					type="hidden" name="rev_id" value=<%out.print(id);%>> 
 					<textarea class = "form-control" placeholder="Write reply" name="reply"></textarea> 
 					<input type="submit"  class = "btn btn-info" value="Reply">
-			</form>
-			<br>
+			</form><br>
 			<%
 				}
 			%>
 			<%
 				List<Object[]> rev_replies = mapped_replies.get(review);
 				if(rev_replies.size() > 0) { %>
-				<h4 style = "padding-left:1em">Replies</h4>
-				<%
-					for (int j = 0; j < rev_replies.size(); j++) {
-			%>
-			<p style="padding-left: 3em">
+				
+				<h4 >Replies</h4>
+				<% for (int j = 0; j < rev_replies.size(); j++) { %>
+				
+			<ul class = "list-group">
+			<li class = "list-group-item disabled">
 				<%
 					out.print(rev_replies.get(j)[1].toString());
 				%>
-			</p>
-			<p style="padding-left: 5em">
+			</li>
+			<li class = "list-group-item" style = "padding-left:2em">
 				<%
 					out.print(rev_replies.get(j)[2].toString());
 				%>
-			</p>
+			</li>
 			<%
 				}
-				}
-				}
+				} %>
+				</ul>
+				</div>
+				</div>
+				<%}
 			%>
 			
 			<br>
