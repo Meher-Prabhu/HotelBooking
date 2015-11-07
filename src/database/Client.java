@@ -12,15 +12,15 @@ public class Client {
 		Session session = SessionFactoryUtil.getInstance().getCurrentSession();
 		try {
 			tx = session.beginTransaction();
-//			Scanner in = new Scanner(System.in);
+			// Scanner in = new Scanner(System.in);
 
 			SQLQuery query = session.createSQLQuery("select * from hotel H natural join room").addEntity(Hotel.class);
 			@SuppressWarnings("unchecked")
 			List<Hotel> rows = (List<Hotel>) query.list();
 			System.out.println(rows.get(0));
-//			System.out.println(rows.get(2));
+			// System.out.println(rows.get(2));
 			tx.commit();
-		} catch(RuntimeException e) {
+		} catch (RuntimeException e) {
 			e.printStackTrace();
 		}
 		System.out.println("Done");

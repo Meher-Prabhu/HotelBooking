@@ -42,7 +42,7 @@ public class Bookinginfo extends HttpServlet {
 		List<Integer> room_ids;
 		try {
 			tx = session.beginTransaction();
-			int days = (int)((end_date.getTime() - start_date.getTime())/(1000*60*60*24)) + 1;
+			int days = (int) ((end_date.getTime() - start_date.getTime()) / (1000 * 60 * 60 * 24)) + 1;
 			String stmt = "select room_id from room natural join availability where hotel_id = :hotel_id and type = :type and date >= :start_date and date <= :end_date group by room_id having count(*) = :diff order by room_id";
 			SQLQuery query = ((SQLQuery) session.createSQLQuery(stmt).setParameter("hotel_id", hotel.get_id())
 					.setParameter("type", room_type).setParameter("start_date", start_date)

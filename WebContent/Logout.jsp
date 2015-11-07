@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,7 +7,9 @@
 <title>Logout</title>
 </head>
 <body>
-<% session.setAttribute("currentUser", null); 
-	response.sendRedirect("Homepage.jsp");%>
+	<%
+		session.setAttribute("currentUser", null);
+		response.sendRedirect("Homepage.jsp");
+	%>
 </body>
 </html>

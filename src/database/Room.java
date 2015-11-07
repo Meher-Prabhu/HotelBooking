@@ -11,23 +11,23 @@ import javax.persistence.Table;
 public class Room {
 	@Id
 	@Column(name = "room_id")
-	@ManyToMany(mappedBy="booking")
+	@ManyToMany(mappedBy = "booking")
 	private int room_id;
-	
+
 	@Id
 	@Column(name = "hotel_id")
-	@ManyToMany(mappedBy="booking")
+	@ManyToMany(mappedBy = "booking")
 	private int hotel_id;
 
 	@Column(name = "type")
 	private String type;
-	
+
 	@Column(name = "type_hotel_id")
 	private int type_hotel_id;
 
-	public Room(){
+	public Room() {
 	}
-	
+
 	public int getRoom_id() {
 		return room_id;
 	}
@@ -65,6 +65,5 @@ public class Room {
 		return "Room [room_id=" + room_id + ", hotel_id=" + hotel_id + ", type=" + type + ", type_hotel_id="
 				+ type_hotel_id + "]";
 	}
-	
-	
+
 }

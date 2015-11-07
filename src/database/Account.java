@@ -1,10 +1,9 @@
 package database;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-
 
 @Entity
 @Table(name = "accounts")
@@ -13,7 +12,7 @@ public class Account {
 	@Id
 	@Column(name = "mail_id")
 	private String mail_id;
-	
+
 	@Column(name = "password")
 	private String password;
 
@@ -22,91 +21,91 @@ public class Account {
 
 	@Column(name = "contact_number")
 	private Long contact_number;
-	
+
 	@Column(name = "address")
 	private String address;
 
 	@Column(name = "type")
 	private String type;
-	
+
 	@Column(name = "status")
 	private String status;
-	
+
 	public Account() {
 	}
-	
+
 	public Account(String mail, String pass) {
 		this.mail_id = mail;
 		this.password = pass;
 	}
-	
+
 	public String get_mail_id() {
 		return mail_id;
 	}
-	
+
 	public void set_mail_id(String value) {
 		this.mail_id = value;
 	}
-	
+
 	public String get_password() {
 		return password;
 	}
-	
+
 	public void set_password(String value) {
 		this.password = value;
 	}
-	
+
 	public String get_name() {
 		return name;
 	}
-	
+
 	public void set_name(String value) {
 		this.name = value;
 	}
-	
+
 	public Long get_contact_number() {
 		return contact_number;
 	}
-	
+
 	public void set_contact_number(Long value) {
 		this.contact_number = value;
 	}
-	
+
 	public String get_address() {
 		return address;
 	}
-	
+
 	public void set_address(String value) {
-		if(value != null)
+		if (value != null)
 			this.address = value;
 		else
 			this.address = "";
 	}
-	
+
 	public String get_type() {
 		return type;
 	}
-	
+
 	public void set_type(String value) {
 		this.type = value;
 	}
-	
+
 	public void set_status(String value) {
 		this.status = value;
 	}
-	
+
 	public String get_status() {
 		return status;
 	}
-	
+
 	public String toString() {
-		String str = "Mail ID: " + get_mail_id() + " Password: " + get_password() + " name: " + get_name() + " type: " + get_type();
-		if(get_contact_number() != null) str += " contact: " + get_contact_number();
-		if(get_address() != null) str += " address: " + get_address();
-		str += " status: " + get_status(); 
+		String str = "Mail ID: " + get_mail_id() + " Password: " + get_password() + " name: " + get_name() + " type: "
+				+ get_type();
+		if (get_contact_number() != null)
+			str += " contact: " + get_contact_number();
+		if (get_address() != null)
+			str += " address: " + get_address();
+		str += " status: " + get_status();
 		return str;
 	}
 }
-
-
-

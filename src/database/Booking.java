@@ -15,7 +15,7 @@ public class Booking {
 	@Id
 	@Column(name = "booking_id")
 	private Long booking_id;
-	
+
 	@Id
 	@Column(name = "mail_id")
 	private String mail_id;
@@ -23,29 +23,29 @@ public class Booking {
 	@Id
 	@Column(name = "room_id")
 	private int room_id;
-	
+
 	@Id
 	@Column(name = "hotel_id")
 	private int hotel_id;
-	
+
 	@Column(name = "name")
 	private String name;
-	
+
 	@Column(name = "address")
 	private String address;
-	
+
 	@Column(name = "contact_number")
 	private long contact_number;
-	
+
 	@Column(name = "start_date")
 	private Date start_date;
-	
+
 	@Column(name = "end_date")
 	private Date end_date;
-	
+
 	@Column(name = "status")
 	private String status;
-	
+
 	public Booking() {
 	}
 
