@@ -36,7 +36,7 @@ public class Userprofile extends HttpServlet {
 
 		try {
 			tx = session.beginTransaction();
-			String stmt = "select booking.booking_id,hotel.name,hotel.area,hotel.city,booking.start_date,booking.end_date,booking.status from booking,hotel where booking.hotel_id = hotel.hotel_id and booking.mail_id = :mail_id ";
+			String stmt = "select booking.booking_id,count(room_id),hotel.name,hotel.area,hotel.city,booking.start_date,booking.end_date,booking.status from booking,hotel where booking.hotel_id = hotel.hotel_id and booking.mail_id = :mail_id group by booking_id,hotel.name,hotel.area,hotel.city,booking.start_date,booking.end_date,booking.status order by booking_id;";
 			SQLQuery query = (SQLQuery) session.createSQLQuery(stmt).
 					setParameter("mail_id", id);
 			list = (List<Object[]>) query.list();

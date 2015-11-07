@@ -324,7 +324,7 @@ public class Hotelinfo extends HttpServlet {
 					for(int i=0;i<lamenities.size();i++)
 					{stmt+= "intersect select hotel_id,name,room_id from hotel natural join room natural join amenities where amenity='"+lamenities.get(i)+"'";}
 					
-					String stmt1 = "select type,count(*) from (" + stmt + ") as R natural join room where hotel_id= :id group by type";
+					String stmt1 = "select room_type.type,count(*),capacity from (" + stmt + ") as R natural join room, room_type where room.hotel_id= :id and room.type = room_type.type and room.type_hotel_id = room_type.hotel_id group by room_type.type,capacity";
 					System.out.println(stmt1);
 					SQLQuery query1 = ((SQLQuery) session.createSQLQuery(stmt1).setParameter("city", city)
 							.setParameter("area", area).setParameter("start_date", strt_date).setParameter("rating", search_rating).setParameter("budget", budget)
